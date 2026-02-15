@@ -3,17 +3,13 @@
 
 # Learning outcomes
 
-The discipline of bioengineering studies the systematic engineer of biological entities.
-Example applications are in bioproduction, pharma, environmental sciences, and medicine.
+Bioengineering is the systematic engineering of biological entities—designing genetic circuits, engineering cells for medicine and industry, optimizing bioproduction.
+It is an increasingly interdisciplinary field where advances come from biology, computer science, circuit design, control theory, and more.
 
-The discipline is increasingly interdisciplinary, with advances profiting from research in
-biology, computer science, circuit design, and control theory, among others.
-
-In this course you learn the basics of bionengineering and how computational techniques can be
-effectively used to progress in this domain.
-Concretely, taught techniques will involve modeling of cellular processes, simulation, mathematical
-analysis, distributed computing techniques, design of simple digital circuits in cells, RNA/DNA engineering, and computational aspects of measurements.
-A running example is be the design of an Inverter in a bacterial cell.
+In this course, you will learn how computational techniques drive progress in bioengineering.
+We will cover modeling and simulation of cellular processes, distributed algorithms for biological systems, design of genetic circuits and digital logic in cells, RNA/DNA engineering, and computational approaches to measurement.
+A concrete running example will be the design of an inverter in a bacterial cell.
+By the end, you'll have both the theoretical foundations and practical skills to understand and build basic biological systems.
 
 In the course you will also work on your own project which allows you to deep-dive into one of the above aspects.
 
@@ -101,12 +97,13 @@ Thu 21/5/2026
 
 ## Week 4
 
-Working on your project
+Working on your project (self-guided; no instructional sessions)
 
 ## Week 5
 
 Working on your project +
 11. Project hand-in & presentations
+- remote, live presentations, 15 minutes per project
 
 
 
@@ -141,9 +138,9 @@ hours: e.g. 10-12
 
 # Examination modalities
 
-- Contribution in class.
-- Written report: short (2 pages) scientific paper on your outcome.
-- Presentation of project.
+- Contribution in class: 25%
+- Written report: short (2 pages) scientific paper on your outcome: 40%
+- Presentation of project: 35%
 
 
 # Previous knowledge
@@ -152,12 +149,12 @@ No prior knowledge of biology and computational biology are required.
 In all sessions we will code in Python. While advanced coding skills are not required, basic Python skills are needed to follow the course and carry out the project. This is no formal requirement and can be fulfilled by training/refreshing some basic coding before the course starts.
 As a self-check you should be able to efficiently:
 - Plot a certain function in matplotlib, style & label the plot accordingly, save it as a pdf, and compute some statistics on this function.
-- Install and use a 3rd party library after reading its documention.
+- Install and use a 3rd party library after reading its documentation.
 
 Basic knowledge of algorithmics and ordinary differential equations will be helpful. Again this is not a formal requirement but you are encouraged to review basics.
 As a self-check you should be able to:
 - Write exponential growth and decay as an ODE.
-- Solve this ODE with an Ansatz.
+- Solve this ODE with an ansatz.
 
 
 
