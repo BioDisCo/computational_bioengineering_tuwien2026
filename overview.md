@@ -13,11 +13,11 @@ In this course you learn the basics of bionengineering and how computational tec
 effectively used to progress in this domain.
 Concretely, taught techniques will involve modeling of cellular processes, simulation, mathematical
 analysis, distributed computing techniques, design of simple digital circuits in cells, RNA/DNA engineering, and computational aspects of measurements.
-A running example will be the design of an Inverter in a bacterial cell.
+A running example is be the design of an Inverter in a bacterial cell.
 
 In the course you will also work on your own project which allows you to deep-dive into one of the above aspects.
 
-This course is based on a course by Matthias Függer and Thomas Nowak at ENS Paris-Saclay.
+This course is based on a course by Matthias Függer and Thomas Nowak at ENS Paris-Saclay (https://compbioeng.biodis.co).
 
 
 # Subject of course
@@ -29,7 +29,7 @@ Each session is 2 hours.
 
 Wed 6/5/2026
 1-2. Introduction 1/2
-- Introduction into the Course
+- Modalities of the Course
 - Your Project
 - Biological Basics
 - Mathematical Basics
@@ -112,27 +112,54 @@ Working on your project +
 
 # Teaching methods
 
+Bring your laptop to the sessions with a readily setup Jupyter/Python coding environment.
+
 Courses 1-10 are 2h and with presence in class at TU Wien.
-Sessions will be interactive, interleaving blackboard, coding (mainly Python in Jupyter), and slides.
-The interactive part is particularly relevant since different backgrounds will require different foci.
+Sessions will be interactive, interleaving chalk + blackboard, coding (mainly Python in Jupyter), slides, and discussions.
 
+The interactive part is particularly relevant since we expect you to join with different backgrounds.
+We will take care of this within the first sessions with short recaps of basics adapted to the needs.
 
+Throughout the course you will learn about problems and techniques in computational bioengineering.
+For that purpose, Jupyter notebooks will be shared with you.
+It is highly encouraged to practice the learned techniques after each session - hints on how to do this will be provided in the course.
 
-The final session (11) is remote.
+In Session 10 you will propose a project you will work on for 2 weeks.
+This allows you to focus on one aspect in greater depth.
 
+A written (1-2 pages) short paper about the result is due after 2 weeks.
+Projects will be presented in the final Session 11 (happening remotely). 
 
 The course will be given in English.
-
-
-# Mode of examination
 
 
 # Course dates
 
 see before
+hours: e.g. 10-12
 
 
 # Examination modalities
+
+- Contribution in class.
+- Written report: short (2 pages) scientific paper on your outcome.
+- Presentation of project.
+
+
+# Previous knowledge
+
+No prior knowledge of biology and computational biology are required.
+In all sessions we will code in Python. While advanced coding skills are not required, basic Python skills are needed to follow the course and carry out the project. This is no formal requirement and can be fulfilled by training/refreshing some basic coding before the course starts.
+As a self-check you should be able to efficiently:
+- Plot a certain function in matplotlib, style & label the plot accordingly, save it as a pdf, and compute some statistics on this function.
+- Install and use a 3rd party library after reading its documention.
+
+Basic knowledge of algorithmics and ordinary differential equations will be helpful. Again this is not a formal requirement but you are encouraged to review basics.
+As a self-check you should be able to:
+- Write exponential growth and decay as an ODE.
+- Solve this ODE with an Ansatz.
+
+
 
 
 
