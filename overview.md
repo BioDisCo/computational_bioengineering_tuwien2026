@@ -1,7 +1,7 @@
 # Computational Bioengineering
 
 
-# Learning outcomes
+## Learning outcomes
 
 Bioengineering is the systematic engineering of biological entities—designing genetic circuits, engineering cells for medicine and industry, optimizing bioproduction.
 It is an increasingly interdisciplinary field where advances come from biology, computer science, circuit design, control theory, and more.
@@ -16,53 +16,47 @@ In the course you will also work on your own project which allows you to deep-di
 This course is based on a course by Matthias Függer and Thomas Nowak at ENS Paris-Saclay (https://compbioeng.biodis.co).
 
 
-# Subject of course
+## Subject of course
 
 Each session is 2 hours.
 
 
-## Week 1
+### Week 1
 
-Wed 6/5/2026
-1-2. Introduction 1/2
-- Modalities of the Course
-- Your Project
-- Biological Basics
-- Mathematical Basics
-- Computational Basics
-- Genetic Control
+1. Introduction 1/2 (Wed 6/5/2026)
+    - Modalities of the Course
+    - Your Project
+    - Biological Basics
+    - Mathematical Basics
+    - Computational Basics
+    - Genetic Control
 
-Thu 7/5/2026
-2. Introduction 2/2
+2. Introduction 2/2 (Thu 7/5/2026)
 
-Fri 8/5/2026
-3. Modeling
-- Abstractions
-- Chemical Reaction Networks
-- Simulation
-- Stochastic Simulation
+3. Modeling (Fri 8/5/2026)
+    - Abstractions
+    - Chemical Reaction Networks
+    - Simulation
+    - Stochastic Simulation
 
-## Week 2
+### Week 2
 
-Mo 11/5/2026
-4. Distributed Algorithms
-- Basics, Proofs
-- Chemical Reaction Networks
-- Majority Consensus
-- AI Techniques
+4. Distributed Algorithms (Mo 11/5/2026)
+    - Basics, Proofs
+    - Chemical Reaction Networks
+    - Majority Consensus
+    - AI Techniques
 
-Tue 12/5/2026
-5. Nucleic Acid Design
-- Physics
-- Design
-- Lab Techniques
+5. Nucleic Acid Design (Tue 12/5/2026)
+    - Physics
+    - Design
+    - Lab Techniques
 
-Wed 13/5/2026
-6. Plasmid Design
-- Biology
-- Design
-- Lab Techniques
-- AI Techniques
+6. Plasmid Design (Wed 13/5/2026)
+    - Biology
+    - Design
+    - Lab Techniques
+    - AI Techniques
 
 14/5/2026
 holidays
@@ -71,43 +65,42 @@ no lecture
 15/5/2026
 no lecture
 
-## Week 3
+### Week 3
 
-Mo 18/5/2026
-7. Digital Design
-- Logic Gates
-- Oscillators
-- Patterns
-- Circuits
-- AI Techniques
+7. Digital Design (Mo 18/5/2026)
+    - Logic Gates
+    - Oscillators
+    - Patterns
+    - Circuits
+    - AI Techniques
 
-Tue 19/5/2026
-8. Bulk Measurements
-- How to measure
-- Parametrization
-- AI Techniques
+8. Bulk Measurements (Tue 19/5/2026)
+    - How to measure
+    - Parametrization
+    - AI Techniques
 
-Wed 20/5/2026
-9. Cell Measurements
-- Computer Vision for Microscopy
-- AI Techniques
+9. Cell Measurements (Wed 20/5/2026)
+    - Computer Vision for Microscopy
+    - AI Techniques
 
-Thu 21/5/2026
-10. Project kickoff
+10. Project kickoff (Thu 21/5/2026)
 
-## Week 4
+### Week 4
 
 Working on your project (self-guided; no instructional sessions)
 
-## Week 5
+### Week 5
 
-Working on your project +
+Working on your project as well as a final session.
+
 11. Project hand-in & presentations
-- remote, live presentations, 15 minutes per project
+    - remote
+    - live presentations
+    - 15 minutes per project
 
 
 
-# Teaching methods
+## Teaching methods
 
 Bring your laptop to the sessions with a readily setup Jupyter/Python coding environment.
 
@@ -130,29 +123,31 @@ Projects will be presented in the final Session 11 (happening remotely).
 The course will be given in English.
 
 
-# Course dates
+## Course dates
 
 see before
 hours: e.g. 10-12
 
 
-# Examination modalities
+## Examination modalities
 
 - Contribution in class: 25%
 - Written report: short (2 pages) scientific paper on your outcome: 40%
 - Presentation of project: 35%
 
 
-# Previous knowledge
+## Previous knowledge
 
 No prior knowledge of biology and computational biology are required.
 In all sessions we will code in Python. While advanced coding skills are not required, basic Python skills are needed to follow the course and carry out the project. This is no formal requirement and can be fulfilled by training/refreshing some basic coding before the course starts.
 As a self-check you should be able to efficiently:
+
 - Plot a certain function in matplotlib, style & label the plot accordingly, save it as a pdf, and compute some statistics on this function.
 - Install and use a 3rd party library after reading its documentation.
 
 Basic knowledge of algorithmics and ordinary differential equations will be helpful. Again this is not a formal requirement but you are encouraged to review basics.
 As a self-check you should be able to:
+
 - Write exponential growth and decay as an ODE.
 - Solve this ODE with an ansatz.
 
