@@ -10,20 +10,26 @@ book:
   date: "2026"
   chapters:
     - index.qmd
+    - part: "Preliminaries"
+      chapters:
+        - 01-intro/coding.ipynb
+        - 01-intro/math.ipynb
+        - 01-intro/cs.ipynb
     - part: "Introduction"
       chapters:
         - 01-intro/notes.ipynb
-        - 01-intro/math.ipynb
-        - 01-intro/cs.ipynb
     - part: "Transcription Circuits"
       chapters:
         - 02-intro/notes.ipynb
+
+from: markdown+lists_without_preceding_blankline
 
 format:
   html:
     theme: cosmo
     code-fold: true
     code-tools: true
+    fig-cap-location: margin
     toc: false
     number-sections: false
 
