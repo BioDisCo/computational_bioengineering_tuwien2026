@@ -1,9 +1,11 @@
 # Preface {.unnumbered}
 
-These are the lecture notes for *Computational Bioengineering* at TU Wien (2026),
-taught by Matthias Függer and Thomas Nowak.
+The book evolved from the lecture notes of *Computational Bioengineering* at ENS Paris-Saclay (2025)
+and a course at TU Wien (2026).
+When designing the course we took inspirations from several other courses, most notably,
+the course by Michael Elowitz and Justin Bois.
 
-Bioengineering is the systematic engineering of biological entities — designing genetic
+Bioengineering is the systematic engineering of biological entities - designing genetic
 circuits, engineering cells for medicine and industry, optimizing bioproduction.
 It is an increasingly interdisciplinary field where advances come from biology, computer
 science, circuit design, control theory, and more.
@@ -14,32 +16,12 @@ biological systems, design of genetic circuits and digital logic in cells, RNA/D
 engineering, and computational approaches to measurement.
 A concrete running example throughout is the design of an inverter in a bacterial cell.
 
-## Schedule {.unnumbered}
+We are always looking forward for feedback.
 
-| Session | Date | Topic |
-|---------|------|-------|
-| 1 | Wed 6/5/2026 | Introduction 1/2 — biological, mathematical, and computational basics |
-| 2 | Thu 7/5/2026 | Introduction 2/2 — transcription circuits |
-| 3 | Fri 8/5/2026 | Modeling — CRNs, simulation, stochastic simulation |
-| 4 | Mon 11/5/2026 | Distributed algorithms |
-| 5 | Tue 12/5/2026 | Nucleic acid design |
-| 6 | Wed 13/5/2026 | Plasmid design |
-| 7 | Mon 18/5/2026 | Digital design |
-| 8 | Tue 19/5/2026 | Bulk measurements |
-| 9 | Wed 20/5/2026 | Cell measurements |
-| 10 | Thu 21/5/2026 | Project kickoff |
-| 11 | TBD | Project presentations |
-
-## Examination {.unnumbered}
-
-- Contribution in class: 25 %
-- Written report (2 pages): 40 %
-- Project presentation: 35 %
 
 ## License {.unnumbered}
 
-Course materials are adapted from content by
+Course materials includes adapted content from
 [Michael Elowitz and Justin Bois](https://biocircuits.github.io/)
-and from a previous version of this course at ENS Paris-Saclay
-(<https://compbioeng.biodis.co>).
+and original material from Matthias Függer and Thomas Nowak.
 Licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).

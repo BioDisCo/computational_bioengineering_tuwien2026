@@ -4,19 +4,18 @@ project:
 
 book:
   title: "Computational Bioengineering"
-  subtitle: "TU Wien 2026"
   author:
     - name: Matthias Függer
     - name: Thomas Nowak
   date: "2026"
   chapters:
     - index.qmd
-    - part: "Session 1 — Introduction"
+    - part: "Introduction"
       chapters:
         - 01-intro/notes.ipynb
         - 01-intro/math.ipynb
         - 01-intro/cs.ipynb
-    - part: "Session 2 — Transcription Circuits"
+    - part: "Transcription Circuits"
       chapters:
         - 02-intro/notes.ipynb
 
@@ -25,8 +24,7 @@ format:
     theme: cosmo
     code-fold: true
     code-tools: true
-    toc: true
-    toc-depth: 3
+    toc: false
     number-sections: false
 
 execute:
