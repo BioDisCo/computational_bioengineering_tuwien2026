@@ -1,7 +1,7 @@
 # Preface {.unnumbered}
 
-The book evolved from the lecture notes of *Computational Bioengineering* at ENS Paris-Saclay (2025)
-and a course at TU Wien (2026).
+The book evolved from the lecture notes of the course *Computational Bioengineering* held at ENS Paris-Saclay (2025)
+and at TU Wien (2026).
 When designing the course we took inspirations from several other courses, most notably,
 the course by Michael Elowitz and Justin Bois.
 
@@ -21,7 +21,6 @@ We are always looking forward for feedback.
 
 ## License {.unnumbered}
 
-Course materials includes adapted content from
-[Michael Elowitz and Justin Bois](https://biocircuits.github.io/)
-and original material from Matthias Függer and Thomas Nowak.
+Course materials includes original material from Matthias Függer and Thomas Nowak and adapted content from
+[Michael Elowitz and Justin Bois](https://biocircuits.github.io/).
 Licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
