@@ -16,8 +16,16 @@ book:
         - 01-intro/coding.ipynb
         - 01-intro/math.ipynb
         - 01-intro/cs.ipynb
-    - 01-intro/notes.ipynb
-    - 02-intro/notes.ipynb
+    - part: "Introduction"
+      chapters:
+      - 01-intro/notes.ipynb
+      - 02-intro/notes.ipynb
+    - part: "Modeling"
+      chapters:
+      - 03-modeling/crn.ipynb
+      - 03-modeling/stochastic_simulation.ipynb
+      - 03-modeling/mobspy.ipynb
+
 
 from: markdown+lists_without_preceding_blankline
 
