@@ -3,11 +3,21 @@ html {
   scrollbar-gutter: stable;
 }
 
-/* Force slimcontent pages to use the same grid as fullcontent so the sidebar
-   does not jump when navigating between pages with and without margin figures.
-   Only applied at >=992px where the sidebar is actually visible. */
+/* Eliminate sidebar jump between slimcontent and fullcontent pages.
+   Both page types use identical grids so the 5fr columns — and therefore the
+   sidebar position — are consistent.  Only at >=992px where the sidebar is
+   actually visible; bootstrap's tablet/mobile rules take over below that.
+
+   Slimcontent normally keeps a ~250px right-margin column that makes its 5fr
+   ~100px smaller than fullcontent's, shifting the sidebar visibly.  The unified
+   grid collapses that column (body-end==page-end), matching fullcontent exactly.
+
+   Margin captions on slimcontent pages are then redirected from the now-zero-
+   width body-end/page-end span to the right 5fr column, which is ~150-230px
+   wide at typical screen widths — narrower than the nominal 250px but readable. */
 @media (min-width: 992px) {
-  body.floating.slimcontent .page-columns {
+  body.floating.slimcontent .page-columns,
+  body.floating.fullcontent .page-columns {
     grid-template-columns:
       [screen-start] 1.5em
       [screen-start-inset] 5fr
@@ -20,5 +30,12 @@ html {
       [body-end body-end-outset page-end-inset page-end] 5fr
       [screen-end-inset] 1.5em
       [screen-end];
+  }
+
+  body.floating.slimcontent .margin-caption,
+  body.floating.slimcontent div.aside,
+  body.floating.slimcontent aside:not(.footnotes):not(.sidebar),
+  body.floating.slimcontent .column-margin {
+    grid-column: body-end / screen-end-inset !important;
   }
 }
