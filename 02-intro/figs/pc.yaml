@@ -65,3 +65,28 @@
   label_rate_bwd:
     tex: "$k_{-} D_\\text{occ}$"
     size: "54pt"
+
+
+- panel: activation.svg
+  output: activation.svg
+  content_style: "stroke: #000000; stroke-width: 0.4; fill: initial;"
+
+  label_A:
+    tex: "$A$"
+    size: "54pt"
+
+  label_A2:
+    tex: "$A$"
+    size: "54pt"
+
+  label_x:
+    tex: "$x$"
+    size: "54pt"
+
+  label_rate_fwd:
+    tex: "$k_{+} DA$"
+    size: "54pt"
+
+  label_rate_bwd:
+    tex: "$k_{-} D_\\text{occ}$"
+    size: "54pt"
