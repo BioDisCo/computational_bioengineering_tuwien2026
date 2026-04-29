@@ -59,11 +59,11 @@
     size: "54pt"
 
   label_rate_fwd:
-    tex: "$k_{+} DR$"
+    tex: "$k_{+} OR$"
     size: "54pt"
 
   label_rate_bwd:
-    tex: "$k_{-} D_\\text{occ}$"
+    tex: "$k_{-} O_\\text{occ}$"
     size: "54pt"
 
 
@@ -84,9 +84,9 @@
     size: "54pt"
 
   label_rate_fwd:
-    tex: "$k_{+} DA$"
+    tex: "$k_{+} OA$"
     size: "54pt"
 
   label_rate_bwd:
-    tex: "$k_{-} D_\\text{occ}$"
+    tex: "$k_{-} O_\\text{occ}$"
     size: "54pt"
