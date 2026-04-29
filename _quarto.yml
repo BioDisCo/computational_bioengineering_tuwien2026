@@ -44,11 +44,17 @@ from: markdown+lists_without_preceding_blankline
 format:
   html:
     theme: cosmo
+    css: custom.css
     code-fold: true
     code-tools: true
     fig-cap-location: margin
     toc: false
     number-sections: false
+    grid:
+      sidebar-width: 250px
+      body-width: 800px
+      margin-width: 250px
+      gutter-width: 1.5em
 
 execute:
   freeze: auto
