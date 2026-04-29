@@ -1,0 +1,24 @@
+/* Prevent layout shift from scrollbar appearing/disappearing between pages. */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* Force slimcontent pages to use the same grid as fullcontent so the sidebar
+   does not jump when navigating between pages with and without margin figures.
+   Only applied at >=992px where the sidebar is actually visible. */
+@media (min-width: 992px) {
+  body.floating.slimcontent .page-columns {
+    grid-template-columns:
+      [screen-start] 1.5em
+      [screen-start-inset] 5fr
+      [page-start] 50px
+      [page-start-inset] minmax(50px, 150px)
+      [body-start-outset] 50px
+      [body-start] 1.5em
+      [body-content-start] minmax(500px, calc(800px - 3em))
+      [body-content-end] 1.5em
+      [body-end body-end-outset page-end-inset page-end] 5fr
+      [screen-end-inset] 1.5em
+      [screen-end];
+  }
+}
