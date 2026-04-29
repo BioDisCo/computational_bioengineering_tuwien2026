@@ -1,0 +1,27 @@
+panel: transcription_translation.svg
+output: transcription_translation.svg
+content_style: "stroke: #000000; stroke-width: 0.4; fill: initial;"
+
+label_beta_m:
+  tex: "$\\beta_m$"
+  size: "54pt"
+
+label_m:
+  tex: "$m$"
+  size: "54pt"
+
+label_beta_p:
+  tex: "$\\beta_p$"
+  size: "54pt"
+
+label_gamma_m_m:
+  tex: "$\\gamma_m m$"
+  size: "54pt"
+
+label_gamma_p_x:
+  tex: "$\\gamma_p x$"
+  size: "54pt"
+
+label_x:
+  tex: "$x$"
+  size: "54pt"
