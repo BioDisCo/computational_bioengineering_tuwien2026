@@ -25,6 +25,18 @@ book:
       - 03-modeling/crn.ipynb
       - 03-modeling/stochastic_simulation.ipynb
       - 03-modeling/mobspy.ipynb
+    - part: "Distributed Algorithms"
+    - part: "Nucleic Acid Design"
+    - part: "Plasmid Design"
+      chapters:
+      - 06-plasmid/notes.ipynb
+    - part: "Digital Design"
+    - part: "Bulk Measurements"
+      chapters:
+      - 08-measure-bulk/notes.ipynb
+    - part: "Cell Measurements"
+      chapters:
+      - 09-measure-cell/notes.ipynb
 
 
 from: markdown+lists_without_preceding_blankline
