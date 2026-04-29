@@ -10,14 +10,13 @@ book:
   date: "2026"
   chapters:
     - index.qmd
+    - 01-intro/course.ipynb
     - part: "Preliminaries"
       chapters:
         - 01-intro/coding.ipynb
         - 01-intro/math.ipynb
         - 01-intro/cs.ipynb
-    - part: "Introduction"
-      chapters:
-        - 01-intro/notes.ipynb
+    - 01-intro/notes.ipynb
     - part: "Transcription Circuits"
       chapters:
         - 02-intro/notes.ipynb
