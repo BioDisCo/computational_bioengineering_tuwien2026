@@ -36,7 +36,8 @@ book:
       - 08-measure-bulk/notes.ipynb
     - part: "Cell Measurements"
       chapters:
-      - 09-measure-cell/notes.ipynb
+      - 09-measure-cell/basics.ipynb
+      - 09-measure-cell/ai.ipynb
 
 
 from: markdown+lists_without_preceding_blankline
