@@ -33,7 +33,8 @@ book:
     - part: "Digital Design"
     - part: "Bulk Measurements"
       chapters:
-      - 08-measure-bulk/notes.ipynb
+      - 08-measure-bulk/od.ipynb
+      - 08-measure-bulk/spectra.ipynb
     - part: "Cell Measurements"
       chapters:
       - 09-measure-cell/basics.ipynb
