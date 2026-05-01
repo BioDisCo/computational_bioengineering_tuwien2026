@@ -22,6 +22,7 @@ book:
       - 02-intro/notes.ipynb
     - part: "Modeling"
       chapters:
+      - 03-modeling/abstraction.ipynb
       - 03-modeling/crn.ipynb
       - 03-modeling/stochastic_simulation.ipynb
       - 03-modeling/mobspy.ipynb
