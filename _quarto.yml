@@ -23,6 +23,7 @@ book:
     - part: "Modeling"
       chapters:
       - 03-modeling/abstraction.ipynb
+      - 03-modeling/quantum.ipynb
       - 03-modeling/crn.ipynb
       - 03-modeling/stochastic_simulation.ipynb
       - 03-modeling/mobspy.ipynb
