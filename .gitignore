@@ -209,9 +209,17 @@ __marimo__/
 # mac
 .DS_Store
 
+# AI
+CLAUDE.md
+
 # Quarto
 _book/
-
-
 /.quarto/
 **/*.quarto_ipynb
+
+# compiled things
+*.csv
+*.html
+*.zip
+*.pdf
+*.pt
