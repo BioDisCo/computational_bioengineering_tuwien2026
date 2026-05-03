@@ -1,0 +1,77 @@
+# Panel-compiler config for Markov chain figures in 03-modeling/figs/.
+# Run from this directory:  pc pc.yaml
+
+- panel: markov_mrna.svg
+  output: markov_mrna.svg
+
+  label_beta_01:
+    tex: "$\\beta$"
+    size: "10pt"
+  label_beta_12:
+    tex: "$\\beta$"
+    size: "10pt"
+  label_beta_23:
+    tex: "$\\beta$"
+    size: "10pt"
+
+  label_gamma_1:
+    tex: "$\\gamma$"
+    size: "10pt"
+  label_gamma_2:
+    tex: "$2\\gamma$"
+    size: "10pt"
+  label_gamma_3:
+    tex: "$3\\gamma$"
+    size: "10pt"
+
+- panel: markov.svg
+  output: markov.svg
+
+  # Node labels
+  label_mp:
+    tex: "$(m,p)$"
+    size: "7pt"
+  label_mpp1:
+    tex: "$(m,p{+}1)$"
+    size: "7pt"
+  label_mpm1:
+    tex: "$(m,p{-}1)$"
+    size: "7pt"
+  label_m1p:
+    tex: "$(m{+}1,p)$"
+    size: "7pt"
+  label_mm1p:
+    tex: "$(m{-}1,p)$"
+    size: "7pt"
+
+  # Transcription rate β_m
+  label_beta_m_right:
+    tex: "$\\beta_m$"
+    size: "8pt"
+  label_beta_m_left:
+    tex: "$\\beta_m$"
+    size: "8pt"
+
+  # Translation rate m·β_p
+  label_beta_p_up:
+    tex: "$m\\beta_p$"
+    size: "8pt"
+  label_beta_p_down:
+    tex: "$m\\beta_p$"
+    size: "8pt"
+
+  # mRNA degradation: leaving (m,p) at m·γ_m; entering from (m+1,p) at (m+1)·γ_m
+  label_gamma_m_left:
+    tex: "$m\\gamma_m$"
+    size: "8pt"
+  label_gamma_m_right:
+    tex: "$(m{+}1)\\gamma_m$"
+    size: "8pt"
+
+  # Protein degradation: leaving (m,p) at p·γ_p; entering from (m,p+1) at (p+1)·γ_p
+  label_gamma_p_down:
+    tex: "$p\\gamma_p$"
+    size: "8pt"
+  label_gamma_p_up:
+    tex: "$(p{+}1)\\gamma_p$"
+    size: "8pt"
