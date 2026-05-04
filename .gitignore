@@ -223,3 +223,7 @@ _book/
 *.zip
 *.pdf
 *.pt
+
+# measurement data
+*.tif
+microbeSEG_dataset/

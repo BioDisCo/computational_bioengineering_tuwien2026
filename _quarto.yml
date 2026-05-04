@@ -52,6 +52,7 @@ format:
     css: custom.css
     code-fold: true
     code-tools: true
+    notebook-links: inline
     fig-cap-location: margin
     toc: false
     number-sections: false

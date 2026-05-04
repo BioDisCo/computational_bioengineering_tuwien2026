@@ -18,6 +18,14 @@ A concrete running example throughout is the design of an inverter in a bacteria
 
 We are always looking forward for feedback.
 
+## Running the notebooks {.unnumbered}
+
+To run the notebooks locally, clone the repository:
+
+```bash
+git clone https://github.com/BioDisCo/computational_bioengineering_tuwien2026.git
+```
+
 
 ## License {.unnumbered}
 
