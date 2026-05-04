@@ -10,6 +10,16 @@
     ]
   },
   {
+    "objectID": "index.html#running-the-notebooks",
+    "href": "index.html#running-the-notebooks",
+    "title": "Computational Bioengineering",
+    "section": "Running the notebooks",
+    "text": "Running the notebooks\nTo run the notebooks locally, clone the repository:\ngit clone https://github.com/BioDisCo/computational_bioengineering_tuwien2026.git",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
     "objectID": "index.html#license",
     "href": "index.html#license",
     "title": "Computational Bioengineering",
