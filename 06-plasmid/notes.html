@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Plasmid Design – Computational Bioengineering</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../08-measure-bulk/od.html" rel="next">
+<link href="../03-modeling/mobspy.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5ccb035bea26c1e21f80f44cf7c27909.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../custom.css">
+</head>
+
+<body class="nav-sidebar floating fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../06-plasmid/notes.html">Plasmid Design</a></li><li class="breadcrumb-item"><a href="../06-plasmid/notes.html"><span class="chapter-title">Plasmid Design</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computational Bioengineering</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/course.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Course Modalities (TU Wien, 2026)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Preliminaries</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/coding.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Coding Setup Guide</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/math.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ordinary Differential Equations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/cs.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Complexity and Asymptotic Notation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/notes.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Living Cells</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-intro/notes.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Genetic Circuits</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Modeling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/abstraction.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Abstraction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/quantum.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Quantum Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/molecular.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Molecular Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/crn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Chemical Reaction Networks</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/stochastic_simulation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Stochastic Simulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/mobspy.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CRN Modeling with MobsPy</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Distributed Algorithms</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Nucleic Acid Design</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Plasmid Design</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06-plasmid/notes.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Plasmid Design</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Digital Design</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text">Bulk Measurements</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-measure-bulk/od.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Optical Density</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-measure-bulk/spectra.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Spectroscopy</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
+ <span class="menu-text">Cell Measurements</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-measure-cell/basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Computer Vision for Microscopy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-measure-cell/ai.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AI Techniques</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../06-plasmid/notes.html">Plasmid Design</a></li><li class="breadcrumb-item"><a href="../06-plasmid/notes.html"><span class="chapter-title">Plasmid Design</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-title">Plasmid Design</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<hr>
+<p>Objectives:</p>
+<ul>
+<li>Learn how to create your first “Hello world” plasmid.</li>
+<li>Learn the benefits of doing this with code, which are, precise documentation and automation of design and validation.</li>
+</ul>
+<p>Let us install some libraries first.</p>
+<ul>
+<li><a href="https://biopython.org">biopython</a>: You already know this library from the Primer lecture.</li>
+<li><a href="https://github.com/VoigtLab/dnaplotlib">dnaplotlib</a>: We also know this one, and will use it for plotting genetic constructs.</li>
+<li><a href="https://edinburgh-genome-foundry.github.io/DnaFeaturesViewer/">dna_features_viewer</a>: A library by the Edinburgh Genome Foundry (University of Edinburgh) to visualize annotated DNA.</li>
+<li><a href="https://github.com/pydna-group/pydna">pydna</a>: A library to plan cloning. See also the publication <a href="https://doi.org/10.1186/s12859-015-0544-x">Pereira, F., Azevedo, F., Carvalho, Â., Ribeiro, G. F., Budde, M. W., &amp; Johansson, B. (BMC Bioinformatics, 2015)</a>.</li>
+</ul>
+<div id="91a90d06" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment the following line to install required packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install biopython dnaplotlib dna_features_viewer pydna</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="logging-and-error-handling" class="level2">
+<h2 class="anchored" data-anchor-id="logging-and-error-handling">Logging and Error Handling</h2>
+<p>Let’s also add a simple logger for error handling. This is a useful alternative of decorating your code with <code>print("Error: ...")</code>. Instead we will be using <code>logger.error(...)</code>. This is not only more consistent in the form of the error messages, but also allows us to set the log level. For example, level <code>debug</code> will not be shown, while <code>info</code>, <code>warning</code>, <code>exception</code>, and <code>error</code> will be shown. Check out the <a href="https://docs.python.org/3/library/logging.html">documentation about logging</a> to learn more about it.</p>
+<div id="09bbd321" class="cell" data-execution_count="48">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Simple logger setup</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>logger <span class="op">=</span> logging.getLogger(<span class="st">"plasmid"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>logger.setLevel(logging.INFO)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>logger.propagate <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove any existing handlers first</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> logger.handlers:</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    logger.handlers.clear()</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a StreamHandler</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>sh <span class="op">=</span> logging.StreamHandler()</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>sh.setLevel(logging.INFO)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>sh.setFormatter(logging.Formatter(<span class="st">"[</span><span class="sc">%(levelname)s</span><span class="st">] </span><span class="sc">%(funcName)s</span><span class="st">: </span><span class="sc">%(message)s</span><span class="st">"</span>))</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>logger.addHandler(sh)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="the-design" class="level2">
+<h2 class="anchored" data-anchor-id="the-design">The Design</h2>
+<p>We would like to write our first “Hello world” program for <em>E. coli</em>. The language in which we will be writing is DNA as this is directly understood by the bacterium as sequence of instructions.</p>
+<p>While in Python, a “Hello world” program is a short <code>main.py</code> with <code>print("Hello world")</code>, we cannot (yet) make an <em>E. coli</em> that displays the letters “Hello World”. And even if, this would be far from a very basic code - which is kind of the purpose of “hello world” programs. Let’s choose a similarly simple task that is adapted to engineered bacteria: make the bacteria display a pink color!</p>
+<p>There are several ways to write the DNA. The most direct one is to simply write the DNA directly. Typically this is out of reach for even simple programs like our one; and thus we exclude that directly. The next, and perhaps most frequently taken approach, is to use a GUI-based DNA viewer where we can click together our DNA. This may be easy to start with, but has many downsides as we know from related tasks in computer science. While learning how to code a computer may be nice to do with drag-and-dropping code pieces, we do not even see mildly complex code written in such languages.</p>
+<p>Following the CS approach of writing code that writes other code, in case the latter is too complex to write directly, let us do the same. We will thus use <code>Python</code> to write <code>DNA</code>.</p>
+<p>This comes with other benefits:</p>
+<ul>
+<li>Anyone else that has our code can see and verify our design decisions.</li>
+<li>We can write code that may be not totally general for other constructs, but that can be adapted to them without too much effort.</li>
+<li>We can add powerful checks in our code. For example, we can check that a primer fulfills certain requirements and do not rely on the designer go to a website and enter the primers, there; which may be is skipped in a stressful week or by unexperienced designers.</li>
+</ul>
+<p>Let us plot the design of our “Hello world” program first.</p>
+<ul>
+<li>We will choose a plasmid that will contain our program as extra DNA. This plasmid is called the backbone or vector.</li>
+<li>We want the <em>E. coli</em> to be pink. Thus we need a promoter, an RBS, the CDS of a gene that codes for something pink, and a terminator.</li>
+</ul>
+<p>Let’s plot that design with the <code>dnaplotlib</code> library.</p>
+<div id="879d24ca" class="cell" data-execution_count="49">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dnaplotlib <span class="im">as</span> dpl</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create DNA renderer</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>dr <span class="op">=</span> dpl.DNARenderer()</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>renderers <span class="op">=</span> dr.SBOL_part_renderers()</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Define design ---</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>p0 <span class="op">=</span> {</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">'type'</span>: <span class="st">'Promoter'</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">'fwd'</span>: <span class="va">True</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">'opts'</span>: {</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>            <span class="st">'label'</span>:<span class="st">'P'</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>            <span class="st">'label_size'</span>:<span class="dv">10</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>            <span class="st">'label_y_offset'</span>: <span class="op">-</span><span class="dv">5</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>            <span class="st">'color'</span>:[<span class="fl">0.8</span>, <span class="fl">0.8</span>, <span class="fl">0.8</span>],</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>rbs0 <span class="op">=</span> {</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">'type'</span>: <span class="st">'RBS'</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">'fwd'</span>: <span class="va">True</span>,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">'opts'</span>: {</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">'label'</span>:<span class="st">'RBS'</span>,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">'label_size'</span>:<span class="dv">10</span>,</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">'label_y_offset'</span>: <span class="op">-</span><span class="dv">5</span>,</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">'color'</span>:[<span class="fl">0.8</span>, <span class="fl">0.8</span>, <span class="fl">0.8</span>],</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>cds0 <span class="op">=</span> {</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">'type'</span>: <span class="st">'CDS'</span>,</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">'fwd'</span>: <span class="va">True</span>,</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        <span class="st">'opts'</span>: {</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>            <span class="st">'color'</span>:[<span class="fl">0.82</span>, <span class="fl">0.32</span>, <span class="fl">0.32</span>],</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>            <span class="st">'label'</span>:<span class="st">'pink protein'</span>,</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>            <span class="st">'label_size'</span>:<span class="dv">10</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> {</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>        <span class="st">'type'</span>: <span class="st">'Terminator'</span>,</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        <span class="st">'fwd'</span>: <span class="va">True</span>,</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        <span class="st">'opts'</span>: {</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>            <span class="st">'color'</span>:[<span class="fl">0.82</span>, <span class="fl">0.32</span>, <span class="fl">0.32</span>],</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>            <span class="st">'label'</span>:<span class="st">'T'</span>,</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>            <span class="st">'label_y_offset'</span>: <span class="op">-</span><span class="dv">5</span>,</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>            <span class="st">'label_size'</span>: <span class="dv">10</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>design <span class="op">=</span> [</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    p0, rbs0, cds0, t0,</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Render DNA ---</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">3</span>, <span class="dv">3</span>))</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>start_pos, end_pos <span class="op">=</span> dr.renderDNA(</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax,</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>    parts<span class="op">=</span>design,</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    regs<span class="op">=</span>[],</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    part_renderers<span class="op">=</span>renderers,</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>    reg_renderers<span class="op">=</span> dr.std_reg_renderers(),</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(start_pos <span class="op">-</span> <span class="dv">1</span>, end_pos <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="op">-</span><span class="dv">40</span>, <span class="dv">40</span>)</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>ax.set_axis_off()</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Hello world"</span>)</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="notes_files/figure-html/cell-4-output-1.png" class="img-fluid">
+</div>
+</div>
+</section>
+<section id="the-backbone" class="level2">
+<h2 class="anchored" data-anchor-id="the-backbone">The Backbone</h2>
+<p>For our construct we need to choose a backbone, also called vector. This is the plasmid, a circular DNA, into which we will insert our construct.</p>
+<p>We will choose a small and simple plasmid that is relatively empty and has some nice initial features. It is one of the most researched plasmids in genetic engineering and is maintained in high copy number by our host, the bacteria <em>E. coli</em>. The plasmid is called <code>pUC19</code>, starting with the usual <code>p</code> for plasmids and <code>UC</code> for University of California. You can find some basic info on it on <a href="https://en.wikipedia.org/wiki/PUC19">Wikipedia</a>.</p>
+<p>Since we will be coding our construct, we need to get the DNA sequence <code>pUC19</code>. There are many websites that offer this - and many formats to get DNA. While basic formats like <a href="https://en.wikipedia.org/wiki/FASTA_format">FASTA</a> just contain a short description and the DNA sequence as letters <code>ATGC...</code>, more advanced formats allow the annotation of so called features - that is (lists of) subsequences - with a <code>type</code>, <code>description</code>, etc. One such more verbose format is <code>GenBank</code> (<code>.gbk</code>).</p>
+<p>Assuming that we get our plasmid from <code>addgene</code>, let’s also get our sequence from them with the <code>url</code> specified below.</p>
+<div id="c96a4643" class="cell" data-execution_count="50">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>backbone_data <span class="op">=</span> {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"url"</span>: <span class="st">"https://media.addgene.org/snapgene-media/v3.0.0/sequences/222046/51c2cfab-a3b4-4d62-98df-0c77ec21164e/addgene-plasmid-50005-sequence-222046.gbk"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"pUC19"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Now we are ready to fetch the sequence and show some properties with <code>biopython</code>.</p>
+<div id="53d5436e" class="cell" data-execution_count="51">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.request</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio <span class="im">import</span> SeqIO, SeqRecord</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio.Seq <span class="im">import</span> Seq, MutableSeq</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_sequence(name: <span class="bu">str</span>, url: <span class="bu">str</span>) <span class="op">-&gt;</span> SeqRecord.SeqRecord:</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Get a DNA sequence.</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">    Currently only supports GenBank files from URLs."""</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Download the GenBank file if not already present</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    sequence_path <span class="op">=</span> Path(<span class="st">"data"</span>) <span class="op">/</span> <span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">.gbk"</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> os.path.exists(sequence_path):</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        urllib.request.urlretrieve(url, sequence_path)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="ss">f"Downloaded </span><span class="sc">{</span>sequence_path<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="ss">f"</span><span class="sc">{</span>sequence_path<span class="sc">}</span><span class="ss"> already exists"</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Load the plasmid using BioPython</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> SeqIO.read(sequence_path, <span class="st">"genbank"</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the backbone sequence</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>backbone <span class="op">=</span> get_sequence(backbone_data[<span class="st">'name'</span>], backbone_data[<span class="st">'url'</span>])</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> backbone.seq <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>, <span class="st">"Failed to load backbone sequence"</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Display basic information about the plasmid</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Description: </span><span class="sc">{</span>backbone<span class="sc">.</span>description<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Sequence length: </span><span class="sc">{</span><span class="bu">len</span>(backbone.seq)<span class="sc">}</span><span class="ss"> bp"</span>)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Number of features: </span><span class="sc">{</span><span class="bu">len</span>(backbone.features)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>[INFO] get_sequence: data/pUC19.gbk already exists</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Description: pUC cloning vector
+Sequence length: 2686 bp
+Number of features: 21</code></pre>
+</div>
+</div>
+</section>
+<section id="visualizing-dna" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-dna">Visualizing DNA</h2>
+<p>Next let’s use <code>dna_features_viewer</code> to view the sequence. While <code>dna_features_viewer</code> provides some standard way of viewing sequences with a few commands, we opted for a little customization. For example, our sequence has features that are composed of multiple parts (subsequences) that may even wrap around in the plasmid. Also we would later like to draw only a subsequence. The standard plotting has some problems with this, so let’s code a small wrapper.</p>
+<div id="e436aa26" class="cell" data-execution_count="52">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dna_features_viewer <span class="im">import</span> GraphicFeature, CircularGraphicRecord, GraphicRecord</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> TypedDict, Literal, NamedTuple</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.axes <span class="im">import</span> Axes</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Define colors for feature types</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>feature_colors: <span class="bu">dict</span>[<span class="bu">str</span>,<span class="bu">str</span>] <span class="op">=</span> {</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"promoter"</span>: <span class="st">"#FF7171"</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"CDS"</span>: <span class="st">"#7BEB7B"</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"terminator"</span>: <span class="st">"#6A6AF1"</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"RBS"</span>: <span class="st">"#F3F35F"</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rep_origin"</span>: <span class="st">"#F378F3"</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"misc_feature"</span>: <span class="st">"#91F8F8"</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"protein_bind"</span>: <span class="st">"#FFA500"</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Provide a way to add extra features</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co"># that are not in the sequence.</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ExtraFeature(TypedDict):</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    start: <span class="bu">int</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    end: <span class="bu">int</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    strand: Literal[<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>]</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    label: <span class="bu">str</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    feature_type: <span class="bu">str</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    color: <span class="bu">str</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CroppedFeature(NamedTuple):</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Result of cropping a feature to a display window."""</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    display_start: <span class="bu">int</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    display_end: <span class="bu">int</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    open_left: <span class="bu">bool</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    open_right: <span class="bu">bool</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _crop_feature(</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>        start: <span class="bu">int</span>,</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>        end: <span class="bu">int</span>,</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>        from_to: <span class="bu">tuple</span>[<span class="bu">int</span>,<span class="bu">int</span>] <span class="op">|</span> <span class="va">None</span>,</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>        sequence_length: <span class="bu">int</span> <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">-&gt;</span> CroppedFeature <span class="op">|</span> <span class="va">None</span>:</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Crop a feature to the display window. Returns None if completely outside.</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="co">    -----------</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="co">    start, end : feature boundaries</span></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="co">    from_to : display window (start, end). start &gt; end indicates wrap-around (circular).</span></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a><span class="co">    sequence_length : total sequence length (for wrap-around detection)</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> start <span class="op">&lt;=</span> end, <span class="st">"Feature start must be &lt;= end"</span></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> from_to <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> CroppedFeature(start, end, <span class="va">False</span>, <span class="va">False</span>)</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>    range_start, range_end <span class="op">=</span> from_to</span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>    is_wrap_around <span class="op">=</span> range_start <span class="op">&gt;</span> range_end</span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> is_wrap_around <span class="kw">and</span> sequence_length <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Wrap-around case: window is [range_start, sequence_length) and [0, range_end)</span></span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>        overlaps_first_part <span class="op">=</span> <span class="kw">not</span> (end <span class="op">&lt;=</span> range_start <span class="kw">or</span> start <span class="op">&gt;=</span> sequence_length)</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>        overlaps_second_part <span class="op">=</span> <span class="kw">not</span> (end <span class="op">&lt;=</span> <span class="dv">0</span> <span class="kw">or</span> start <span class="op">&gt;=</span> range_end)</span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> (overlaps_first_part <span class="kw">or</span> overlaps_second_part):</span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>        <span class="co"># For wrap-around display, just return original coords</span></span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>        open_left <span class="op">=</span> (overlaps_first_part <span class="kw">and</span> start <span class="op">&lt;</span> range_start) <span class="kw">or</span> (overlaps_second_part <span class="kw">and</span> start <span class="op">&lt;</span> <span class="dv">0</span>)</span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>        open_right <span class="op">=</span> (overlaps_first_part <span class="kw">and</span> end <span class="op">&gt;</span> sequence_length) <span class="kw">or</span> (overlaps_second_part <span class="kw">and</span> end <span class="op">&gt;</span> range_end)</span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> CroppedFeature(start, end, open_left, open_right)</span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Normal (non-wrap-around) case</span></span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> end <span class="op">&lt;=</span> range_start <span class="kw">or</span> start <span class="op">&gt;=</span> range_end:</span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>        display_start <span class="op">=</span> <span class="bu">max</span>(start, range_start)</span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>        display_end <span class="op">=</span> <span class="bu">min</span>(end, range_end)</span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>        open_left <span class="op">=</span> start <span class="op">&lt;</span> range_start</span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>        open_right <span class="op">=</span> end <span class="op">&gt;</span> range_end</span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> CroppedFeature(display_start, display_end, open_left, open_right)</span>
+<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_sequence(</span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>        sequence: SeqRecord.SeqRecord,</span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>        view_as_cycle: <span class="bu">bool</span><span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>        figure_width: <span class="bu">int</span><span class="op">=</span><span class="dv">15</span>,</span>
+<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>        extra_features:<span class="bu">list</span>[ExtraFeature] <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>        from_to: <span class="bu">tuple</span>[<span class="bu">int</span>,<span class="bu">int</span>] <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>        plot_sequence: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">-&gt;</span> Axes <span class="op">|</span> <span class="va">None</span>:</span>
+<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Plot a sequence with features."""</span></span>
+<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> sequence.seq <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a>        logger.error(<span class="st">"required sequence.seq is missing"</span>)</span>
+<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> view_as_cycle <span class="kw">and</span> from_to <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a>        logger.error(<span class="st">"from_to parameter cannot be used for circular plasmid plots"</span>)</span>
+<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> from_to <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a>        from_to <span class="op">=</span> (<span class="dv">0</span>, <span class="bu">len</span>(sequence.seq))</span>
+<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check if positive integers</span></span>
+<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> from_to[<span class="dv">0</span>] <span class="op">&gt;=</span> <span class="dv">0</span> <span class="kw">and</span> from_to[<span class="dv">1</span>] <span class="op">&gt;=</span> <span class="dv">0</span>, <span class="st">"from_to values must be non-negative integers"</span></span>
+<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check if not trying to plot more than sequence length</span></span>
+<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> from_to[<span class="dv">0</span>] <span class="op">&lt;=</span> from_to[<span class="dv">1</span>]:</span>
+<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> (from_to[<span class="dv">1</span>] <span class="op">-</span> from_to[<span class="dv">0</span>]) <span class="op">&lt;=</span> <span class="bu">len</span>(sequence.seq), <span class="st">"Display window exceeds sequence length"</span></span>
+<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> (<span class="bu">len</span>(sequence.seq) <span class="op">-</span> from_to[<span class="dv">0</span>] <span class="op">+</span> from_to[<span class="dv">1</span>]) <span class="op">&lt;=</span> <span class="bu">len</span>(sequence.seq), <span class="st">"Display window exceeds sequence length"</span>        </span>
+<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a>    first_index <span class="op">=</span> from_to[<span class="dv">0</span>]</span>
+<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Handle wrap-around case: from_to[0] &gt; from_to[1]</span></span>
+<span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> from_to[<span class="dv">0</span>] <span class="op">&gt;</span> from_to[<span class="dv">1</span>]:</span>
+<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Wrap-around: distance from start to end of sequence, plus start to from_to[1]</span></span>
+<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a>        sequence_length <span class="op">=</span> (<span class="bu">len</span>(sequence.seq) <span class="op">-</span> from_to[<span class="dv">0</span>]) <span class="op">+</span> from_to[<span class="dv">1</span>]</span>
+<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a>        sequence_length <span class="op">=</span> from_to[<span class="dv">1</span>] <span class="op">-</span> from_to[<span class="dv">0</span>]</span>
+<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The features to plot</span></span>
+<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a>    graphic_features: <span class="bu">list</span>[GraphicFeature] <span class="op">=</span> []</span>
+<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add the extra features if provided</span></span>
+<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> extra_features <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb8-127"><a href="#cb8-127" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> extra_feature <span class="kw">in</span> extra_features:</span>
+<span id="cb8-128"><a href="#cb8-128" aria-hidden="true" tabindex="-1"></a>            graphic_features.append(</span>
+<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a>                GraphicFeature(</span>
+<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a>                    start<span class="op">=</span>extra_feature[<span class="st">'start'</span>],</span>
+<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a>                    end<span class="op">=</span>extra_feature[<span class="st">'end'</span>],</span>
+<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a>                    strand<span class="op">=</span>extra_feature[<span class="st">'strand'</span>],</span>
+<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a>                    label<span class="op">=</span>extra_feature[<span class="st">'label'</span>],</span>
+<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a>                    feature_type<span class="op">=</span>extra_feature[<span class="st">'feature_type'</span>],</span>
+<span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a>                    color<span class="op">=</span>extra_feature[<span class="st">'color'</span>]</span>
+<span id="cb8-136"><a href="#cb8-136" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb8-138"><a href="#cb8-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-139"><a href="#cb8-139" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> feature <span class="kw">in</span> sequence.features:</span>
+<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a>        feature_type: <span class="bu">str</span> <span class="op">=</span> feature.<span class="bu">type</span></span>
+<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Only include features that are in the color dictionary</span></span>
+<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> feature_type <span class="kw">in</span> feature_colors:</span>
+<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a>            location <span class="op">=</span> feature.location</span>
+<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> location <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a>                <span class="cf">continue</span></span>
+<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a>            strand <span class="op">=</span> location.strand</span>
+<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a>            color <span class="op">=</span> feature_colors[feature_type]</span>
+<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a>            name <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span><span class="st">','</span><span class="sc">.</span>join(feature.qualifiers[<span class="st">'label'</span>])<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>feature<span class="sc">.</span><span class="bu">type</span><span class="sc">}</span><span class="ss">)"</span></span>
+<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Handle compound locations (join) - add each part separately</span></span>
+<span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">hasattr</span>(location, <span class="st">'parts'</span>) <span class="kw">and</span> <span class="bu">len</span>(location.parts) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
+<span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a>                <span class="co"># For compound locations in circular plasmids, add each part</span></span>
+<span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> i, part <span class="kw">in</span> <span class="bu">enumerate</span>(location.parts):</span>
+<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a>                    start <span class="op">=</span> <span class="bu">int</span>(part.start)  <span class="co"># type: ignore</span></span>
+<span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a>                    end <span class="op">=</span> <span class="bu">int</span>(part.end)  <span class="co"># type: ignore</span></span>
+<span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a>                    </span>
+<span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a>                    <span class="co"># Only add label to the first part</span></span>
+<span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a>                    label_text <span class="op">=</span> name <span class="cf">if</span> i <span class="op">==</span> <span class="dv">0</span> <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a>                    </span>
+<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a>                    <span class="co"># Crop to display window</span></span>
+<span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a>                    cropped <span class="op">=</span> _crop_feature(start, end, from_to, <span class="bu">len</span>(sequence.seq))</span>
+<span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> cropped <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:                    </span>
+<span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a>                        graphic_features.append(</span>
+<span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a>                            GraphicFeature(</span>
+<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a>                                start<span class="op">=</span>cropped.display_start,</span>
+<span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a>                                end<span class="op">=</span>cropped.display_end,</span>
+<span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a>                                strand<span class="op">=</span>strand,</span>
+<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a>                                label<span class="op">=</span>label_text,</span>
+<span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a>                                feature_type<span class="op">=</span>feature_type,</span>
+<span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a>                                color<span class="op">=</span>color,</span>
+<span id="cb8-172"><a href="#cb8-172" aria-hidden="true" tabindex="-1"></a>                                open_left<span class="op">=</span>cropped.open_left,</span>
+<span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a>                                open_right<span class="op">=</span>cropped.open_right</span>
+<span id="cb8-174"><a href="#cb8-174" aria-hidden="true" tabindex="-1"></a>                            )</span>
+<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a>                        )</span>
+<span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a>                <span class="co"># For simple locations</span></span>
+<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a>                start <span class="op">=</span> <span class="bu">int</span>(location.start)  <span class="co"># type: ignore</span></span>
+<span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a>                end <span class="op">=</span> <span class="bu">int</span>(location.end)  <span class="co"># type: ignore</span></span>
+<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Crop to display window</span></span>
+<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a>                cropped <span class="op">=</span> _crop_feature(start, end, from_to, <span class="bu">len</span>(sequence.seq))</span>
+<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> cropped <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a>                    graphic_features.append(</span>
+<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a>                        GraphicFeature(</span>
+<span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a>                            start<span class="op">=</span>cropped.display_start,</span>
+<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a>                            end<span class="op">=</span>cropped.display_end,</span>
+<span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a>                            strand<span class="op">=</span>strand,</span>
+<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a>                            label<span class="op">=</span>name,</span>
+<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a>                            feature_type<span class="op">=</span>feature_type,</span>
+<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a>                            color<span class="op">=</span>color,</span>
+<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a>                            open_left<span class="op">=</span>cropped.open_left,</span>
+<span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a>                            open_right<span class="op">=</span>cropped.open_right</span>
+<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a>                        )</span>
+<span id="cb8-195"><a href="#cb8-195" aria-hidden="true" tabindex="-1"></a>                    )</span>
+<span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> view_as_cycle:</span>
+<span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a>        record <span class="op">=</span> CircularGraphicRecord(sequence_length<span class="op">=</span><span class="bu">len</span>(sequence.seq), features<span class="op">=</span>graphic_features)</span>
+<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a>        <span class="co"># For linear view, GraphicRecord will automatically crop features to the window</span></span>
+<span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a>        record <span class="op">=</span> GraphicRecord(</span>
+<span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a>            sequence<span class="op">=</span>sequence.seq, </span>
+<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a>            features<span class="op">=</span>graphic_features, </span>
+<span id="cb8-204"><a href="#cb8-204" aria-hidden="true" tabindex="-1"></a>            first_index<span class="op">=</span>first_index, </span>
+<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a>            sequence_length<span class="op">=</span>sequence_length</span>
+<span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb8-207"><a href="#cb8-207" aria-hidden="true" tabindex="-1"></a>    ax, _ <span class="op">=</span> record.plot(figure_width<span class="op">=</span>figure_width)</span>
+<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> plot_sequence:</span>
+<span id="cb8-209"><a href="#cb8-209" aria-hidden="true" tabindex="-1"></a>        fontdict <span class="op">=</span> {<span class="st">"size"</span>: <span class="dv">11</span>, <span class="st">"family"</span>: <span class="st">"monospace"</span>}</span>
+<span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, base <span class="kw">in</span> <span class="bu">enumerate</span>(sequence.seq[first_index:first_index <span class="op">+</span> sequence_length]):</span>
+<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a>            ax.text(</span>
+<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a>                first_index <span class="op">+</span> i,</span>
+<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a>                <span class="op">-</span><span class="fl">1.5</span>,</span>
+<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a>                base,</span>
+<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a>                ha<span class="op">=</span><span class="st">"center"</span>,</span>
+<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a>                va<span class="op">=</span><span class="st">"center"</span>,</span>
+<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a>                fontdict<span class="op">=</span>fontdict,</span>
+<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ax</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Great - we are ready to plot. Feel free to try the circular plot, too.</p>
+<div id="1d2d3f09" class="cell" data-execution_count="53">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># view_as_cycle = True</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>view_as_cycle <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plot_sequence(backbone, view_as_cycle<span class="op">=</span>view_as_cycle)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Backbone plasmid pUC19"</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="notes_files/figure-html/cell-8-output-1.png" class="img-fluid">
+</div>
+</div>
+<p>We clearly see the features of two promoter regions (<code>promoter</code>) with the coding sequences (<code>CDS</code>), the origin of replication (<code>ori</code>), and a somewhat new feature called <code>MCS</code>.</p>
+<p>What are the purposes of the two proteins that are expressed on the backbone:</p>
+<ul>
+<li><p>The <code>AmpR</code> construct (promoter and CDS are annotated) is responsible for expressing a beta-lactamase enzyme. This makes the bacterium resistant to the <a href="https://en.wikipedia.org/wiki/Ampicillin">antibiotic ampicillin</a> (<code>amp</code>). See also <code>blaTEM-1</code> in https://www.uniprot.org/uniprotkb/I1YAX3/entry (<code>bla</code> refers to <code>b</code>eta-<code>la</code>ctamase)</p></li>
+<li><p>The <code>lacZ-alpha</code> construct (promoter and CDS annotated) is responsible for expressing the LacZ-alpha fragment. In some <em>E. coli</em> strains a part of the LacZ gene has been deleted: the LacZ-alpha part has been removed, while the LacZ-omega part remains in their genome. Deletions are annotated in strain names with a <span class="math inline">\(\Delta\)</span> followed by the type of deletion. But why does the plasmid carry this fragment? This is used in <a href="https://en.wikipedia.org/wiki/Blue–white_screen">blue-white screening</a>: if grown on <a href="https://en.wikipedia.org/wiki/X-gal">X-gal</a> and in presence of <a href="https://en.wikipedia.org/wiki/Isopropyl_β-D-1-thiogalactopyranoside">IPTG</a>, the bacteria that express this gene will be blue, while those that do not, remain white colonies on a plate. As we know from a previous lecture IPTG acts as a repressor of a repressor: it binds to the lac repressor, inhibiting lac from binding the <code>lac operator</code> site (shown in the above figure). Given this double repression, we can see IPTG as positively driving expression of downstream CDS.</p></li>
+</ul>
+<p>We will also add the start codon for <code>lacZ-alpha</code> as a feature. This will be interesting for us later to remember where the CDS of this protein started.</p>
+<div id="94589c6d" class="cell" data-execution_count="54">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio.SeqFeature <span class="im">import</span> SeqFeature, FeatureLocation</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the lacZ-alpha CDS start codon</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>lacz_cds <span class="op">=</span> [f <span class="cf">for</span> f <span class="kw">in</span> backbone.features <span class="cf">if</span> f.<span class="bu">type</span> <span class="op">==</span> <span class="st">"CDS"</span> <span class="kw">and</span> <span class="st">"lacZ"</span> <span class="kw">in</span> <span class="bu">str</span>(f.qualifiers.get(<span class="st">"label"</span>, []))]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> lacz_cds:</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    logger.error(<span class="st">"Cannot find lacZ"</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the start position of the lacZ CDS</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>lacz_start <span class="op">=</span> <span class="bu">int</span>(lacz_cds[<span class="dv">0</span>].location.start)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if start codon feature already exists to avoid duplicates</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>start_codon_exists <span class="op">=</span> <span class="bu">any</span>(</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    f.<span class="bu">type</span> <span class="op">==</span> <span class="st">"misc_feature"</span> <span class="kw">and</span> </span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Start codon"</span> <span class="kw">in</span> <span class="bu">str</span>(f.qualifiers.get(<span class="st">"label"</span>, [])) </span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> f <span class="kw">in</span> backbone.features</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> start_codon_exists:</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add a feature for just the start codon (3 bp)</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    start_codon_feature <span class="op">=</span> SeqFeature(</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        FeatureLocation(lacz_start, lacz_start <span class="op">+</span> <span class="dv">3</span>, strand<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        <span class="bu">type</span><span class="op">=</span><span class="st">"misc_feature"</span>,</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>        qualifiers<span class="op">=</span>{</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">"label"</span>: [<span class="st">"Start codon (ATG)"</span>],</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">"note"</span>: [<span class="st">"lacZ-alpha start codon"</span>]</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    backbone.features.append(start_codon_feature)</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Added start codon feature"</span>)</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Start codon feature already exists"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>[INFO] &lt;module&gt;: Added start codon feature</code></pre>
+</div>
+</div>
+<p>We could even annotate more details in the sequence. For example, if we check out https://www.snapgene.com/plasmids/basic_cloning_vectors/lac_promoter then this even annotates the -35 and 10 regions of the lac promoter. We will not do this, here, but in general the more annotations you have in your sequence, the less likely you are to overwrite/clone into such sequences.</p>
+<p>Also annotating is a good habit for checking the consistency. For example, we can check if the lac promoter corresponds to the one found at the source above, making us more confident about the part.</p>
+</section>
+<section id="linearizing-the-backbone" class="level2">
+<h2 class="anchored" data-anchor-id="linearizing-the-backbone">Linearizing the Backbone</h2>
+<p>MCS stands for <a href="https://en.wikipedia.org/wiki/Multiple_cloning_site">Multiple cloning site</a> and is also often referred to as a polylinker. It is a region with lots of restriction sites that occur nowhere else on the plasmid. This makes it easy to cut it open and insert another fragment at this site.</p>
+<p>As we see in the figure before, the <code>MCS</code> is in the middle (or rather beginning) of the <code>lacZ-alpha</code> CDS. This is not a coincidence, but a key idea in blue-white screening. If we cut in the MCS and successfully insert a gene there, we will destroy the original <code>lacZ-alpha</code> CDS. In presence of X-Gal and IPTG, the colonies with successful inserts will thus be white (unless we make them pink as we plan to) and not blue anymore.</p>
+<p>Let’s look at the MCS feature in more detail.</p>
+<div id="2f5e1f0c" class="cell" data-execution_count="55">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify the MCS feature</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>MSC_feature <span class="op">=</span> [feature <span class="cf">for</span> feature <span class="kw">in</span> backbone.features <span class="cf">if</span> feature.<span class="bu">type</span> <span class="op">==</span> <span class="st">"misc_feature"</span>][<span class="dv">0</span>]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"# MSC feature:</span><span class="ch">\n</span><span class="sc">{</span>MSC_feature<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>MSC_feature_seq <span class="op">=</span> MSC_feature.extract(backbone.seq)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># MSC feature:
+type: misc_feature
+location: [631:688](+)
+qualifiers:
+    Key: label, Value: ['MCS']
+    Key: note, Value: ['pUC18/19 multiple cloning site']
+</code></pre>
+</div>
+</div>
+<p><code>biopython</code> comes with a really useful library of restriction enzymes, where we can search for restriction sites and simulate cuts. Let’s do this within the MCS for a list of frequently used enzymes.</p>
+<p>We also code a function <code>get_enzymes_only_in_feature</code> to obtain a list of enzymes that cut only within the MCS and not somewhere else in the plasmid.</p>
+<div id="4e50a5cb" class="cell" data-execution_count="56">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio.Restriction <span class="im">import</span> AllEnzymes, RestrictionBatch</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio.Restriction.PrintFormat <span class="im">import</span> PrintFormat</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_enzymes_only_in_feature(feature) <span class="op">-&gt;</span> <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">list</span>[<span class="bu">int</span>]]:</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Get restriction enzymes that cut within a feature."""</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    enzymes: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">list</span>[<span class="bu">int</span>]] <span class="op">=</span> {}</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    enzymes_cutting_outside: <span class="bu">list</span>[<span class="bu">str</span>] <span class="op">=</span> []</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    feature_start <span class="op">=</span> <span class="bu">int</span>(feature.location.start)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    feature_end <span class="op">=</span> <span class="bu">int</span>(feature.location.end)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check cut sites for all enzymes</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> enzyme <span class="kw">in</span> AllEnzymes:</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        name <span class="op">=</span> enzyme.<span class="va">__name__</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>        cut_sites <span class="op">=</span> enzyme.search(backbone.seq)</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> site <span class="kw">in</span> cut_sites:</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> feature_start <span class="op">&lt;=</span> site <span class="op">&lt;</span> feature_end:</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> name <span class="kw">not</span> <span class="kw">in</span> enzymes:</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>                    enzymes[name] <span class="op">=</span> []</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>                enzymes[name].append(site)</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>                enzymes_cutting_outside.append(name)</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove enzymes that cut outside the feature</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> enzyme_name <span class="kw">in</span> <span class="bu">set</span>(enzymes_cutting_outside):</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> enzyme_name <span class="kw">in</span> enzymes:</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>            <span class="kw">del</span> enzymes[enzyme_name]</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> enzymes</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Find enzymes that cut only within the MCS</span></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>enzymes_only_in_MCS <span class="op">=</span> get_enzymes_only_in_feature(MSC_feature)</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"# Enzymes cutting only within MCS:</span><span class="ch">\n</span><span class="sc">{</span><span class="bu">list</span>(enzymes_only_in_MCS.keys())<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: Print cut sites for EcoRI</span></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>ecoRI_sites <span class="op">=</span> enzymes_only_in_MCS.get(<span class="st">"EcoRI"</span>, [])</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"# EcoRI cut sites within MCS:</span><span class="ch">\n</span><span class="sc">{</span>ecoRI_sites<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a><span class="co"># show cuttings for some</span></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>batch_in_lab <span class="op">=</span> [<span class="st">'EcoRI'</span>, <span class="st">'BamHI'</span>, <span class="st">'HindIII'</span>, <span class="st">'KpnI'</span>, <span class="st">'XbaI'</span>, <span class="st">'PstI'</span>]</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>batch_safe <span class="op">=</span> [ enzyme <span class="cf">for</span> enzyme <span class="kw">in</span> batch_in_lab <span class="cf">if</span> enzyme <span class="kw">in</span> enzymes_only_in_MCS ]</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"# Cut sites for selected safe enzymes </span><span class="sc">{</span>batch_safe<span class="sc">}</span><span class="ss">:"</span>)</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>restriction_batch <span class="op">=</span> RestrictionBatch(batch_safe)</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> restriction_batch.search(MSC_feature_seq)</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>my_map <span class="op">=</span> PrintFormat()</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>my_map.sequence <span class="op">=</span> MSC_feature_seq  <span class="co"># type: ignore</span></span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>my_map.print_as(<span class="st">"map"</span>)</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>my_map.print_that(result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># Enzymes cutting only within MCS:
+['HincII', 'EcoICRI', 'KpnI', 'AvaI', 'SstI', 'BscXI', 'SphI', 'BveI', 'Ecl136II', 'BamHI', 'BspMAI', 'Asp718I', 'HindIII', 'BspMI', 'FriOI', 'Acc65I', 'BanII', 'EcoRI', 'PstI', 'Bps6700III', 'BmeT110I', 'XapI', 'Hso63373III', 'BfuAI', 'HindII', 'Eco53kI', 'XmiI', 'XmaI', 'Sse8387I', 'XbaI', 'Cfr9I', 'SmaI', 'Ama87I', 'EcoT38I', 'TspMI', 'AccI', 'FblI', 'ApoI', 'BsiHKCI', 'SdaI', 'Asl11923II', 'SalI', 'SpnRII', 'PgaP73III', 'Eco88I', 'Psp124BI', 'SbfI', 'Eco24I', 'PaeI', 'AcsI', 'SacI', 'Nli3877I', 'BsoBI', 'HgiJII', 'Acc36I']
+
+# EcoRI cut sites within MCS:
+[684]
+
+# Cut sites for selected safe enzymes ['EcoRI', 'BamHI', 'HindIII', 'KpnI', 'XbaI', 'PstI']:
+ 2 HindIII
+ |                                                          
+ |               18 PstI
+ |               |                                          
+ |               |       26 XbaI
+ |               |       |                                  
+ |               |       |     32 BamHI
+ |               |       |     |                            
+ |               |       |     |            45 KpnI
+ |               |       |     |            |               
+ |               |       |     |            |       53 EcoRI
+ |               |       |     |            |       |       
+AAGCTTGCATGCCTGCAGGTCGACTCTAGAGGATCCCCGGGTACCGAGCTCGAATTC
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+TTCGAACGTACGGACGTCCAGCTGAGATCTCCTAGGGGCCCATGGCTCGAGCTTAAG
+1                                                      57
+
+</code></pre>
+</div>
+</div>
+<p>Let’s mark the sites of two widely used restriction enzymes, <a href="https://en.wikipedia.org/wiki/EcoRI">EcoRI</a> and <a href="https://en.wikipedia.org/wiki/BamHI">BamHI</a>, in the plasmid map and zoom into the MSC region.</p>
+<div id="6993d7a6" class="cell" data-execution_count="57">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>ecoRI_sites <span class="op">=</span> enzymes_only_in_MCS.get(<span class="st">"EcoRI"</span>, [])</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>extra_features <span class="op">=</span> [</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    ExtraFeature(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        start<span class="op">=</span>site,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>        end<span class="op">=</span>site <span class="op">+</span> <span class="dv">1</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        strand<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="st">"✂️ EcoRI"</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        feature_type<span class="op">=</span><span class="st">"restriction_site"</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span><span class="st">"#0F0F0F"</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    ) <span class="cf">for</span> site <span class="kw">in</span> ecoRI_sites]</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>bamHI_sites <span class="op">=</span> enzymes_only_in_MCS.get(<span class="st">"BamHI"</span>, [])</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>extra_features <span class="op">+=</span> [</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    ExtraFeature(</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>        start<span class="op">=</span>site,</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>        end<span class="op">=</span>site <span class="op">+</span> <span class="dv">1</span>,</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>        strand<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="st">"✂️ BamHI"</span>,</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>        feature_type<span class="op">=</span><span class="st">"restriction_site"</span>,</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span><span class="st">"#0F0F0F"</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    ) <span class="cf">for</span> site <span class="kw">in</span> bamHI_sites]</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="co"># And show a crop around the MCS with the promotor upstream</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plot_sequence(backbone, view_as_cycle<span class="op">=</span>view_as_cycle, extra_features<span class="op">=</span>extra_features, from_to<span class="op">=</span>(<span class="dv">500</span>, <span class="dv">700</span>))</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Zoomed in view of MCS with EcoRI and BamHI sites"</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="notes_files/figure-html/cell-12-output-1.png" class="img-fluid">
+</div>
+</div>
+<p>We promised before that <code>biopython</code> cannot only find cut sites but also simulate cutting, including sticky ends with 3’ and 5’ overhangs. Let’s do this for the two enzymes to see their cutting behavior. We code a function <code>visualize_restriction_cut</code> for that purpose.</p>
+<div id="7050f778" class="cell" data-execution_count="58">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio.Restriction <span class="im">import</span> RestrictionBatch</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> visualize_restriction_cut(enzyme, sequence: Seq <span class="op">|</span> MutableSeq <span class="op">|</span> <span class="bu">str</span> <span class="op">|</span> <span class="va">None</span>, show_context_bp: <span class="bu">int</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Visualize a restriction enzyme cut with overhangs in ASCII art.</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">    -----------</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">    enzyme : RestrictionType enzyme object or str</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">        Either the enzyme name as a string (e.g., 'EcoRI') or enzyme object</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">    sequence : Seq or MutableSeq or str or None</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">        The DNA sequence to visualize (will find cut sites in this sequence)</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co">    show_context_bp: int or None</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">        If not None, then the +/- context window from the cut is shown.</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If enzyme is a string, get the enzyme object</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(enzyme, <span class="bu">str</span>):</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>        enzyme_batch <span class="op">=</span> RestrictionBatch([enzyme])</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>        enzyme_rt <span class="op">=</span> <span class="bu">list</span>(enzyme_batch)[<span class="dv">0</span>]</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>        enzyme_rt <span class="op">=</span> enzyme</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>    site <span class="op">=</span> enzyme_rt.site  <span class="co"># type: ignore</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>    ovhg <span class="op">=</span> enzyme_rt.ovhg  <span class="co"># type: ignore</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    fst5 <span class="op">=</span> enzyme_rt.fst5  <span class="co"># type: ignore</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>    fst3 <span class="op">=</span> enzyme_rt.fst3  <span class="co"># type: ignore</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">✂️ </span><span class="sc">{</span>enzyme_rt<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    site_display <span class="op">=</span> site[:fst5] <span class="op">+</span> <span class="st">'|'</span> <span class="op">+</span> site[fst5:]</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Cut position: </span><span class="sc">{</span>site_display<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Overhang: </span><span class="sc">{</span>ovhg<span class="sc">}</span><span class="ss"> (negative = 5' overhang, positive = 3' overhang)"</span>)</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>()</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert to Seq if string</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>    sequence <span class="op">=</span> enzyme_rt.site <span class="cf">if</span> sequence <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> sequence</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>    seq_obj <span class="op">=</span> Seq(sequence) <span class="cf">if</span> <span class="bu">isinstance</span>(sequence, <span class="bu">str</span>) <span class="cf">else</span> sequence</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Find all cut sites in the sequence</span></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>    cut_sites <span class="op">=</span> enzyme_rt.search(seq_obj)</span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> cut_sites:</span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"No cut sites found."</span>)</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Show each cut site with context</span></span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, cut_pos <span class="kw">in</span> <span class="bu">enumerate</span>(cut_sites, <span class="dv">1</span>):</span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Cut site </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> at position </span><span class="sc">{</span>cut_pos<span class="sc">}</span><span class="ss">:"</span>)</span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>        <span class="co"># BioPython uses 1-based indexing, Python uses 0-based</span></span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>        <span class="co"># search() returns the 1-based position after the forward strand cut</span></span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>        <span class="co"># To get the 0-based site start: (search_result - 1) - fst5</span></span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>        site_start <span class="op">=</span> cut_pos <span class="op">-</span> <span class="dv">1</span> <span class="op">-</span> fst5</span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>        site_end <span class="op">=</span> site_start <span class="op">+</span> <span class="bu">len</span>(site)</span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get context around the cut</span></span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> show_context_bp <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>            context_start <span class="op">=</span> <span class="bu">max</span>(<span class="dv">0</span>, cut_pos <span class="op">-</span> show_context_bp)</span>
+<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a>            context_end <span class="op">=</span> <span class="bu">min</span>(<span class="bu">len</span>(seq_obj), cut_pos <span class="op">+</span> show_context_bp)</span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>            context_start <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a>            context_end <span class="op">=</span> <span class="bu">len</span>(seq_obj)</span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a>        context <span class="op">=</span> seq_obj[context_start:context_end]</span>
+<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Position of the site start within the context</span></span>
+<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a>        site_start_in_context <span class="op">=</span> site_start <span class="op">-</span> context_start</span>
+<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a>        site_end_in_context <span class="op">=</span> site_start_in_context <span class="op">+</span> <span class="bu">len</span>(site)</span>
+<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get reverse complement</span></span>
+<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a>        rev_comp <span class="op">=</span> <span class="bu">str</span>(context.reverse_complement())</span>
+<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate cut positions within the context</span></span>
+<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a>        <span class="co"># fwd_cut_pos: position where forward strand is cut</span></span>
+<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a>        fwd_cut_pos <span class="op">=</span> site_start_in_context <span class="op">+</span> fst5</span>
+<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a>        <span class="co"># For reverse strand: positions are mirrored because of antiparallel nature</span></span>
+<span id="cb17-75"><a href="#cb17-75" aria-hidden="true" tabindex="-1"></a>        <span class="co"># rev_cut_pos in the reverse complement string is calculated as:</span></span>
+<span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a>        rev_cut_pos <span class="op">=</span> <span class="bu">len</span>(rev_comp) <span class="op">-</span> (site_end_in_context <span class="op">+</span> fst3)</span>
+<span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-78"><a href="#cb17-78" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Split around the cuts</span></span>
+<span id="cb17-79"><a href="#cb17-79" aria-hidden="true" tabindex="-1"></a>        fwd_left <span class="op">=</span> <span class="bu">str</span>(context[:fwd_cut_pos])</span>
+<span id="cb17-80"><a href="#cb17-80" aria-hidden="true" tabindex="-1"></a>        fwd_right <span class="op">=</span> <span class="bu">str</span>(context[fwd_cut_pos:])</span>
+<span id="cb17-81"><a href="#cb17-81" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-82"><a href="#cb17-82" aria-hidden="true" tabindex="-1"></a>        <span class="co"># For reverse strand, we need to reverse it for display (3' to 5' direction)</span></span>
+<span id="cb17-83"><a href="#cb17-83" aria-hidden="true" tabindex="-1"></a>        rev_comp_rev <span class="op">=</span> rev_comp[::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb17-84"><a href="#cb17-84" aria-hidden="true" tabindex="-1"></a>        rev_cut_pos_rev <span class="op">=</span> <span class="bu">len</span>(rev_comp_rev) <span class="op">-</span> rev_cut_pos</span>
+<span id="cb17-85"><a href="#cb17-85" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-86"><a href="#cb17-86" aria-hidden="true" tabindex="-1"></a>        rev_left <span class="op">=</span> rev_comp_rev[:rev_cut_pos_rev]</span>
+<span id="cb17-87"><a href="#cb17-87" aria-hidden="true" tabindex="-1"></a>        rev_right <span class="op">=</span> rev_comp_rev[rev_cut_pos_rev:]</span>
+<span id="cb17-88"><a href="#cb17-88" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-89"><a href="#cb17-89" aria-hidden="true" tabindex="-1"></a>        <span class="co"># For visualization, add spaces to show the overhang gap</span></span>
+<span id="cb17-90"><a href="#cb17-90" aria-hidden="true" tabindex="-1"></a>        gap_size <span class="op">=</span> <span class="bu">abs</span>(ovhg)</span>
+<span id="cb17-91"><a href="#cb17-91" aria-hidden="true" tabindex="-1"></a>        gap <span class="op">=</span> <span class="st">' '</span> <span class="op">*</span> (gap_size <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a>        fwd_cut <span class="op">=</span> fwd_left <span class="op">+</span> gap <span class="op">+</span> fwd_right</span>
+<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a>        rev_cut <span class="op">=</span> rev_left <span class="op">+</span> gap <span class="op">+</span> rev_right</span>
+<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"  5'- "</span> <span class="op">+</span> fwd_cut <span class="op">+</span> <span class="st">" -3'"</span>)</span>
+<span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"  3'- "</span> <span class="op">+</span> rev_cut <span class="op">+</span> <span class="st">" -5'"</span>)</span>
+<span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>()</span>
+<span id="cb17-99"><a href="#cb17-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-100"><a href="#cb17-100" aria-hidden="true" tabindex="-1"></a><span class="co"># Using enzyme name as string with the MCS sequence</span></span>
+<span id="cb17-101"><a href="#cb17-101" aria-hidden="true" tabindex="-1"></a>visualize_restriction_cut(<span class="st">"EcoRI"</span>, backbone.seq, show_context_bp<span class="op">=</span><span class="dv">30</span>)</span>
+<span id="cb17-102"><a href="#cb17-102" aria-hidden="true" tabindex="-1"></a>visualize_restriction_cut(<span class="st">"BamHI"</span>, backbone.seq, show_context_bp<span class="op">=</span><span class="dv">30</span>)</span>
+<span id="cb17-103"><a href="#cb17-103" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize_restriction_cut("SmaI", backbone.seq, show_context_bp=30)</span></span>
+<span id="cb17-104"><a href="#cb17-104" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize_restriction_cut("KpnI", backbone.seq, show_context_bp=30)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+✂️ EcoRI
+Cut position: G|AATTC
+Overhang: -4 (negative = 5' overhang, positive = 3' overhang)
+
+Cut site 1 at position 684:
+  5'- CTCTAGAGGATCCCCGGGTACCGAGCTCG     AATTCACTGGCCGTCGTTTTACAACGTCGTG -3'
+  3'- GAGATCTCCTAGGGGCCCATGGCTCGAGCTTAA     GTGACCGGCAGCAAAATGTTGCAGCAC -5'
+
+
+✂️ BamHI
+Cut position: G|GATCC
+Overhang: -4 (negative = 5' overhang, positive = 3' overhang)
+
+Cut site 1 at position 663:
+  5'- GCTTGCATGCCTGCAGGTCGACTCTAGAG     GATCCCCGGGTACCGAGCTCGAATTCACTGG -3'
+  3'- CGAACGTACGGACGTCCAGCTGAGATCTCCTAG     GGGCCCATGGCTCGAGCTTAAGTGACC -5'
+</code></pre>
+</div>
+</div>
+<p>Both look great with similar cutting characteristics. There is no strong preference there: <code>EcoRI</code> is perhaps the most commonly used one in labs and <code>BamHI</code> is a little closer to the upstream promoter and may thus result in better efficiency in expression. Let’s choose <code>BamHI</code>.</p>
+<div id="3f5cff25" class="cell" data-execution_count="59">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio.Restriction <span class="im">import</span> BamHI</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Cut the (circular) backbone with BamHI</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>cut_backbone <span class="op">=</span> BamHI.catalyze(backbone.seq)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># This results in a single fragment</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(cut_backbone) <span class="op">==</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>If we cut with <code>BamHI</code> this will produce sticky ends with overhangs. However the Gibson Master Mix contains a 5’-exonuclease that chews back DNA from the 5’ ends. This will remove the overhangs (and even chew way further), resulting in 3’ overhangs.</p>
+<p>For our insert to anneal to the two ends of the linearized backbone, we need to create homology arms for the insert that match the contexts of the cut sites. Typically these arms need to be of length around 20 nt for Gibson with a single (or few) inserts.</p>
+<p>Let us first show the cut sites with blunt ends (after some chewing).</p>
+<div id="8895d22f" class="cell" data-execution_count="60">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>homology_length <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"We aim for homology arms of length </span><span class="sc">{</span>homology_length<span class="sc">}</span><span class="ss">."</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Upstream: before the cut site and after chewing back the 5' overhang"</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>cut_backbone_left <span class="op">=</span> cut_backbone[<span class="dv">0</span>][<span class="op">-</span>homology_length:]</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"5'- ..."</span> <span class="op">+</span> cut_backbone_left)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"3'- ..."</span> <span class="op">+</span> cut_backbone_left.complement())</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>chew_back_5prime <span class="op">=</span> <span class="op">-</span>BamHI.ovhg</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>cut_backbone_right <span class="op">=</span> cut_backbone[<span class="dv">1</span>][chew_back_5prime:chew_back_5prime<span class="op">+</span>homology_length]</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Downstream: after the cut site and after chewing back the 5' overhang"</span>)</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cut_backbone_right <span class="op">+</span> <span class="st">"... -3'"</span>)</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cut_backbone_right.complement() <span class="op">+</span> <span class="st">"... -5'"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>We aim for homology arms of length 20.
+
+Upstream: before the cut site and after chewing back the 5' overhang
+5'- ...CCTGCAGGTCGACTCTAGAG
+3'- ...GGACGTCCAGCTGAGATCTC
+
+Downstream: after the cut site and after chewing back the 5' overhang
+CCCGGGTACCGAGCTCGAAT... -3'
+GGGCCCATGGCTCGAGCTTA... -5'</code></pre>
+</div>
+</div>
+<p>While we show blunt ends, the 5’ ends will be chewed back even further. For the insert, we need to complement the template (= bottom) strand. Thus we can use the bases from <code>-homology_length</code> to <code>0</code> (relative to the cut) of the coding (=top) strand for the left arm.</p>
+<p>Likewise, the right cut starts after the overhang for <code>homology_length</code> nt.</p>
+<div id="884ae5c4" class="cell" data-execution_count="61">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>left_homology <span class="op">=</span> cut_backbone_left</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(left_homology) <span class="op">==</span> homology_length</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>right_homology <span class="op">=</span> cut_backbone_right</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(right_homology) <span class="op">==</span> homology_length</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Homology arms that we need to add to the insert:"</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(left_homology, <span class="st">" + (insert) + "</span>, right_homology)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Homology arms that we need to add to the insert:
+CCTGCAGGTCGACTCTAGAG  + (insert) +  CCCGGGTACCGAGCTCGAAT</code></pre>
+</div>
+</div>
+<section id="part-1-the-rbs" class="level3">
+<h3 class="anchored" data-anchor-id="part-1-the-rbs">Part 1: The RBS</h3>
+<p>Ribosome binding sites (RBSes) are DNA sequences that are transcribed to RNA that binds tightly to part of the Ribosome. By analyzing many such sequences and looking at the statistics of most common bases, so-called consensus sequences have been obtained. For the RBS this is the famous <a href="https://en.wikipedia.org/wiki/Shine–Dalgarno_sequence">Shine-Dalgarno sequence</a>. In <em>E. coli</em> the RNA sequence is <code>AGGAGGU</code> (corresponding to <code>AGGAGGT</code> in DNA).</p>
+<p>Once we have chosen our RBS, when designing our insert, we need to know how to add our CDS after the RBS. Luckily this has been studied. An important parameter for the translation initiation rate is the spacing between the RBS and the start codon of the CDS. A systematic study was done by <a href="https://doi.org/10.1093/nar/22.23.4953">Hongyun Chen, Matthew Bjerknes, Ravindra Kumar, Ernest Jay, NAR 1994</a>. They found that 5 nt was optimal.</p>
+<blockquote class="blockquote">
+<p><strong><em>Side note:</em></strong> How does the Ribosome determine the open reading frame (ORF)? It scans for a start codon like <code>AUG</code> on the RNA (<code>ATG</code> in DNA) which then sets the reading frame (determining the codons). However, central to this is the distance of the Shine-Dalgarno to the possible start of the ORF. As noted before, 5 nt is optimal.</p>
+</blockquote>
+<p>All these findings have been systematically included into a tool by <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2782888/">Salis, Mirsky, Voigt (Nat Biotechnol. 2009)</a>. Besides binding of the Shine-Dalgarno sequence and spacing, the authors also identify the standby site upstream of the Shine-Dalgarno sequence as central for the translation initiation rate. Figure 1 in their article shows the standby site, the Shine-Dalgarno sequence, spacing, and the start codon nicely in relation to the Ribosome that interacts with them.</p>
+<section id="choosing-an-rbs" class="level4">
+<h4 class="anchored" data-anchor-id="choosing-an-rbs">Choosing an RBS</h4>
+<p>We will choose a relatively strong RBS that is frequently used in synthetic designs: it is part <code>BBa_B0034</code> from https://parts.igem.org/Ribosome_Binding_Sites/Prokaryotic/Constitutive/Community_Collection.</p>
+<p>It already contains the standby site, the Shine-Dalgarno sequence, spacing, and the start codon: <code>TCTAGAG</code> + <code>AAAGAGGAGAAA</code> + <code>TACTAG</code> + <code>ATG</code></p>
+<p>Let’s create an annotated sequence <code>rbs</code> for the RBS.</p>
+<div id="a47ce840" class="cell" data-execution_count="62">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio.SeqRecord <span class="im">import</span> SeqRecord</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>rbs_standby <span class="op">=</span> Seq(<span class="st">"TCTAGAG"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>rbs_shine_dalgarno <span class="op">=</span> Seq(<span class="st">"AAAGAGGAGAAA"</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>rbs_spacer <span class="op">=</span> Seq(<span class="st">"TACTAG"</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>rbs_seq <span class="op">=</span> rbs_standby <span class="op">+</span> rbs_shine_dalgarno <span class="op">+</span> rbs_spacer</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>rbs <span class="op">=</span> SeqRecord(rbs_seq, name<span class="op">=</span><span class="st">"RBS_BBa_B0034"</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>rbs_features <span class="op">=</span> [</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    SeqFeature(</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>        FeatureLocation(<span class="dv">0</span>, <span class="bu">len</span>(rbs_seq), strand<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">type</span><span class="op">=</span><span class="st">"RBS"</span>,</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>        qualifiers<span class="op">=</span>{</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">"label"</span>: [<span class="st">"BBa_B0034"</span>],</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>            <span class="st">"note"</span>: [<span class="st">"new RBS"</span>]</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    SeqFeature(</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>        FeatureLocation(<span class="bu">len</span>(rbs_standby), <span class="bu">len</span>(rbs_standby <span class="op">+</span> rbs_shine_dalgarno), strand<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>        <span class="bu">type</span><span class="op">=</span><span class="st">"misc_feature"</span>,</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>        qualifiers<span class="op">=</span>{</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">"label"</span>: [<span class="st">"Shine-Dalgarno"</span>],</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">"note"</span>: [<span class="st">"Shine-Dalgarno sequence"</span>]</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>rbs.features.extend(rbs_features)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="part-2-the-pink-cds" class="level3">
+<h3 class="anchored" data-anchor-id="part-2-the-pink-cds">Part 2: The Pink CDS</h3>
+<p>We want our <em>E. coli</em> to be pink. A promising CDS is the <code>mCherry CDS</code> sequence, that we find, for example, at https://www.ncbi.nlm.nih.gov/protein/AAV52164.1</p>
+<p>Let’s get this sequence, annotate it, and check translation: it should start with the usual <code>M</code> (or Met) for <a href="https://en.wikipedia.org/wiki/Methionine">Methionine</a> and stop with the stop codon shown as <code>*</code>. While most translation processes start with this amino acid, it is often cleaved after translation, with the final protein not starting with it.</p>
+<div id="c0d77939" class="cell" data-execution_count="63">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio <span class="im">import</span> Entrez, SeqIO</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio.SeqFeature <span class="im">import</span> SeqFeature, FeatureLocation</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pprint <span class="im">import</span> pprint</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>accession <span class="op">=</span> <span class="st">"AY678264"</span>  <span class="co"># mCherry gene</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>email <span class="op">=</span> <span class="st">"contact@biodis.co"</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> Entrez.efetch(db<span class="op">=</span><span class="st">"nucleotide"</span>, <span class="bu">id</span><span class="op">=</span>accession, rettype<span class="op">=</span><span class="st">"fasta"</span>, retmode<span class="op">=</span><span class="st">"text"</span>, email<span class="op">=</span>email) <span class="im">as</span> handle:</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    cds <span class="op">=</span> SeqIO.read(handle, <span class="st">"fasta"</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a CDS feature annotation</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>cds_feature <span class="op">=</span> SeqFeature(</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>FeatureLocation(<span class="dv">0</span>, <span class="bu">len</span>(cds.seq), strand<span class="op">=</span><span class="dv">1</span>),  <span class="co"># Start to end, forward strand</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">type</span><span class="op">=</span><span class="st">"CDS"</span>,</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    qualifiers<span class="op">=</span>{</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"label"</span>: [<span class="st">"mCherry"</span>],</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"product"</span>: [<span class="st">"mCherry fluorescent protein"</span>],</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"note"</span>: [<span class="st">"Red fluorescent protein"</span>]</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>cds.features.append(cds_feature)</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Translation"</span>)</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'DNA:'</span>, cds.seq)</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Protein:'</span>, cds.seq.translate())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Translation
+DNA: ATGGTGAGCAAGGGCGAGGAGGATAACATGGCCATCATCAAGGAGTTCATGCGCTTCAAGGTGCACATGGAGGGCTCCGTGAACGGCCACGAGTTCGAGATCGAGGGCGAGGGCGAGGGCCGCCCCTACGAGGGCACCCAGACCGCCAAGCTGAAGGTGACCAAGGGTGGCCCCCTGCCCTTCGCCTGGGACATCCTGTCCCCTCAGTTCATGTACGGCTCCAAGGCCTACGTGAAGCACCCCGCCGACATCCCCGACTACTTGAAGCTGTCCTTCCCCGAGGGCTTCAAGTGGGAGCGCGTGATGAACTTCGAGGACGGCGGCGTGGTGACCGTGACCCAGGACTCCTCCCTGCAGGACGGCGAGTTCATCTACAAGGTGAAGCTGCGCGGCACCAACTTCCCCTCCGACGGCCCCGTAATGCAGAAGAAGACCATGGGCTGGGAGGCCTCCTCCGAGCGGATGTACCCCGAGGACGGCGCCCTGAAGGGCGAGATCAAGCAGAGGCTGAAGCTGAAGGACGGCGGCCACTACGACGCTGAGGTCAAGACCACCTACAAGGCCAAGAAGCCCGTGCAGCTGCCCGGCGCCTACAACGTCAACATCAAGTTGGACATCACCTCCCACAACGAGGACTACACCATCGTGGAACAGTACGAACGCGCCGAGGGCCGCCACTCCACCGGCGGCATGGACGAGCTGTACAAGTAA
+Protein: MVSKGEEDNMAIIKEFMRFKVHMEGSVNGHEFEIEGEGEGRPYEGTQTAKLKVTKGGPLPFAWDILSPQFMYGSKAYVKHPADIPDYLKLSFPEGFKWERVMNFEDGGVVTVTQDSSLQDGEFIYKVKLRGTNFPSDGPVMQKKTMGWEASSERMYPEDGALKGEIKQRLKLKDGGHYDAEVKTTYKAKKPVQLPGAYNVNIKLDITSHNEDYTIVEQYERAEGRHSTGGMDELYK*</code></pre>
+</div>
+</div>
+<p>Indeed we find the start codon <code>ATG</code> at the beginning being translated to <code>M</code> and the stop codon at the end.</p>
+</section>
+<section id="part-3-the-terminator" class="level3">
+<h3 class="anchored" data-anchor-id="part-3-the-terminator">Part 3: The Terminator</h3>
+<p>We will choose a strong double terminator <code>BBa_B0015</code> from https://parts.igem.org/Part:BBa_B0015</p>
+<div id="e087fd33" class="cell" data-execution_count="64">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>terminator_seq <span class="op">=</span> Seq(<span class="st">"ccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttgtttgtcggtgaacgctctctactagagtcacactggctcaccttcgggtgggcctttctgcgtttata"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>terminator <span class="op">=</span> SeqRecord(terminator_seq, name<span class="op">=</span><span class="st">"BBa_B0015"</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>terminator_feature <span class="op">=</span> SeqFeature(</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    FeatureLocation(<span class="dv">0</span>, <span class="bu">len</span>(terminator_seq), strand<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">type</span><span class="op">=</span><span class="st">"terminator"</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    qualifiers<span class="op">=</span>{</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"label"</span>: [<span class="st">"BBa_B0015"</span>],</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"note"</span>: [<span class="st">"Double terminator"</span>]</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>terminator.features.append(terminator_feature)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="gluing-the-insert-together" class="level3">
+<h3 class="anchored" data-anchor-id="gluing-the-insert-together">Gluing the Insert together</h3>
+<p>We are now ready to construct the DNA sequence from the parts via:</p>
+<div id="1dbffe64" class="cell" data-execution_count="65">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>insert <span class="op">=</span> left_homology <span class="op">+</span> rbs <span class="op">+</span> cds <span class="op">+</span> terminator <span class="op">+</span> right_homology</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>And let’s look at the insert as a whole</p>
+<div id="6c7eb2ce" class="cell" data-execution_count="66">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plot_sequence(insert, view_as_cycle<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f"Insert sequence (length </span><span class="sc">{</span><span class="bu">len</span>(insert.seq)<span class="sc">}</span><span class="ss">nt) with homology arms (length </span><span class="sc">{</span>homology_length<span class="sc">}</span><span class="ss">nt)"</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="notes_files/figure-html/cell-21-output-1.png" class="img-fluid">
+</div>
+</div>
+</section>
+</section>
+<section id="the-gibson-assembly" class="level2">
+<h2 class="anchored" data-anchor-id="the-gibson-assembly">The Gibson Assembly</h2>
+<p>Next comes the big step: we will simulate a Gibson assembly and check if the construct is what we expected. Let’s code this with the help of <code>pydna</code>.</p>
+<div id="6ce5d6aa" class="cell" data-execution_count="67">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pydna</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydna.assembly2 <span class="im">import</span> Assembly</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydna.dseqrecord <span class="im">import</span> Dseqrecord</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>backbone_dseq <span class="op">=</span> Dseqrecord(backbone, name<span class="op">=</span><span class="st">"backbone"</span>, circular<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>cutting <span class="op">=</span> backbone_dseq.cut(BamHI)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>backbone_linearized_dseq <span class="op">=</span> cutting[<span class="dv">0</span>]</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="co"># The insert</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>insert_dseq <span class="op">=</span> Dseqrecord(insert, name<span class="op">=</span><span class="st">"insert"</span>, circular<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>fragments <span class="op">=</span> [</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>    backbone_linearized_dseq,</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>    insert_dseq,</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>asm <span class="op">=</span> Assembly(fragments, limit<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> asm.assemble_circular()</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>final_construct <span class="op">=</span> products[<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Of particular interest is the sequence from the promoter to the start codon of the new CDS. We will show this and check if it looks unexpected.</p>
+<div id="c6de5537" class="cell" data-execution_count="68">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>promoters <span class="op">=</span> [ f <span class="cf">for</span> f <span class="kw">in</span> backbone_linearized_dseq.features <span class="cf">if</span> f.<span class="bu">type</span> <span class="op">==</span> <span class="st">"promoter"</span> ]</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>promoter <span class="op">=</span> promoters[<span class="dv">1</span>]</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(promoter)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plot_sequence(final_construct, view_as_cycle<span class="op">=</span>view_as_cycle, from_to<span class="op">=</span>(<span class="dv">2560</span><span class="op">+</span><span class="dv">54</span>, <span class="dv">2710</span>), plot_sequence<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Zoomed in view of promoter to CDS start codon"</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>type: promoter
+location: [2564:2595](+)
+qualifiers:
+    Key: label, Value: ['lac promoter']
+    Key: note, Value: ['promoter for the E. coli lac operon']
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<img src="notes_files/figure-html/cell-23-output-2.png" class="img-fluid">
+</div>
+</div>
+<p>We see that between the lac operator and our RBS there is already the original start codon from the CDS that we cut. That means there was probably also an RBS between the lac operator and this <code>ATG</code>. Ribosomes may thus already start translating there. While this is not a clean design to just add our RBS and <code>ATG</code> afterwards, we will go for this as this is whats possible with cutting in the MCS. For a “Hello world” with the goal to be as simple as possible, we did this deliberately, though.</p>
+<p>You will work on a, more complex, clean workaround in the problem session.</p>
+</section>
+<section id="the-plasmid" class="level2">
+<h2 class="anchored" data-anchor-id="the-plasmid">The Plasmid</h2>
+<p>Here it is, ready for the lab, our “Hello world” plasmid as a whole.</p>
+<div id="2f77deda" class="cell" data-execution_count="69">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plot_sequence(final_construct, view_as_cycle<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Hello world plasmid"</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="notes_files/figure-html/cell-24-output-1.png" class="img-fluid">
+</div>
+</div>
+<hr>
+<p><strong>License</strong>: © 2025 Matthias Függer and Thomas Nowak. Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../03-modeling/mobspy.html" class="pagination-link" aria-label="CRN Modeling with MobsPy">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">CRN Modeling with MobsPy</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../08-measure-bulk/od.html" class="pagination-link" aria-label="Optical Density">
+        <span class="nav-page-text"><span class="chapter-title">Optical Density</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

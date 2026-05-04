@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Living Cells – Computational Bioengineering</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../02-intro/notes.html" rel="next">
+<link href="../01-intro/cs.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5ccb035bea26c1e21f80f44cf7c27909.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../custom.css">
+</head>
+
+<body class="nav-sidebar floating slimcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-intro/notes.html">Introduction</a></li><li class="breadcrumb-item"><a href="../01-intro/notes.html"><span class="chapter-title">Living Cells</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computational Bioengineering</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/course.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Course Modalities (TU Wien, 2026)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Preliminaries</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/coding.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Coding Setup Guide</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/math.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ordinary Differential Equations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/cs.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Complexity and Asymptotic Notation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/notes.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Living Cells</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-intro/notes.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Genetic Circuits</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Modeling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/abstraction.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Abstraction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/quantum.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Quantum Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/molecular.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Molecular Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/crn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Chemical Reaction Networks</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/stochastic_simulation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Stochastic Simulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/mobspy.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CRN Modeling with MobsPy</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Distributed Algorithms</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Nucleic Acid Design</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Plasmid Design</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06-plasmid/notes.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Plasmid Design</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Digital Design</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text">Bulk Measurements</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-measure-bulk/od.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Optical Density</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-measure-bulk/spectra.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Spectroscopy</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
+ <span class="menu-text">Cell Measurements</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-measure-cell/basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Computer Vision for Microscopy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-measure-cell/ai.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AI Techniques</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-intro/notes.html">Introduction</a></li><li class="breadcrumb-item"><a href="../01-intro/notes.html"><span class="chapter-title">Living Cells</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-title">Living Cells</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>We start with an introduction into the basics of living cells.</p>
+<section id="coding-setup" class="level2">
+<h2 class="anchored" data-anchor-id="coding-setup">Coding setup</h2>
+<p>We will stick to Python 3 code that can be run stand-alone at your computer whenever possible. When running the code locally on your computer, we suggest to use a virtual environment. We will install several libraries and a virtual environment helps to not interfere with the system’s Python libraries.</p>
+<p>For <a href="https://docs.python.org/3/library/venv.html">venv</a> this is done by running this in the directory that will be used for the lecture:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv venv</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">.</span> ./venv/bin/activate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Next let’s load some libraries we will need for the course.</p>
+<div id="0ea99977" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># in case you need to install a library run a command like:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install numpy</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install matplotlib</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install mobspy</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># imports</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># configure notebook figures</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># remove it in case you run it as stand-alone code</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="computing-cell" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="computing-cell">Computing cell</h2>
+<p>A cell is a <strong>computing device</strong>: it senses molecular inputs, processes them through a network of biochemical reactions, and produces outputs that determine its behavior: growth, motion, gene expression, division. This computation has been running, and refined by natural selection, for roughly four billion years.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/life_timeline_wiki.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption class="margin-caption">Timeline of life on Earth (from Wikipedia, https://en.wikipedia.org/wiki/Template:Life_timeline)</figcaption>
+</figure>
+</div>
+<p>Cells span a wide range of scales: a bacterium such as <em>E. coli</em> occupies about <span class="math inline">\(1\,\mu\text{m}^3 = 1\,\text{fL}\)</span> (<a href="https://bionumbers.hms.harvard.edu/bionumber.aspx?id=100004">bionumbers</a>), a microalga such as <em>Chlamydomonas reinhardtii</em> roughly <span class="math inline">\(270\,\mu\text{m}^3\)</span> (<a href="https://bionumbers.hms.harvard.edu/bionumber.aspx?s=n&amp;v=2&amp;id=110530">bionumber</a>), and a typical human cell roughly <span class="math inline">\(500\)</span>–<span class="math inline">\(4{,}000\,\mu\text{m}^3\)</span> (<a href="https://book.bionumbers.org/how-big-is-a-human-cell/">bionumbers</a>). Within each, thousands of molecular species interact through reactions that sense, integrate, and relay signals.</p>
+<p>The figure below compares these volumes under the simplifying assumption of cells being balls.</p>
+<div id="0ce2213c" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>volumes <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">270</span>, <span class="dv">1000</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> [<span class="st">"E. coli"</span>, <span class="st">"C. reinhardtii"</span>, <span class="st">"human"</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>radii <span class="op">=</span> [(<span class="dv">3</span><span class="op">*</span>v<span class="op">/</span>(<span class="dv">4</span><span class="op">*</span>np.pi))<span class="op">**</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>) <span class="cf">for</span> v <span class="kw">in</span> volumes]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>gap <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="dv">0</span>]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(radii)):</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    x.append(x[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> radii[i<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> radii[i] <span class="op">+</span> gap)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> xi, r, v, name <span class="kw">in</span> <span class="bu">zip</span>(x, radii, volumes, names):</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    ax.add_patch(plt.Circle((xi, <span class="dv">0</span>), r, fill<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    ax.text(xi, <span class="dv">0</span>, <span class="ss">f"V=</span><span class="sc">{</span>v<span class="sc">}</span><span class="ss">"</span>, ha<span class="op">=</span><span class="st">"center"</span>, va<span class="op">=</span><span class="st">"center"</span>, fontsize<span class="op">=</span><span class="dv">6</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    ax.text(xi, <span class="op">-</span><span class="dv">8</span>, name, ha<span class="op">=</span><span class="st">"center"</span>, va<span class="op">=</span><span class="st">"center"</span>, fontsize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Cell sizes in fL and as circular cuts"</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>ax.set_aspect(<span class="st">"equal"</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(x[<span class="dv">0</span>] <span class="op">-</span> radii[<span class="dv">0</span>] <span class="op">-</span> gap, x[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> radii[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> gap)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="op">-</span><span class="bu">max</span>(radii) <span class="op">-</span> gap, <span class="bu">max</span>(radii) <span class="op">+</span> gap)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">"off"</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="notes_files/figure-html/cell-3-output-1.png" class="img-fluid">
+</div>
+</div>
+<p>Cells have different means to acquire inputs, perform computations, and generate outputs. These include biochemical mechanisms to:</p>
+<ul>
+<li><strong>sense</strong> their environment, including nutrient gradients, toxins, and signaling molecules</li>
+<li><strong>process</strong> the stimuli through cascading networks of proteins, signaling molecules, metabolites, and nucleic acids</li>
+<li><strong>act</strong> by altering growth rate, secreting molecules, or moving toward or away from a signal</li>
+</ul>
+<p>The computational substrate is chemistry rather than silicon, and the relevant timescales are set by molecular collision rates. Yet the problems solved, from reliable signal detection under molecular noise to robust decision-making with imprecise components and distributed coordination across cell populations, remain ones that challenge our best engineered systems.</p>
+<p>Understanding how cells compute, and learning to engineer that computation, is what this course is about.</p>
+<section id="models" class="level3">
+<h3 class="anchored" data-anchor-id="models">Models</h3>
+<p>To describe (aspects of) a cell’s behavior models on different levels of abstraction have been used. During the course we will discuss some of these. An example is Chemical Reaction Networks (CRNs) that describe the evolution of species in a cell via reactions that occur among the species. Reactions modify, generate, and consume other species. While such a (chemically inspired) model may seem mostly relevant at a molecular level, we will see that one can also use it at more abstract levels. A core difference there is that we often drop the assumption that mass is preserved in the reactions. More on this later in the course.</p>
+</section>
+<section id="a-model-organism-the-bacterium-escherichia-coli-e.-coli" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="a-model-organism-the-bacterium-escherichia-coli-e.-coli">A model organism: the bacterium <em>Escherichia coli</em> (<em>E. coli</em>)</h3>
+<p>While many of the concepts covered in the course are general to a wide class of cells, we will often refer to <a href="https://en.wikipedia.org/wiki/Escherichia_coli"><em>E. coli</em></a> as an example. <em>E. coli</em> is a gram negative bacterium. It has an inner and outer membrane.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="https://phil.cdc.gov/PHIL_Images/10071/10071_lores.jpg" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">E.coli (from CDC, by Janice Haney Carr, https://phil.cdc.gov)</figcaption>
+</figure>
+</div>
+<p>Bacteria belong to the prokaryotes, which is Greek for “before kernel”; they do not possess of a nucleus such as mammalian cells of humans.</p>
+<p>The shape of an is <em>E. coli</em> approximately cylindrical with round caps (rod shaped) with a radius of <span class="math inline">\(0.5\mu\)</span> and length of <span class="math inline">\(2\mu m\)</span>. Their volume of about <span class="math inline">\(1 \mu m^3\)</span>, or equivalently, <span class="math inline">\(10^{-15} L = 1fL\)</span>. <em>E. coli</em> cultures <a href="https://www.youtube.com/watch?v=_5bGPa-QXV4">grow by cell division</a> with a rate depending on several factors like strain, temperature, and available nutrients in the growth medium. During fast growth cells duplicate about every 20 min.</p>
+<p>Below is a schematic of its membranes from the inside of the cell (cytoplasm, bottom in the figure) to the outside (top in the figure).</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Gram_negative_cell_wall.svg/1920px-Gram_negative_cell_wall.svg.png" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">E.coli (from wikimedia by Jeff Dahl, CC BY-SA 4.0, https://en.wikipedia.org/wiki/Gram-negative_bacteria)</figcaption>
+</figure>
+</div>
+<p>Recently microscopy has made significant advances in capturing high-resolution images of parts of cells. One such image you can find in <a href="https://journals.asm.org/doi/10.1128/JB.185.20.6112-6118.2003#pill-references">Matias, Valério RF, et al., J. of Bacteriology, 2020</a> Fig.4. of the paper where membranes are nicely visible.</p>
+</section>
+<section id="genome" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="genome">Genome</h3>
+<p>The genome of <em>E. coli</em> is a double stranded circular DNA and varies considerably by strain. For MG1655 (a K-12 substrain) it is 4,641,652 bp long and can be found in the <a href="https://www.ncbi.nlm.nih.gov/nuccore/U00096">ncbh database</a>. It comprises of 4,000 to 5,000 genes. The following figure shows the annotated genomes with currently known genes in 2026.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/poster-genome-Escherichia-coli-K-12-substr-MG1655.jpg" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">E.coli genome (from https://ecocyc.org/genbro/genbro.shtml?orgid=ECOLI&amp;replicon=COLI-K12)</figcaption>
+</figure>
+</div>
+<p><strong>Gene.</strong> A gene is a sequence of DNA that is transcribed. Not necessarily all genes are translated (result in proteins though) and postprocessing may happen on several layers. Genes often occur in clusters with common control elements. These sequences including genes and control elements are called <strong>operons</strong>. They are particularly important from a computational perspective and we will discuss them in detail throughout the course.</p>
+</section>
+<section id="crowded-volume" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="crowded-volume">Crowded volume</h3>
+<p>The cytoplasm of a cell should be imagined as a crowded space in contrast to molecules freely floating around. To get an impression how densely packed it is, see this <a href="http://cellimagelibrary.org/images/28234">simulation of the cytoplasm of <em>E. coli</em> during 15ms by McGuffee and Elcock</a>.</p>
+<p>A fascinating, already cleared up but still crowded, interactive visualization can be found at <a href="https://media.cellsignal.com/www/html/science/landscapes/adhesion/adhesion.html#acHero_86">cellsignal.com</a></p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/cellsignal_cell.png" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">crowded cell (from media.cellsignal.com)</figcaption>
+</figure>
+</div>
+</section>
+<section id="the-central-dogma" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="the-central-dogma">The central dogma</h3>
+<p><strong>Central dogma.</strong> The flow of genetic information in a cell was summarized by Francis Crick in 1958. DNA stores the heritable sequence information. The universal flows are:</p>
+<ul>
+<li><strong>Replication</strong>: DNA <span class="math inline">\(\to\)</span> DNA (genome copied before division)</li>
+<li><strong>Transcription</strong>: DNA <span class="math inline">\(\to\)</span> RNA (a gene is transcribed into messenger RNA)</li>
+<li><strong>Translation</strong>: RNA <span class="math inline">\(\to\)</span> protein (mRNA translated into amino acid sequence)</li>
+</ul>
+<p>Two additional flows occur in specific organisms but are not happening in all cells:</p>
+<ul>
+<li><strong>Reverse transcription</strong>: RNA <span class="math inline">\(\to\)</span> DNA (retroviruses such as HIV)</li>
+<li><strong>RNA replication</strong>: RNA <span class="math inline">\(\to\)</span> RNA (RNA viruses)</li>
+</ul>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/d/dd/Extended_Central_Dogma_with_Enzymes.jpg" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">Central dogma of molecular biology (from Wikipedia, by Daniel Horspool, CC BY-SA 3.0)</figcaption>
+</figure>
+</div>
+<p>Sequence information does not flow from protein back to nucleic acid under any known natural conditions.</p>
+</section>
+<section id="dna" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="dna">DNA</h3>
+<p>A <strong>nucleotide</strong> is the monomer, the basic building brick, of DNA: a phosphate group, a 2′-deoxyribose sugar, and one of four nitrogenous bases: adenine (A), thymine (T), guanine (G), cytosine (C). A and G are purines (two-ring); T and C are pyrimidines (one-ring).</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Phosphate_backbone.jpg/960px-Phosphate_backbone.jpg" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption class="margin-caption">DNA composition (from Wikipedia, by the National Human Genome Research Institute)</figcaption>
+</figure>
+</div>
+<p>DNA is a <strong>double helix</strong> of two antiparallel polynucleotide strands (Watson and Crick, 1953). The strands are held together by Watson-Crick base pairing: A pairs with T via two hydrogen bonds, G pairs with C via three and thus binds stronger. The higher the G-C content in a DNA segment, the more thermally stable the duplex.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/DNA_Structure%2BKey%2BLabelled.pn_NoBB.png/960px-DNA_Structure%2BKey%2BLabelled.pn_NoBB.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption class="margin-caption">DNA double helix with labeled structural features (from Wikipedia, by Zephyris, CC BY-SA 3.0)</figcaption>
+</figure>
+</div>
+<p>Here we see the bonds in greater detail.</p>
+<div style="display:flex; justify-content:center; gap:30px; margin:20px 0;">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Base_pair_AT.svg/1920px-Base_pair_AT.svg.png" class="img-fluid" style="width:45.0%" alt="A–T: 2 hydrogen bonds"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Base_pair_GC.svg/1920px-Base_pair_GC.svg.png" class="img-fluid" style="width:45.0%" alt="G–C: 3 hydrogen bonds"></p>
+</div>
+<p><strong>Direction.</strong> Each strand has chemical polarity: the 5′ end carries a free phosphate on the 5′ carbon of the sugar; the 3′ end carries a free hydroxyl on the 3′ carbon. The two strands of a duplex are antiparallel: one runs 5′ <span class="math inline">\(\to\)</span> 3′ while its complement runs 3′ <span class="math inline">\(\to\)</span> 5′.</p>
+<p><strong>Plus and minus strands.</strong> By convention the (+) strand, also called the sense or coding strand, has the same sequence as the mRNA (with T in place of U). The (−) strand, the antisense or template strand, is its complement and serves as the template for the RNA polymerase (RNAP) during transcription. Which strand is (+) depends on the gene: on a circular bacterial chromosome, different genes use different strands as their template.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/dna.svg" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption class="margin-caption">DNA plus and minus strands</figcaption>
+</figure>
+</div>
+</section>
+<section id="dna-synthesis" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="dna-synthesis">DNA Synthesis</h3>
+<p>DNA strands can only be synthesized in the direction 5’ <span class="math inline">\(\to\)</span> 3’. This is done when the genome is copied. The strand that is read is read in the direction 3’ <span class="math inline">\(\to\)</span> 5’ to create a 5’ <span class="math inline">\(\to\)</span> 3’ copy. Synthesis is performed by the DNA-bound DNA polymerase, or short, DNA polymerase.</p>
+<p>DNA replication starts from the <code>oriC</code> site in both directions along the circular genome in <em>E. coli</em>. The <strong>DNA helicase</strong> creates a so-called moving replication fork so that the DNA polymerase can access the strands for replication.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Replication_fork.svg/3840px-Replication_fork.svg.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption class="margin-caption">DNA replication fork (from Wikipedia, by Masur, CC BY-SA 3.0)</figcaption>
+</figure>
+</div>
+<p>As we see here the lagging strand cannot be synthesized continuously since synthesis can be only 5’ <span class="math inline">\(\to\)</span> 3’. The short initial starts are from RNA that is synthesized via the <strong>Primase enzyme</strong>.</p>
+<blockquote class="blockquote">
+<p>Side note: Speed. <em>E. coli</em> can synthesize DNA at 1000 <span class="math inline">\(\text{nt}\,\text{s}^{-1}\)</span>. This is much faster than human cells that have a speed of 50 <span class="math inline">\(\text{nt}\,\text{s}^{-1}\)</span>. How long does it take to replicate the whole <em>E. coli</em> genome? At a size of 4.6 Mbp and the fact that the genome is replicated form both sides, we obtain a duration of <span class="math display">\[ \frac{4.6\, \text{Mbp} \cdot \frac{1}{2}}{1000\, \text{bp}\,\text{s}^{-1}} \approx 40 \, \text{min} .\]</span></p>
+</blockquote>
+<p>Several such replications must thus be ongoing during growth of an <em>E. coli</em> that divides every 20 min. The gens close to the <code>oriC</code> thus exist in multiples.</p>
+</section>
+<section id="rna" class="level3">
+<h3 class="anchored" data-anchor-id="rna">RNA</h3>
+<p>RNA nucleotides differ from DNA in two respects: the sugar is ribose (with a 2′-OH group) rather than deoxyribose, and uracil (U) replaces thymine (T). U base-pairs with A, just as T does.</p>
+<p><strong>Direction.</strong> RNA is synthesized and read 5′ to 3′, the same convention as DNA. During transcription, RNAP moves along the template strand 3′ <span class="math inline">\(\to\)</span> 5′ and builds the transcript 5′ <span class="math inline">\(\to\)</span> 3′.</p>
+<blockquote class="blockquote">
+<p>Side note: Speed. <em>E. coli</em> can transcribe at about 40-80 <span class="math inline">\(\text{nt}\,\text{s}^{-1}\)</span>. This is again faster than human cells that have a speed of 6-70 <span class="math inline">\(\text{nt}\,\text{s}^{-1}\)</span>.</p>
+</blockquote>
+<p>RNA is typically <strong>single-stranded</strong>, but extensive intramolecular base pairing creates secondary structures (stems, loops, pseudoknots) that are critical for function. The main functional classes in bacteria are:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Class</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mRNA</td>
+<td>carries coding sequence from gene to ribosome</td>
+</tr>
+<tr class="even">
+<td>tRNA</td>
+<td>adaptor molecule linking codon to amino acid</td>
+</tr>
+<tr class="odd">
+<td>rRNA</td>
+<td>structural and catalytic core of the ribosome</td>
+</tr>
+<tr class="even">
+<td>sRNA</td>
+<td>small regulatory RNA, often by base-pairing with mRNA</td>
+</tr>
+</tbody>
+</table>
+<p>In eukaryotes, pre-mRNA undergoes further processing (5′ capping, splicing of introns, 3′ polyadenylation) before export from the nucleus. Bacteria lack these steps: the primary transcript often is the mature mRNA.</p>
+</section>
+<section id="transcription" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="transcription">Transcription</h3>
+<p>The enzyme responsible for transcription is <strong>RNA polymerase</strong> (RNAP or simply R). In bacteria, the catalytic core (subunit composition α₂ββ′ω) cannot on its own locate where on the chromosome to begin. The <strong>σ (sigma) factor</strong> is a dissociable subunit that associates with the core to form the <strong>holoenzyme</strong> (α₂ββ′ωσ also written as Rσ). The sigma factor recognizes the <strong>promoter</strong>: a pair of conserved sequence motifs at positions −35 and −10 relative to the transcription start site. After binding, and being in the so-called <strong>closed complex</strong>, the holoenzyme unwinds roughly DNA locally by favorable energetic binding conditions to form the <strong>open complex</strong>, allowing the template strand to enter the active site of the holoenzyme.</p>
+<p>Transcription then proceeds in three stages:</p>
+<ol type="1">
+<li><p><strong>Initiation</strong>: holoenzyme binds promoter, transitioning from the closed complex to the open complex. It starts transcribing the DNA, but may easily fall off and interrupt during the first few codons. Sigma dissociates once elongation is underway.</p></li>
+<li><p><strong>Elongation</strong>: RNAP moves along the template strand (3′ $$ 5′), synthesizing mRNA 5′ <span class="math inline">\(\to\)</span> 3′ at roughly <span class="math inline">\(40-80\;\text{nt}\,\text{s}^{-1}\)</span> in <em>E. coli</em>.</p></li>
+<li><p><strong>Termination</strong>: RNAP stalls at a terminator sequence and releases the mRNA transcript.</p></li>
+</ol>
+<p><em>E. coli</em> encodes seven sigma factors. The housekeeping factor <span class="math inline">\(\sigma^{70}\)</span> directs transcription of most genes during exponential growth. Alternative sigma factors (e.g., <span class="math inline">\(\sigma^{32}\)</span>) redirect RNAP to stress-response genes, giving the cell a simple mechanism for large-scale transcriptional reprogramming. This is a recurring design motif we will encounter throughout the course.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="https://www.sciencefacts.net/wp-content/uploads/2022/08/Transcription-in-Prokaryotes.jpg" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption class="margin-caption">From DNA to mRNA: transcription overview (from www.sciencefacts.net).</figcaption>
+</figure>
+</div>
+</section>
+<section id="translation" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="translation">Translation</h3>
+<p>The mRNA is decoded by the <strong>ribosome</strong>, a large ribonucleoprotein assembly. In bacteria it consists of a 30S small subunit and a 50S large subunit (together: 70S). The small subunit positions itself on the mRNA via the <strong>Shine-Dalgarno sequence</strong>, a purine-rich stretch about 5-10 nt upstream of the start codon (AUG) that base-pairs with the 3′ end of 16S rRNA.</p>
+<p>During elongation, <strong>aminoacyl-tRNAs</strong> enter the A-site, each matching the codon by anticodon base-pairing. The large subunit catalyzes peptide bond formation, the ribosome translocates by one codon, and the growing polypeptide is extended at roughly 15-20 amino acids <span class="math inline">\(\text{s}^{-1}\)</span>. Translation ends at a stop codon (UAA, UAG, or UGA), triggering release of the polypeptide.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Prokaryotic_Translation_Initiation.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption class="margin-caption">Translation at the ribosome (from Wikipedia, by Richard Wheeler, CC BY-SA 3.0)</figcaption>
+</figure>
+</div>
+<p>In bacteria, transcription and translation are <strong>spatially coupled</strong>: ribosomes begin translating the 5′ end of an mRNA while RNAP is still synthesizing the 3′ end. This co-transcriptional translation is absent in eukaryotes, where transcription occurs in the nucleus and mRNA must be exported before cytoplasmic translation can begin.</p>
+</section>
+</section>
+<section id="pathways-in-e.-coli" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="pathways-in-e.-coli">Pathways in <em>E. coli</em></h2>
+<p>Reactions are typically grouped together into pathways, that describe reactions for a certain cell function. Examples are the modification of molecules by enzymes along <em>metabolic pathways</em> as well as transcription and translation in <em>genetic pathways</em>. An overview of reactions grouped into pathways is shown in the figure below. An interactive schematic is available <a href="https://ecocyc.org/overviewsWeb/celOv.shtml?orgid=ECOLI">here by ecocyc</a> and lists of pathways available, e.g., by <a href="https://biocyc.org/ECOLI/class-tree?object=Pathways">biocyc</a> and <a href="https://www.genome.jp/kegg/pathway.html#cellular">kegg</a>.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/ecoli_reactions.png" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">schematic of E. coli pathways (from ecocyc, https://ecocyc.org/overviewsWeb/celOv.shtml?orgid=ECOLI)</figcaption>
+</figure>
+</div>
+<p>Below is an excerpt of reactions from a genetic pathway that includes the expression of the <code>lacI</code> gene. See <a href="https://ecocyc.org/gene?orgid=ECOLI&amp;id=MONOMER0-159">here</a> for an interactive version. These reactions will play a role later on in the course.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/lacI.png" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">lacI gene in pathways (from ecocyc)</figcaption>
+</figure>
+</div>
+<hr>
+<p><strong>License &amp; Attribution</strong>: This page is adapted from material by <a href="https://biocircuits.github.io/">Michael Elowitz and Justin Bois</a> (© 2021–2025), licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>. Attributions of images not created by the authors are indicated.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../01-intro/cs.html" class="pagination-link" aria-label="Complexity and Asymptotic Notation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Complexity and Asymptotic Notation</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../02-intro/notes.html" class="pagination-link" aria-label="Genetic Circuits">
+        <span class="nav-page-text"><span class="chapter-title">Genetic Circuits</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

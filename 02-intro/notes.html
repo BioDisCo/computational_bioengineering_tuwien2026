@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Genetic Circuits – Computational Bioengineering</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../03-modeling/abstraction.html" rel="next">
+<link href="../01-intro/notes.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5ccb035bea26c1e21f80f44cf7c27909.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../custom.css">
+</head>
+
+<body class="nav-sidebar floating slimcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-intro/notes.html">Introduction</a></li><li class="breadcrumb-item"><a href="../02-intro/notes.html"><span class="chapter-title">Genetic Circuits</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computational Bioengineering</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/course.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Course Modalities (TU Wien, 2026)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Preliminaries</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/coding.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Coding Setup Guide</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/math.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ordinary Differential Equations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/cs.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Complexity and Asymptotic Notation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/notes.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Living Cells</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-intro/notes.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Genetic Circuits</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Modeling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/abstraction.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Abstraction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/quantum.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Quantum Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/molecular.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Molecular Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/crn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Chemical Reaction Networks</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/stochastic_simulation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Stochastic Simulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/mobspy.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CRN Modeling with MobsPy</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Distributed Algorithms</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Nucleic Acid Design</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Plasmid Design</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06-plasmid/notes.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Plasmid Design</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Digital Design</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text">Bulk Measurements</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-measure-bulk/od.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Optical Density</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-measure-bulk/spectra.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Spectroscopy</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
+ <span class="menu-text">Cell Measurements</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-measure-cell/basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Computer Vision for Microscopy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-measure-cell/ai.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AI Techniques</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../01-intro/notes.html">Introduction</a></li><li class="breadcrumb-item"><a href="../02-intro/notes.html"><span class="chapter-title">Genetic Circuits</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-title">Genetic Circuits</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this chapter we cover basic circuit principles, the way cells regulate gene expression via genetic circuits, and mathematical models to describe genetic circuits.</p>
+<div id="bd1d9661" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="circuits" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="circuits">Circuits</h2>
+<p>We may view a pathway as a system that comprises of:</p>
+<ul>
+<li>a set of input species</li>
+<li>a set of output species</li>
+<li>a set of internal species</li>
+<li>a set of reactions that describe the interactions among all these species</li>
+</ul>
+<p>An example is shown below where <code>lacI</code> represses expression of <code>lacZ</code> as indicated via the arrow head <code>-|</code>.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/lacI_to_lacZ.jpeg" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">Example pathway: LacI repressor controlling LacZ expression.</figcaption>
+</figure>
+</div>
+<p>This is very similar to what is called a <em>circuit</em> which comprises of:</p>
+<ul>
+<li>a set of input ports/nodes</li>
+<li>a set of output ports/nodes</li>
+<li>a set of internal nodes</li>
+<li>a set of electronic components that relate signals at the nodes to each other.</li>
+</ul>
+<p>We will thus refer to a pathway as a <em>biological circuit</em>. There are <em>natural</em> circuits that have naturally evolved and <em>synthetic</em> biological circuits that have been engineered into the cell. Synthetic circuits, however, use components of naturally evolved circuits that are then either used directly or adapted for synthetic circuits.</p>
+<section id="signals" class="level3">
+<h3 class="anchored" data-anchor-id="signals">Signals</h3>
+<p>An <em>execution</em> or <em>signal trace</em> of an electronic circuit is given by the voltage <span class="math inline">\(u(t)\)</span> at each of its nodes with respect to a ground potential over time <span class="math inline">\(t\)</span>. An execution not only depends on the circuit, but also on the circuit <em>environment</em>, interacting with the circuit via its input and output ports - in the end we want the circuit to react differently to different inputs.</p>
+<p>A digital signal with values in <span class="math inline">\(\{0,1\}\)</span> is sometimes more convenient when designing, analyzing, and simulating a circuit and it is obtained from the analog signal by discretizing at a <em>threshold voltage</em>.</p>
+<blockquote class="blockquote">
+<p><strong><em>Side note.</em></strong> In some contexts more than two discrete signal values are used. One such example is using 0 and 1 for strong signal values and <span class="math inline">\(X\)</span> for an intermediate signal value. This becomes relevant when signals spend a significant amount of time within value-ranges that are neither clear 0 nor 1. One can also compute with such an extended logic <a href="https://ieeexplore.ieee.org/abstract/document/8314764">(Friedrichs, Függer, Lenzen, IEEE Transactions on Computers 2018)</a>.</p>
+</blockquote>
+<p>Signals in a biological circuit are typically given as concentrations or counts (in a fixed volume) of species over time. We will see that digital abstractions will also be used in biological circuits.</p>
+<p>However, we stress that signals are not necessarily voltages and concentrations. For example, in electrical circuits, it is sometimes more convenient to use the current <span class="math inline">\(i(t)\)</span> through a certain connection between nodes as the signal. We may even mix signal domains and use current for the input signal and voltage for the output signal or vice versa. Likewise, current-analogs are used in biological circuits as signals. Examples are production rates of species <a href="https://www.nature.com/articles/s41586-019-1321-1">(Aoki, Lillacci, Gupta, Baumschlager, Schweingruber, Khammash, Nature 2019)</a> and the number of RNA polymerases (RNAPs) that pass a certain DNA bp per time (RNAP flux) <a href="https://jbioleng.biomedcentral.com/articles/10.1186/1754-1611-3-4">(Kelly et al., J. of Biological Engineering 2009)</a>, <a href="https://www.nature.com/articles/s41467-020-18630-2">(Espah Borujeni, Zhang, Doosthosseini, Nielsen, Voigt, Nature comm. 2020)</a>.</p>
+</section>
+<section id="circuit-components" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="circuit-components">Circuit components</h3>
+<p>Examples for analog electronic components are the resistor and the capacitor, example for digital components (gates) are the inverter (INV), a NAND gate, and a NOR gate:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Circuit_elements.svg" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">Electronic circuit components. Passive and active elements (from wikimedia, https://upload.wikimedia.org/wikipedia/commons/c/cb/Circuit_elements.svg)</figcaption>
+</figure>
+</div>
+<p>Let us start with two analog components. The <em>resistor</em> with resistance <span class="math inline">\(R\)</span> between two of the circuit’s nodes <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> relates voltage <span class="math inline">\(u_{pq}(t)\)</span> and current <span class="math inline">\(i_{pq}(t)\)</span> accross it by <span class="math display">\[
+u_{pq}(t) = R \cdot i_{pq}(t) \enspace.
+\]</span></p>
+<p>The <em>capacitor</em> with capacitance <span class="math inline">\(C\)</span> relates voltage <span class="math inline">\(u_{pq}(t)\)</span> and current <span class="math inline">\(i_{pq}(t)\)</span> across it by <span class="math display">\[
+i_{pq}(t) = C \cdot \frac{du_{pq}(t)}{dt} \enspace.
+\]</span></p>
+<p>These analog components do not have dedicated input and output ports. They are undirected and simply restrict signals among the ports they connect in certain ways.</p>
+<p>Thus, a priori, such a circuit thus does not have a direction. The choice of which ports are inputs and which ones outputs is irrelevant for the executions it produces. It is rather a convention to tell the circuit’s user which node voltages we propose to vary (via the environment) to obtain a certain intended behavior at the output nodes (given that the output’s environment does not interfere with this).</p>
+<p>Additionally to the circuit components, we also need to include the <em>Kirchhoff current law</em>. Let <span class="math inline">\(p\)</span> be a node in the circuit and <span class="math inline">\(N(p)\)</span> the set of neighboring nodes. Then, <span class="math display">\[
+\sum_{q \in N(p)} i_{qp}(t) = 0\enspace.
+\]</span> Further, the <em>Kirchhoff voltage law</em> states that along a closed path <span class="math inline">\(C\)</span> of edges in the circuit, <span class="math display">\[
+\sum_{e \in C} u_{e}(t) = 0\enspace.
+\]</span></p>
+</section>
+<section id="charging-a-capacitance" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="charging-a-capacitance">Charging a capacitance</h3>
+<p>Let’s look at a small example, an RC circuit, shown in the figure below where a capacitance C is charged via a resistance R.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/circuit_RC.svg" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">RC circuit</figcaption>
+</figure>
+</div>
+<p>We have marked the ground potential with <span class="math inline">\(0\,\text{V}\)</span>, a dedicated input node and an output node. Input and output signals are in terms of voltage.</p>
+<p>The first assumption made is one about the <em>circuit’s environment</em>: we have assumed that the output current is <span class="math inline">\(0\)</span>A. While this may be true for some circuits, or at least approximately hold since output currents are very low, it may be violated for others. For example, we cannot simply compose two such circuits sequentially: the assumption would most a priori be violated with a positive input current of the second instance.</p>
+<p>For the input environment, we assume that the input voltage was <span class="math inline">\(0\)</span> V all before time <span class="math inline">\(0\)</span>, and has jumped to <span class="math inline">\(1\)</span> V at time <span class="math inline">\(0\)</span> where it remains.</p>
+<p>We have: <span class="math display">\[\begin{align}
+u_R(t)    &amp;= R \cdot i_R(t)       \qquad&amp;&amp;\text{(resistor rule)}\\
+i_C(t)    &amp;= C \cdot \frac{du_{out}(t)}{dt}       \qquad&amp;&amp;\text{(capacitor rule)}\\
+u_{in}(t) &amp;= u_R(t) + u_{out}(t)        &amp;&amp;\text{(Kirchhoff voltage)}\\
+i_{R}(t) &amp;= i_C(t)        &amp;&amp;\text{(Kirchhoff current)}\\
+\end{align}\]</span></p>
+<p>and thus</p>
+<p><span class="math display">\[\begin{align}
+\frac{du_{out}(t)}{dt}   &amp;= \frac{1}{RC} \left( u_{in}(t) -  u_{out}(t) \right)&amp;&amp; \\
+u_{out}(0) &amp;= 0  &amp;&amp;\text{(input environment)}
+\end{align}\]</span></p>
+<p>The change of the output <span class="math inline">\(\frac{du_{out}(t)}{dt}\)</span> is thus proportional to the difference of input and output <span class="math inline">\(u_{in}(t) -  u_{out}(t)\)</span>. If <span class="math inline">\(u_{in}(t) &gt; u_{out}(t)\)</span>, the output is corrected to increase and vice versa for <span class="math inline">\(u_{in}(t) &lt; u_{out}(t)\)</span>.</p>
+<p>For our assumptions of an input at <span class="math inline">\(1\)</span> V, we observe that the following equation fulfills the above differential equation and initial conditions <span class="math display">\[\begin{align}
+u_{out}(t) =  1 - e^{-\frac{t}{RC}} \enspace.
+\end{align}\]</span> Let’s plot it over time:</p>
+<div id="a68f6544" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compute</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">200</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>uout <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> np.exp(<span class="op">-</span>t<span class="op">/</span>(R<span class="op">*</span>C))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># build plot</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">3</span>))</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'output $u_</span><span class="sc">{out}</span><span class="st">$ over time'</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"time $t$ (s)"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"$u_</span><span class="sc">{out}</span><span class="st">$ (V)"</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>plt.plot(t, uout, linewidth<span class="op">=</span><span class="dv">2</span>, color<span class="op">=</span><span class="st">"tomato"</span>, label<span class="op">=</span><span class="st">"$u_</span><span class="sc">{out}</span><span class="st">$"</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>,<span class="fl">1.1</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="notes_files/figure-html/cell-3-output-1.png" class="img-fluid">
+</div>
+</div>
+<p>The plot clearly shows how the capacitance is charged over time until it reaches a limit.</p>
+</section>
+</section>
+<section id="gene-expression-model" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="gene-expression-model">Gene expression model</h2>
+<p>Let’s turn to biological circuits. We will start by thinking about a single gene, coding for a single corresponding protein. This minimal example will allow us to develop intuition for the dynamics of the simplest gene regulations systems and lay out a procedure that we can further extend to analyze more complex circuits.</p>
+<p>What protein concentration will be produced by a gene <em>x</em>? We assume that the gene will be transcribed to mRNA and those mRNA molecules will in turn be translated to produce proteins, such that new proteins are produced at a total rate <span class="math inline">\(\beta\)</span> molecules per unit time. The <span class="math inline">\(x\)</span> protein does not simply accumulate over time. It is also removed both through active degradation as well as dilution as cells grow and divide. For simplicity, we will assume that both processes tend to reduce protein concentrations through a simple first-order process, with a rate constant <span class="math inline">\(\gamma\)</span>.</p>
+<p>Thus, we can draw a diagram of our simple gene, x, with its protein being produced and removed (dashed circle):</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/expression.svg" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption class="margin-caption">Basic model for expression of a gene</figcaption>
+</figure>
+</div>
+<p><br></p>
+<blockquote class="blockquote">
+<p><strong><em>Side note (glyphs):</em></strong> We are using the standard <a href="https://sbolstandard.org/visual-glyphs/">SBOL visual glyphs</a> to draw such figures.</p>
+</blockquote>
+<p>Here, protein production occurs at rate <span class="math inline">\(\beta\)</span> and degradation+dilution at rate <span class="math inline">\(\gamma x\)</span>. We can then write down a simple ordinary differential equation (ODE) describing these dynamics:</p>
+<p><span class="math display">\[\begin{align}
+&amp;\frac{dx}{dt} = \mathrm{production - (degradation+dilution)} \\[1em]
+&amp;\frac{dx}{dt} = \beta - \gamma x
+\end{align}\]</span></p>
+<p>where</p>
+<p><span class="math display">\[\begin{align}
+\gamma = \gamma_\mathrm{dilution} + \gamma_\mathrm{degradation}
+\end{align}\]</span></p>
+<p>Luckily this ODE falls into a simple class of ODEs with known solutions: so-called linear ODEs. Indeed we encountered them in the ODE preliminary chapter and know that its solution is:</p>
+<p><span class="math display">\[\begin{align}
+x(t) = x_\mathrm{st} + (x_0 - x_\mathrm{st})\, e^{-\gamma t}, \qquad x_\mathrm{st} = \frac{\beta}{\gamma},
+\end{align}\]</span></p>
+<p>where <span class="math inline">\(x_0 = x(0)\)</span> is the initial protein concentration. For the special case <span class="math inline">\(x(0) = 0\)</span> of no initial presence of protein, this simplifies to</p>
+<p><span class="math display">\[\begin{align}
+x(t) = \frac{\beta}{\gamma}\!\left(1 - e^{-\gamma t}\right).
+\end{align}\]</span></p>
+<p>The concentration rises exponentially toward the steady state <span class="math inline">\(x_\mathrm{st} = \beta/\gamma\)</span> with time constant <span class="math inline">\(\tau = 1/\gamma\)</span>. Note the direct analogy to the RC circuit: <span class="math inline">\(x_\mathrm{st}\)</span> plays the role of <span class="math inline">\(u_{in}\)</span> and <span class="math inline">\(1/\gamma\)</span> plays the role of <span class="math inline">\(RC\)</span>.</p>
+<blockquote class="blockquote">
+<p><strong><em>Side note (arrows in the diagram):</em></strong> The arrows resemble chemical reaction arrows. That is intended as we will later see. Precisely there are two type of arrows/reactions that we did not distinguish in the picture. The first one generates something and the second one transforms something into something. In the picture is clear what is what, but when we will use these reactions to describe systems we need to be clear.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong><em>Side note (units):</em></strong> What are the units of <span class="math inline">\(x\)</span>, <span class="math inline">\(\beta\)</span>, and <span class="math inline">\(\gamma\)</span>? Try to find out yourself by starting with <span class="math inline">\(x\)</span> before reading on. For <span class="math inline">\(x\)</span> there is actually a choice to make. We, and most, hinted here that <span class="math inline">\(x\)</span> is a concentration (expected number for a fixed volume would be an alternative choice for probabilistic systems). We would then eed to decide which concentration we go for: numbers per volume (<span class="math inline">\(1/m^3\)</span>), molar (<span class="math inline">\(mol/m^3\)</span>), mass per volume (<span class="math inline">\(g/m^3\)</span>), etc. While all of these make sense in different contexts, a natural choice for proteins in a small volume is numbers per volume since this number may be linked to experimental results most directly. From there on we deduce <span class="math inline">\([x] = m^{-3}\)</span>, <span class="math inline">\([dx/dt] = m^{-3}s^{-1}\)</span>, and thus for rate constants <span class="math inline">\([\beta] = m^{-3}s^{-1}\)</span> and <span class="math inline">\([\gamma][x] = [dx/dt]\)</span> and thus <span class="math inline">\([\gamma] = s^{-1}\)</span>. Often we will use non-SI units like <span class="math inline">\(uL^{-1}\)</span> or <span class="math inline">\(min^{-1}\)</span>, again since they can be directly linked to experimental outcomes.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong><em>Side note (effective degradation rates):</em></strong> When cells are growing, protein is removed through both degradation and dilution. For stable proteins, dilution dominates. For very unstable proteins, whose half-life is much smaller than the cell cycle period, dilution may be negligible. In bacteria, mRNA half-lives (1-10 min, typically) are much shorter than protein half-lives. In eukaryotic cells this is not necessarily true (mRNA half-lives can be many hours in mammalian cells).</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong><em>Side note (systematic ODEs):</em></strong> For the eletronic circuit the ODEs were obtained systematically. Not so for the biocircuit. We will later discuss how to obtain the ODEs in a systematic way. In short outlook on this is given in the next section.</p>
+</blockquote>
+</section>
+<section id="systematic-model-and-simulation" class="level2">
+<h2 class="anchored" data-anchor-id="systematic-model-and-simulation">Systematic model and simulation</h2>
+<p>We created an ODE that describes the transient behavior of the our first simple circuit. ODEs are great for modeling such dynamical systems, from very simple ones like this where we choose ODEs by hand to complex system behavior. Like every model, ODEs have limitations that we will discuss later.</p>
+<blockquote class="blockquote">
+<p><strong><em>Question (limitations):</em></strong> Can you think of some?</p>
+</blockquote>
+<p>Indeed there are systematic ways to derive the ODEs from more abstract system descriptions like bio-chemical reactions (a concept borrowed from chemistry). We have a full lecture on this, so only some basic principles here.</p>
+<p>The figure showed 2 reactions as arrows:</p>
+<p><span class="math display">\[\begin{align}
+\emptyset &amp;\rightarrow X\\[1em]
+X &amp;\rightarrow \emptyset
+\end{align}\]</span></p>
+<p>where <span class="math inline">\(\emptyset\)</span> is short for <code>nothing</code>. It also specified some rates for these reactions. Since these are of some often used standard form that we will discuss in the upcoming lecture, it is enough to just state the constants <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\gamma\)</span> instead of the complete rates <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\gamma X\)</span>. To distinguish them from the reaction rates, they are called <em>reaction rate constants</em>.</p>
+<p>Using a library like <a href="https://github.com/ROBACON/mobspy">MobsPy</a>, we can now simply simulate the transient via:</p>
+<div id="ba489061" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># uncomment for installing:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install mobspy</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> mobspy <span class="im">as</span> mp</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> mp.BaseSpecies()</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># parameters</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>volume <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>beta <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># production</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>mp.Zero <span class="op">&gt;&gt;</span> X [beta]</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># degradation &amp; dilution</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>X <span class="op">&gt;&gt;</span> mp.Zero [gamma]</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># simulate</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>MySim <span class="op">=</span> mp.Simulation(X)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>MySim.run()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>/Users/mfuegger/Github/Biodisco/computational_bioengineering_tuwien2026/venv/lib/python3.12/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<img src="notes_files/figure-html/cell-4-output-2.png" class="img-fluid">
+</div>
+</div>
+<p>While for quick prototyping unitless simulations can be nice, let’s stick to units as we derived them just before. We also set the volume of the cell to a typical volume of an <em>E. coli</em>.</p>
+<div id="4b96275f" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># E. coli volume</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>volume <span class="op">=</span> <span class="fl">1.0</span> <span class="op">*</span> mp.u(<span class="st">"um**3"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># protein species</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> mp.BaseSpecies()</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># parameters</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>beta <span class="op">=</span> <span class="fl">1.0</span> <span class="op">/</span> mp.u.<span class="bu">min</span> <span class="op">/</span> volume</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="fl">0.1</span> <span class="op">/</span> mp.u.<span class="bu">min</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># production</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>mp.Zero <span class="op">&gt;&gt;</span> X [beta]</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># degradation &amp; dilution</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>X <span class="op">&gt;&gt;</span> mp.Zero [gamma]</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># simulate</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>MySim <span class="op">=</span> mp.Simulation(X)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>MySim.run(duration<span class="op">=</span><span class="dv">60</span> <span class="op">*</span> mp.u.<span class="bu">min</span>, volume<span class="op">=</span>volume, unit_y <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> volume)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="notes_files/figure-html/cell-5-output-1.png" class="img-fluid">
+</div>
+</div>
+</section>
+<section id="relation-to-electronic-circuits" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="relation-to-electronic-circuits">Relation to electronic circuits</h2>
+<p>Let’s for a moment stop and again look at the equation of the RC circuit for the case <span class="math inline">\(u_{in}(t) = c\)</span> for <span class="math inline">\(t \geq 0\)</span>. Both equations look deceptively similar:</p>
+<p><span class="math display">\[\begin{align}
+\frac{du_{out}(t)}{dt}   &amp;=  \frac{c}{RC} -  \frac{1}{RC} \cdot u_{out}(t) &amp;&amp; \text{ (RC circuit)}\\
+\frac{dx}{dt} &amp;= \beta - \gamma x &amp;&amp; \text{ (gene regulation)}
+\end{align}\]</span></p>
+<p>In fact the electronic circuit behaves the same as the genetic circuit if <span class="math inline">\(\beta = \frac{c}{RC}\)</span> and <span class="math inline">\(\gamma = \frac{1}{RC}\)</span>; a strange coincidence?</p>
+<p>While a relation between the circuits is not immediate, let’s consider a different, slightly adapted, electronic circuit shown below.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/circuit_RC_v2.svg" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">RC circuit (v2)</figcaption>
+</figure>
+</div>
+<p>Now the <em>input signal</em> is the input current <span class="math inline">\(i_{in}(t)\)</span> and the output signal the output voltage <span class="math inline">\(u_{out}(t)\)</span>; at least for the moment.</p>
+<p>We have, <span class="math display">\[\begin{align}
+i_C(t) &amp;= C \cdot \frac{du_{out}(t)}{dt} &amp;&amp;\text{ (capacitor rule)}\\
+i_R(t) &amp;= \frac{1}{R} \cdot u_{out}(t) &amp;&amp;\text{ (resistor rule)}\\
+i_{in}(t) &amp;= i_C(t) + i_R(t) &amp;&amp; \text{ (Kirchhoff current)}
+\end{align}\]</span></p>
+<p>and thus <span class="math display">\[\begin{align}
+C \cdot \frac{du_{out}(t)}{dt} &amp;= i_{in}(t) - \frac{1}{R} \cdot u_{out}(t)
+\end{align}\]</span></p>
+<p>Let us change the output even further to the charge <span class="math inline">\(Q(t)\)</span> that is stored in the capacitor at time <span class="math inline">\(t\)</span>. For a capacitor with voltage <span class="math inline">\(u(t)\)</span> across it, it holds that <span class="math display">\[
+Q(t) = C \cdot u(t) \enspace.
+\]</span></p>
+<p>Calling the output signal <span class="math inline">\(Q_{out}\)</span>, we thus have, <span class="math display">\[\begin{align}
+\frac{dQ_{out}(t)}{dt} &amp;= i_{in}(t) - \frac{1}{RC} \cdot Q_{out}(t) \enspace.
+\end{align}\]</span></p>
+<p>Let’s compare: the <em>input current</em> <span class="math inline">\(i_{in}\)</span> now corresponds to the production rate <span class="math inline">\(\beta\)</span>, the <em>output charge</em> <span class="math inline">\(Q_{out}\)</span> to the protein counts (per volume), and <span class="math inline">\(\frac{1}{RC}\)</span> to the degradation and dilution rate <span class="math inline">\(\gamma\)</span>.</p>
+<blockquote class="blockquote">
+<p><strong><em>Question:</em></strong> Can you intuitively explain the relation between both the electronic and the genetic circuit? What is the unit of <span class="math inline">\(i_{in}\)</span> as an SI unit, and what is it in terms of charge <span class="math inline">\(Q\)</span>? What is the unit of <span class="math inline">\(\beta\)</span>?</p>
+</blockquote>
+</section>
+<section id="solving-for-the-steady-state" class="level2">
+<h2 class="anchored" data-anchor-id="solving-for-the-steady-state">Solving for the steady state</h2>
+<p>Often, one of the first things we would like to know is the concentration of protein under steady state conditions. To obtain this, we set the time derivative to 0, and solve:</p>
+<p><span class="math display">\[\begin{align}
+              &amp;\frac{dx}{dt} = \beta - \gamma x = 0 \\[1em]
+\Rightarrow \,&amp;x_{\mathrm{st}} = \beta / \gamma
+\end{align}\]</span></p>
+<p>In other words, the steady-state protein concentration depends on the ratio of production rate to degradation rate.</p>
+</section>
+<section id="refined-expression-model" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="refined-expression-model">Refined expression model</h2>
+<p>This description does not distinguish between transcription and translation. However, considering both processes separately can be important in more dynamic and stochastic contexts that we will encounter later in the course. To do so, we can simply add an additional variable to represent the mRNA concentration, which is now transcribed, translated to protein, and degraded (and diluted), as shown schematically here:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/transcription_translation.svg" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">Model with transcript and translation</figcaption>
+</figure>
+</div>
+<p>These reactions can be described by two coupled differential equations for the mRNA (m) and protein (x):</p>
+<p><span class="math display">\[\begin{align}
+&amp;\frac{dm}{dt} = \beta_m - \gamma_m m, \\[1em]
+&amp;\frac{dx}{dt} = \beta_p m - \gamma_p x.
+\end{align}\]</span></p>
+<p>Now, we can determine the steady state mRNA <span class="math inline">\(m_\mathrm{st}\)</span> and protein <span class="math inline">\(x_\mathrm{st}\)</span> concentrations straightforwardly, by setting both time derivatives to 0 and solving. We find:</p>
+<p><span class="math display">\[\begin{align}
+&amp;m_\mathrm{st} = \beta_m / \gamma_m, \\[1em]
+&amp;x_\mathrm{st} = \frac{\beta_p m_\mathrm{st}}{\gamma_p} = \frac{\beta_p \beta_m}{\gamma_p \gamma_m}.
+\end{align}\]</span></p>
+<p>From this, we see that the steady state protein concentration is proportional to the product of the two synthesis rates and inversely proportional to the product of the two degradation rates.</p>
+<p>And this gives us our first design rule:</p>
+<blockquote class="blockquote">
+<p><strong><em>Design rule:</em></strong> the cell can control protein expression level in at least <strong>four different ways:</strong> It could modulate (1) transcription, (2) translation, (3) mRNA degradation or (4) protein degradation rates. Or combinations thereof.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong><em>Question:</em></strong> Are there tradeoffs between these different options? Are they all used indiscriminately or is one favored in natural contexts?</p>
+</blockquote>
+</section>
+<section id="transcription-regulation" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="transcription-regulation">Transcription regulation</h2>
+<p>Life would be simple—perhaps too simple—if genes were simply left on all the time. To make things interesting the cell has to regulate them, turning their expression levels lower or higher depending on environmental conditions and other inputs. One of the simplest ways to do this is through repressors. Repressors are proteins that can bind to <strong>operators</strong> that are specific binding sites at or near a promoter to change its activity. Often the strength of their binding is contingent on external inputs. For example, the <code>LacI</code> repressor normally turns off the genes for lactose utilization in <em>E. coli</em>. However, in the presence of lactose in the media, a modified form of lactose binds to <code>LacI</code>, inhibiting its ability to repress its target genes. Thus, a nutrient (lactose) can regulate expression of genes that allow the cell to use it.</p>
+<p>In the following diagram, we label the repressor <span class="math inline">\(R\)</span>, the unoccupied operator <span class="math inline">\(O\)</span>, and the occupied operator <span class="math inline">\(O_{occ}\)</span>.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/repression.svg" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">Repression of a gene via binding of R at operator site</figcaption>
+</figure>
+</div>
+<p>The reactions we obtain are:</p>
+<p><span class="math display">\[\begin{align}
+O + R \rightleftharpoons O_{occ}
+\end{align}\]</span></p>
+<p>For the rates we again choose products of the involved species. This is again the normal form that we will often be using for rates; more to this in a dedicated lecture.</p>
+<p>Within the cell, the repressor binds and unbinds its target site. We assume that the expression level of the gene is lower when the repressor is bound and higher when it is unbound. The mean expression level of the gene is then proportional to the fraction of time that the repressor is unbound.</p>
+<p>We therefore compute the concentration of DNA sites in occupied or unoccupied states. (Within a single cell an individual site on the DNA is either bound or unbound, but averaged over a population of cells, we can talk about the mean occupancy of the site). Let <span class="math inline">\(P\)</span> be the concentration of unoccupied operators, <span class="math inline">\(O_\mathrm{occ}\)</span> be the concentration of occupied operators, and <span class="math inline">\(O_\mathrm{tot}\)</span> be the total concentration of operators, with <span class="math inline">\(O_\mathrm{tot} = O + O_\mathrm{occ}\)</span>, as required by conservation of mass.</p>
+<p>We can also assume a <strong>separation of timescales</strong> between the rates of binding and unbinding of the repressor to the DNA binding site are both often fast compared to the timescales over which mRNA and protein concentrations vary.</p>
+<blockquote class="blockquote">
+<p><strong><em>Side note (speed of being in an equilibrium):</em></strong> The method of separation of timescales is often useful to simplify an analysis or speedup a simulation. Be careful when you use it, though. Often its a good idea to run simulations with and without the assumption to quantify the error. In some contexts, such as in mammalian cells, and with CRISPRi circuits, binding and unbinding may be slow.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong><em>Question (expected amounts in a cell volume):</em></strong> Estimate (by looking it up) the amounts of the involved biochemical species in the cell volume. This will be important in the following derivation. Is it the same for all repressors that you find?</p>
+</blockquote>
+<p>All we need to know is the mean concentration of unoccupied binding sites, <span class="math inline">\(O/O_\mathrm{tot}\)</span>.</p>
+<p>Assuming we are (quickly) in an equilibrium, leads to: <span class="math display">\[\begin{align}
+k_+ O R &amp;= k_- O_\mathrm{occ} \\[1em]
+\end{align}\]</span></p>
+<p>Further, we have conservation of <span class="math inline">\(D\)</span> and <span class="math inline">\(R\)</span> species. We use <span class="math inline">\(R_\mathrm{bound}\)</span> as the concentration of bound repressors, <span class="math inline">\(R_\mathrm{tot}\)</span> as its total number, and <span class="math inline">\(R\)</span> as the unbound concentration. <span class="math display">\[\begin{align}
+O_\mathrm{occ} &amp;= O_\mathrm{tot} - O \\[1em]
+R_\mathrm{bound} &amp;= R_\mathrm{tot} - R
+\end{align}\]</span></p>
+<p>We observe that <span class="math inline">\(O_\mathrm{occ} = R_\mathrm{bound}\)</span>: any occupied operator site is bound by exactly one repressor species in our basic repressor model.</p>
+<p>For simplicity, and following common notation, we abbreviate <span class="math inline">\(K_\mathrm{d} = k_- / k_+\)</span> calling it the <em>dissociation constant</em>. Further, we consider the system input to be</p>
+<p><span class="math display">\[x = R_{tot}\]</span></p>
+<p>and its output to be</p>
+<p><span class="math display">\[y = O/O_\mathrm{tot}.\]</span></p>
+<p>Let’s consider two cases, first a simplifying case that is often used. And second an exact analysis.</p>
+<section id="case-1-zero-or-many-repressors" class="level3">
+<h3 class="anchored" data-anchor-id="case-1-zero-or-many-repressors">Case 1: Zero or many repressors</h3>
+<p>In this case we can approximate <span class="math inline">\(R \approx R_{tot}\)</span>. <span class="math display">\[\begin{align}
+O R &amp;= k_-/k_+ O_\mathrm{occ} \\[1em]
+O R_\mathrm{tot} &amp;= K_\mathrm{d} O_\mathrm{occ} \\[1em]
+O R_\mathrm{tot} &amp;= K_\mathrm{d} (O_\mathrm{tot} - O) \\[1em]
+y R_\mathrm{tot} &amp;= K_\mathrm{d} (1 - y) \\[1em]
+y &amp;= \frac{1}{1+R_\mathrm{tot}/K_\mathrm{d}}
+\end{align}\]</span></p>
+<p>and thus finally</p>
+<p><span class="math display">\[\begin{align}
+\boxed{\beta(R_\mathrm{tot}) = \beta_0 \frac{O}{O_\mathrm{tot}} = \frac{\beta_0}{1+R_\mathrm{tot}/K_\mathrm{d}}}
+\end{align}\]</span></p>
+<p>You will frequently encounter this approximation in computational biology. Remember, though, that this is an approximation.</p>
+</section>
+<section id="case-2-exact-calculation" class="level3">
+<h3 class="anchored" data-anchor-id="case-2-exact-calculation">Case 2: Exact calculation</h3>
+<p>We start with, <span class="math display">\[\begin{align}
+O R &amp;= k_-/k_+ O_\mathrm{occ} \\[1em]
+O (R_\mathrm{tot} - R_\mathrm{bound}) &amp;= K_\mathrm{d} O_\mathrm{occ} \\[1em]
+\end{align}\]</span> and after some algebraic manipulation, we get <span class="math display">\[\begin{align}
+y^2 O_\mathrm{tot} + y(R_\mathrm{tot} - O_\mathrm{tot} + K_\mathrm{d}) - K_\mathrm{d} &amp;= 0
+\end{align}\]</span></p>
+<p>Using the classical <span class="math display">\[\begin{align}
+y = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+\end{align}\]</span> let’s check if we can rule out one solution. While it is not necessarily <span class="math inline">\(b &gt; 0\)</span>, we observe that <span class="math inline">\(-4ac &gt; 0\)</span> in our case, and thus <span class="math inline">\(\sqrt{b^2 - 4ac} &gt; |b|\)</span>. We may thus disregard the “-” solution that would yield a negative concentration <span class="math inline">\(y\)</span>. Thus, <span class="math display">\[\begin{align}
+y(R_\mathrm{tot}) &amp;= \frac{-(R_\mathrm{tot} - O_\mathrm{tot} + K_\mathrm{d}) + \sqrt{(R_\mathrm{tot} - O_\mathrm{tot} + K_\mathrm{d})^2 + 4K_\mathrm{d}O_\mathrm{tot}}}{2O_\mathrm{tot}} \\[1em]
+\beta(R_\mathrm{tot}) &amp;= \beta_0 y(R_\mathrm{tot})
+\end{align}\]</span></p>
+<p>Interestingly this formula depends on <span class="math inline">\(O_\mathrm{tot}\)</span> while the simplified one is independent of the number of promoters.</p>
+</section>
+</section>
+<section id="properties-of-the-simple-binding-curve" class="level2">
+<h2 class="anchored" data-anchor-id="properties-of-the-simple-binding-curve">Properties of the simple binding curve</h2>
+<p>This is our first encounter with a soon to be familiar function. Note that this function has two parameters: <span class="math inline">\(K_\mathrm{d}\)</span> specifies the concentration of repressor at which the response is reduced to half its maximum value. The coefficient <span class="math inline">\(\beta_0\)</span> is simply the maximum expression level, and is a parameter that multiples the rest of the function.</p>
+<div id="584d3d16" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build theoretical curves</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>R_tot <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">200</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>b0 <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>Kd <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>beta <span class="op">=</span> b0 <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> R_tot <span class="op">/</span> Kd)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>init_slope <span class="op">=</span> <span class="op">-</span>R_tot <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># exact</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>O_tot <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> R_tot <span class="op">-</span> O_tot <span class="op">+</span> Kd</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>beta_exact <span class="op">=</span> b0 <span class="op">*</span> (<span class="op">-</span>b <span class="op">+</span> np.sqrt(b<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">4</span> <span class="op">*</span> Kd <span class="op">*</span> O_tot) )<span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> O_tot)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Build plot</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">3</span>))</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="vs">fr'</span><span class="dv">$</span><span class="vs">K_d = </span><span class="sc">{</span>Kd<span class="sc">}</span><span class="dv">$</span><span class="vs">, </span><span class="dv">$\b</span><span class="vs">eta_0 = </span><span class="sc">{</span>b0<span class="sc">}</span><span class="dv">$</span><span class="vs">'</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="vs">r"</span><span class="dv">$</span><span class="vs">R_{tot}</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="vs">r"</span><span class="dv">$\b</span><span class="vs">eta</span><span class="kw">(</span><span class="vs">R_{tot}</span><span class="kw">)</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>plt.plot(R_tot, beta, linewidth<span class="op">=</span><span class="dv">2</span>, color<span class="op">=</span><span class="st">"tomato"</span>, label<span class="op">=</span><span class="vs">r"</span><span class="dv">$\b</span><span class="vs">eta</span><span class="kw">(</span><span class="vs">R_{tot}</span><span class="kw">)</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>plt.plot(R_tot, beta_exact, <span class="st">'--'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, color<span class="op">=</span><span class="st">"tomato"</span>, label<span class="op">=</span><span class="vs">fr"</span><span class="dv">$\b</span><span class="vs">eta_</span><span class="ch">{{</span><span class="vs">exact</span><span class="ch">}}</span><span class="kw">(</span><span class="vs">R_</span><span class="ch">{{</span><span class="vs">tot</span><span class="ch">}}</span><span class="kw">)</span><span class="dv">$</span><span class="vs">, </span><span class="dv">$</span><span class="vs">O_</span><span class="ch">{{</span><span class="vs">tot</span><span class="ch">}}</span><span class="vs"> = </span><span class="sc">{</span>O_tot<span class="sc">}</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>plt.plot(R_tot, init_slope, linewidth<span class="op">=</span><span class="dv">2</span>, color<span class="op">=</span><span class="st">"orange"</span>, label<span class="op">=</span><span class="st">"initial slope"</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>,<span class="dv">1</span>)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="notes_files/figure-html/cell-6-output-1.png" class="img-fluid">
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong><em>Question:</em></strong> What happens if you keep increasing the number of promoters in the cell? Check it out in the above code.</p>
+</blockquote>
+</section>
+<section id="gene-expression-can-be-leaky" class="level2">
+<h2 class="anchored" data-anchor-id="gene-expression-can-be-leaky">Gene expression can be leaky</h2>
+<p>As an aside, we note that in real life, many genes never get repressed all the way to zero expression, even when you add a lot of repressor. Instead, there is a baseline, or “basal”, expression level that still occurs. A simple way to model this is by adding an additional constant term, <span class="math inline">\(\alpha_0\)</span> to the expression</p>
+<p><span class="math display">\[\begin{align}
+\beta(R_\mathrm{tot}) = \alpha_0 + \beta_0 \frac{O}{O_\mathrm{tot}} = \alpha_0 + \frac{\beta_0}{1+R_\mathrm{tot}/K_\mathrm{d}}.
+\end{align}\]</span></p>
+<p>Given the ubiquitousness of leakiness, it is important to check that circuit behaviors do not depend on the absence of leaky expression.</p>
+<div id="372c348f" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the theoretical curves</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>R_tot <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">200</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>b0 <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>Kd <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>a0 <span class="op">=</span> <span class="fl">0.25</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>beta <span class="op">=</span> a0 <span class="op">+</span> b0 <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> R_tot <span class="op">/</span> Kd)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Build plot</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">3</span>))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="vs">rf"</span><span class="dv">$</span><span class="vs">K_</span><span class="ch">{{</span><span class="vs">d</span><span class="ch">}}</span><span class="vs"> = </span><span class="sc">{</span>Kd<span class="sc">}</span><span class="dv">$</span><span class="vs">, </span><span class="dv">$\b</span><span class="vs">eta_</span><span class="ch">{{</span><span class="op">0</span><span class="ch">}}</span><span class="vs"> = </span><span class="sc">{</span>b0<span class="sc">}</span><span class="dv">$</span><span class="vs">, </span><span class="dv">$</span><span class="vs">a_</span><span class="ch">{{</span><span class="op">0</span><span class="ch">}}</span><span class="vs"> = </span><span class="sc">{</span>a0<span class="sc">}</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="vs">r"</span><span class="dv">$</span><span class="vs">R_{tot}</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="vs">r"</span><span class="dv">$\b</span><span class="vs">eta</span><span class="kw">(</span><span class="vs">R_{tot}</span><span class="kw">)</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>plt.plot(R_tot, beta,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"tomato"</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="vs">r"</span><span class="dv">$\b</span><span class="vs">eta</span><span class="kw">(</span><span class="vs">R_{tot}</span><span class="kw">)</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>plt.plot([R_tot[<span class="dv">0</span>], R_tot[<span class="op">-</span><span class="dv">1</span>]], [a0, a0],</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"orange"</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"basal expression"</span>)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>, beta.<span class="bu">max</span>())</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="notes_files/figure-html/cell-7-output-1.png" class="img-fluid">
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong><strong>Side note:</strong></strong> Several extensions of the simple promoter model exist. An example is bursty expressions of genes that is observed in experiments.</p>
+</blockquote>
+</section>
+<section id="activation" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="activation">Activation</h2>
+<p>Genes can be regulated by activators as well as repressors. Treating the case of activation just involves switching the state that is actively expressing from the unbound one to the one bound by the protein (now called an Activator). And, just as the binding of a repressor to DNA can be modulated by small molecule inputs, so too can the binding of the activator be modulated by binding to small molecules. In bacteria, one of many examples is the <a href="https://en.wikipedia.org/wiki/L-arabinose_operon">arabinose regulation system</a>.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/activation.svg" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">Activation of expression by binding of an activator to the operator site</figcaption>
+</figure>
+</div>
+<p><br></p>
+<p><span class="math display">\[\begin{align}
+\beta(A) = \beta_0 \frac{O_\mathrm{occ}}{O_\mathrm{tot}} = \frac{\beta_0 A/K_\mathrm{d}}{1+A/K_\mathrm{d}}.
+\end{align}\]</span></p>
+<p>Under the simplifying assumption as in the repressor case, this produces the opposite, mirror image response compared to repression, shown below with no leakage.</p>
+<div id="e6513078" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 4</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">200</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">200</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>beta_A <span class="op">=</span> A <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> A)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>beta_R <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> R)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Build plot</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">3</span>))</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="vs">r"</span><span class="dv">$\b</span><span class="vs">eta</span><span class="dv">$</span><span class="vs"> function"</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"A/Kd, R/Kd"</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"β/β₀"</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>plt.plot(A, beta_A,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"blue"</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"β(A)"</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>plt.plot(R, beta_R,</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"tomato"</span>,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"β(R)"</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="notes_files/figure-html/cell-8-output-1.png" class="img-fluid">
+</div>
+</div>
+</section>
+<section id="activation-versus-repression" class="level2">
+<h2 class="anchored" data-anchor-id="activation-versus-repression">Activation versus Repression</h2>
+<p>We have reached a central design question:</p>
+<blockquote class="blockquote">
+<p><strong><em>Question:</em></strong> The cell has at least two different ways to regulate a gene: using an activator or using a repressor. Which should it choose? Which would you choose if you were designing a synthetic circuit? Why? Are they completely equivalent ways to regulate a target gene? Is one better in some or all conditions? How could we know?</p>
+</blockquote>
+<p>These questions were posed in a <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC388476/">study by Michael Savageau (PNAS, 1974)</a>, who tried to explain the naturally observed usage of activation and repression in bacteria. A different explanation was later developed by <a href="https://doi.org/10.1073/pnas.0506610103">Shinar et al (PNAS 2004)</a>. We end the lecture with this question - try to think about when and why you would use each type of regulation!</p>
+</section>
+<section id="further-reading" class="level1">
+<h1>Further reading</h1>
+<p>As starting material we highly recommand open courses like:</p>
+<ul>
+<li>The course <a href="http://be150.caltech.edu/2020/content/index.html">Biological Circuit Design</a> at Caltech by Elowitz and Bois. Our course is derived from this course.</li>
+<li>The course <a href="https://ocw.mit.edu/courses/biological-engineering/20-020-introduction-to-biological-engineering-design-spring-2009/index.htm">Introduction to Biological Engineering Design</a> at MIT by Kuldell and Endy</li>
+</ul>
+<hr>
+<p><strong>License &amp; Attribution</strong>: This page is adapted from material by <a href="https://biocircuits.github.io/">Michael Elowitz and Justin Bois</a> (© 2021–2025), licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../01-intro/notes.html" class="pagination-link" aria-label="Living Cells">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Living Cells</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../03-modeling/abstraction.html" class="pagination-link" aria-label="Abstraction">
+        <span class="nav-page-text"><span class="chapter-title">Abstraction</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,71 @@
+/* Prevent layout shift from scrollbar appearing/disappearing between pages. */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* Scale jshtml animations (and any other oversized cell output) to the body
+   column width rather than overflowing to the right.  The controls row
+   (.anim-controls) is a sibling of the img inside .animation and stretches
+   to 100% of the constrained container automatically. */
+div.cell-output-display div.animation {
+  max-width: 100%;
+}
+div.cell-output-display div.animation img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Eliminate sidebar jump between slimcontent and fullcontent pages.
+   Both page types use identical grids so the 5fr columns — and therefore the
+   sidebar position — are consistent.  Only at >=992px where the sidebar is
+   actually visible; bootstrap's tablet/mobile rules take over below that.
+
+   Slimcontent normally keeps a ~250px right-margin column that makes its 5fr
+   ~100px smaller than fullcontent's, shifting the sidebar visibly.  The unified
+   grid collapses that column (body-end==page-end), matching fullcontent exactly.
+
+   Margin captions on slimcontent pages are then redirected from the now-zero-
+   width body-end/page-end span to the right 5fr column, which is ~150-230px
+   wide at typical screen widths — narrower than the nominal 250px but readable. */
+@media (min-width: 992px) {
+  body.floating.slimcontent .page-columns,
+  body.floating.fullcontent .page-columns {
+    grid-template-columns:
+      [screen-start] 1.5em
+      [screen-start-inset] 5fr
+      [page-start] 50px
+      [page-start-inset] minmax(50px, 150px)
+      [body-start-outset] 50px
+      [body-start] 1.5em
+      [body-content-start] minmax(500px, calc(800px - 3em))
+      [body-content-end] 1.5em
+      [body-end body-end-outset page-end-inset page-end] 5fr
+      [screen-end-inset] 1.5em
+      [screen-end] !important;
+  }
+
+  body.floating.slimcontent .margin-caption,
+  body.floating.slimcontent div.aside,
+  body.floating.slimcontent aside:not(.footnotes):not(.sidebar),
+  body.floating.slimcontent .column-margin {
+    grid-column: body-end / screen-end-inset !important;
+  }
+
+  /* Every .page-columns nested inside another .page-columns inherits the parent's
+     column tracks via CSS subgrid.  This guarantees that the named lines
+     (body-content-start, body-end, etc.) resolve to identical pixel positions at
+     every level of the grid hierarchy — main → section → .quarto-figure →
+     figure — eliminating the ~112px left drift that appears when any intermediate
+     grid recomputes body-content-start from the compiled slimcontent template
+     instead of from our unified one above.
+
+     Specificity (0,4,1) beats the unified-template rule (0,3,1) for nested
+     elements; the outermost .page-columns (#quarto-content, one level below body)
+     has no .page-columns ancestor so it does NOT match this selector and keeps
+     the unified template as the root definition. */
+  body.floating.slimcontent .page-columns .page-columns,
+  body.floating.fullcontent .page-columns .page-columns {
+    grid-template-columns: subgrid !important;
+  }
+}
