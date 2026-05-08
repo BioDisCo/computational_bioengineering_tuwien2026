@@ -623,7 +623,7 @@ def plot_reactions(species: list[str] | None = None, filename: str = "reactions.
                 return
 
         # Create single figure for all species
-        plt.figure(figsize=(12, 8))
+        plt.figure(figsize=(6, 4))
 
         # Plot individual particle types using their actual colors
         for ptype in plot_species:
@@ -638,8 +638,8 @@ def plot_reactions(species: list[str] | None = None, filename: str = "reactions.
             plt.plot(times, counts, color=plot_color, linewidth=2,
                     label=f'{ptype.upper()} particles', marker='o', markersize=3, alpha=0.8)
 
-        plt.xlabel('Time (s)', fontsize=12)
-        plt.ylabel('Particle Count', fontsize=12)
+        plt.xlabel('Time (s)', fontsize=16)
+        plt.ylabel('Particle Count', fontsize=16)
         plt.title('Particle Counts Over Time', fontsize=16)
         plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', frameon=False)
         plt.tight_layout()

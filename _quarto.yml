@@ -38,7 +38,7 @@ book:
     - part: "Digital Design"
       chapters:
       - 07-digital/gates/notes.ipynb
-      - 07-digital/oscillator/notes.ipynb
+      - 07-digital/oscillators/notes.ipynb
     - part: "Bulk Measurements"
       chapters:
       - 08-measure-bulk/od.ipynb
