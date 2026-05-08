@@ -643,14 +643,12 @@ def plot_reactions(species: list[str] | None = None, filename: str = "reactions.
         plt.title('Particle Counts Over Time', fontsize=16)
         plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', frameon=False)
         plt.tight_layout()
-
-        plt.tight_layout()
         plt.show()
 
         # Print summary statistics
         print(f"Total reactions logged: {len(data)}")
         print(f"Time range: {min(times):.2f} - {max(times):.2f} seconds")
-        print(f"Final particle counts:")
+        print("Final particle counts:")
         final_data = data[-1]
         for ptype in plot_species:
             print(f"  {ptype.upper()}: {final_data[f'count_{ptype}']}")
@@ -665,12 +663,19 @@ def plot_reactions(species: list[str] | None = None, filename: str = "reactions.
 def reactions(boundary_type: BoundaryType = BoundaryType.PERIODIC) -> None:
     width = 400
     height = 400
+
+    # feel free to play around with the initial counts here
     particle_counts = {"A": 51, "B": 49,}
 
+    # a large system:
     # width = 2000
     # height = 2000
     # particle_counts = {"A": 551, "B": 549,}
 
+    # reactions go here
+    # this system:
+    #  A + B -> nothing
+    #  B + A -> nothing (symmetric reaction)
     reactions: Reaction = {
         ("A", "B"): (None, None),
         ("B", "A"): (None, None),  # Symmetric reaction

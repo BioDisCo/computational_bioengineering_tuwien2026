@@ -29,11 +29,16 @@ book:
       - 03-modeling/stochastic_simulation.ipynb
       - 03-modeling/mobspy.ipynb
     - part: "Distributed Algorithms"
+      chapters:
+      - 04-distributed/consensus.ipynb
     - part: "Nucleic Acid Design"
     - part: "Plasmid Design"
       chapters:
       - 06-plasmid/notes.ipynb
     - part: "Digital Design"
+      chapters:
+      - 07-digital/gates/notes.ipynb
+      - 07-digital/oscillator/notes.ipynb
     - part: "Bulk Measurements"
       chapters:
       - 08-measure-bulk/od.ipynb
