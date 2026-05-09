@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Distributed Algorithms – Computational Bioengineering</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../06-plasmid/notes.html" rel="next">
+<link href="../03-modeling/mobspy.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5ccb035bea26c1e21f80f44cf7c27909.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../custom.css">
+</head>
+
+<body class="nav-sidebar floating slimcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-distributed/consensus.html">Distributed Algorithms</a></li><li class="breadcrumb-item"><a href="../04-distributed/consensus.html"><span class="chapter-title">Distributed Algorithms</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computational Bioengineering</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/course.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Course Modalities (TU Wien, 2026)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Preliminaries</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/coding.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Coding Setup Guide</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/math.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ordinary Differential Equations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/cs.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Complexity and Asymptotic Notation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../01-intro/notes.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Living Cells</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-intro/notes.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Genetic Circuits</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Modeling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/abstraction.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Abstraction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/quantum.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Quantum Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/molecular.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Molecular Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/crn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Chemical Reaction Networks</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/stochastic_simulation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Stochastic Simulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../03-modeling/mobspy.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CRN Modeling with MobsPy</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Distributed Algorithms</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-distributed/consensus.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Distributed Algorithms</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Nucleic Acid Design</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Plasmid Design</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../06-plasmid/notes.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Plasmid Design</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Digital Design</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07-digital/gates/notes.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Digital Genetic Circuits</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../07-digital/oscillators/notes.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Oscillators</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text">Bulk Measurements</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-measure-bulk/od.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Optical Density</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../08-measure-bulk/spectra.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Spectroscopy</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
+ <span class="menu-text">Cell Measurements</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-measure-cell/basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Computer Vision for Microscopy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../09-measure-cell/ai.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AI Techniques</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-distributed/consensus.html">Distributed Algorithms</a></li><li class="breadcrumb-item"><a href="../04-distributed/consensus.html"><span class="chapter-title">Distributed Algorithms</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-title">Distributed Algorithms</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This chapter covers concepts and techniques from distributed algorithms:</p>
+<ul>
+<li>The Majority consensus problem</li>
+<li>The pairwise annihilation algorithm</li>
+<li>Stochastic simulation of algorithms</li>
+<li>Markov-chain analysis of algorithms</li>
+</ul>
+<p>Let’s start by importing libraries we will need:</p>
+<div id="cell-2" class="cell" data-execution_count="34">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install mobspy</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install tqdm</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> mobspy <span class="im">as</span> mp</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tqdm</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>figsize <span class="op">=</span> (<span class="dv">5</span>,<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="distributed-computing" class="level2">
+<h2 class="anchored" data-anchor-id="distributed-computing">Distributed Computing</h2>
+<p>Distributed Computing studies computation in distributed systems. Examples for distributed systems are:</p>
+<ul>
+<li><p>A fixed set of (computing) nodes that are interconnected via a dedicated network infrastructure. An example is a scientific cluster, the computer system of a bank, or a computer system in an airplane.</p></li>
+<li><p>A dynamically changing set of nodes interconnected by a dynamic network. An example is a peer-to-peer network of phones, a swarm of drones, or a network of wireless sensors thrown into the landscape.</p></li>
+</ul>
+<p>Distributed systems are <strong>not necessarily classical computers</strong>, but can be anything with a specified (but not necessarily deterministic!) behavior. We may as well have chosen as examples:</p>
+<ul>
+<li><p>Fixed architecture: Cells in a (non growing) tissue that communicate via hormones or electric signals.</p></li>
+<li><p>Dynamic architecture: Opinions of humans formed via social networks, or suspended bacteria in a liquid culture communicating via small molecules or via the exchange of DNA.</p></li>
+</ul>
+<p>While the discipline of distributed computing tries to abstract from the application, the majority of research is on systems with computer networks in mind, with respective assumptions on the system.</p>
+<section id="related-disciplines-distributed-computing-and-circuit-design" class="level3">
+<h3 class="anchored" data-anchor-id="related-disciplines-distributed-computing-and-circuit-design">Related disciplines: distributed computing and circuit design</h3>
+<p>The research field of distributed computing has a long history of analyzing distributed systems under harsh environmental conditions, from node and link failures, with different models of fault manifestation, to completely dynamic network architectures. Likewise, the field of robust circuit design has studied faults and their mitigation in VLSI circuits with great success. In both fields, mathematical modeling and analysis has led to provably robust solutions and insights into how different parameters influence the quality of the solution, resulting in informed design decisions for real-world implementations.</p>
+<p>We will demonstrate the use of some concepts from these two disciplines in a small example: a distributed gate.</p>
+</section>
+<section id="consensus" class="level3">
+<h3 class="anchored" data-anchor-id="consensus">Consensus</h3>
+<p>We will look at one problem that has been extensively studied in distributed computing: the problem of converging from an initial mixed population to a homogenous population of nodes.</p>
+<p>Many variants of the, so called, <strong>consensus</strong> problems, exist, differing in static vs.&nbsp;dynamic architecture, discrete vs.&nbsp;continuous values, terminating vs.&nbsp;non-terminating algorithms, etc. The problem was traditionally studied in networks with a fixed architecture, and with some of the computing nodes potentially failing. Applications for this problem are, e.g., in redundant databases where each server has a certain state and servers need to agree on a unique state.</p>
+</section>
+</section>
+<section id="example-problem-majority-consensus" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="example-problem-majority-consensus">Example Problem: Majority Consensus</h2>
+<p>Assume we are given a population of two kinds of species, A (blue) and B (orange). The problem is to determine which of them is in majority.</p>
+<p>An input instance of this problem may look like this where we have <span class="math inline">\(A = 51\)</span> and <span class="math inline">\(B = 49\)</span> species.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/initial.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption class="margin-caption">Initial configuration with 51 A and 49 B shown as balls.</figcaption>
+</figure>
+</div>
+<p>While it would be tedious to count A vs.&nbsp;B, it is still possible and this would be a so-called <strong>centralized</strong> solution where we play the role of the central processing unit.</p>
+<p>However, this solution would not scale well with the problem size. What is the majority, here? (The answer is A with 551 vs 549)</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/551vs549.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption class="margin-caption">Initial configuration with 551 A and 549 B shown as balls.</figcaption>
+</figure>
+</div>
+<p>For a distributed solution, we distributed the computation across different units - in our case, the units will be the species itself with super simple, but local, computations.</p>
+<p>We first need to define what are the “rules of the game” and clarify some wording in the problem statement.</p>
+<p>Let’s assume that species move, like we saw in the CRN lecture. Further, we assume that a distributed algorithm will define the local behavior of the species. While we resort from modifying speed, and angle, we will allow an algorithm only to change the type of two species upon local (geometric), that is colliding, interaction. In particular an algorithm is allowed to change or remove a species.</p>
+<p>Finally, we need to clarify what the outcome of such a distributed computation should be.In particular, how to signal that A or B is in majority. One option would be that each species needs to output this result, but we take a different direction, here. We say that the algorithm outputs A once all species are A and it outputs B once all species are B. In particular this means that a (bad) algorithm could never terminate by never reaching the state where all species are from one population.</p>
+</section>
+<section id="example-solution-a-distributed-algorithm" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="example-solution-a-distributed-algorithm">Example Solution: A Distributed Algorithm</h2>
+<p>Many solutions to this problem exist, including a deceptively simple one that has a single rule:</p>
+<p><span class="math display">\[
+A + B \rightarrow \emptyset + \emptyset
+\]</span></p>
+<p>If two opposing species collide, they both vanish. The algorithm is indeed a CRN and we simply write</p>
+<p><span class="math display">\[
+A + B \rightarrow \emptyset
+\]</span></p>
+<p>We coded a small particle collider that you can find in <code>src/particle_collider.py</code> that allows one to run and visualize such CRN systems. You can find the code <a href="https://github.com/BioDisCo/computational_bioengineering/blob/main/consensus/collider/particle_collider.py">here</a> and works as a standalone Python script. Running the algorithm for a while, starting from <span class="math inline">\(A = 51\)</span> and <span class="math inline">\(B = 49\)</span>, we get:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/collision1.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption class="margin-caption">Running after some time with less A and B.</figcaption>
+</figure>
+</div>
+<p>and finally</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/collision2.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption class="margin-caption">Finally, all species are from A.</figcaption>
+</figure>
+</div>
+<p>Resulting in the outcome that A was the initial majority.</p>
+<p>Here, is a plot of A and B over time generated by <code>particle_collider.py</code>.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/convergence.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption class="margin-caption">Number of A and B over time. A fast exponential decay is visible.</figcaption>
+</figure>
+</div>
+<p>We observe a fast convergence to consensus with only A being left.</p>
+</section>
+<section id="analysis-of-the-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-of-the-algorithm">Analysis of the Algorithm</h2>
+<p>Typically we want to:</p>
+<ul>
+<li>Ensure an algorithm is correct.</li>
+<li>It performs well.</li>
+</ul>
+<p>Both can be done by different approaches yielding different guarantees.</p>
+<section id="approach-1-simulate" class="level3">
+<h3 class="anchored" data-anchor-id="approach-1-simulate">Approach 1: Simulate</h3>
+<p>The simplest one would be to run the <code>particle_collider.py</code> several times and check the outcome. This takes time (for the current <code>pygame</code> implementation about 20s each run).</p>
+</section>
+<section id="approach-2-abstract-and-simulate" class="level3">
+<h3 class="anchored" data-anchor-id="approach-2-abstract-and-simulate">Approach 2: Abstract and Simulate</h3>
+<p>But, using the insights from the CRN lecture, we do not need to simulate colliding balls. We can approximate this system via a well-mixed CRN system. Let’s code this in <code>MobsPy</code> and run it.</p>
+<div id="cell-7" class="cell" data-execution_count="35">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>delta <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> mp.u.ul <span class="op">/</span> mp.u.s</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>repetitions <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>duration <span class="op">=</span> <span class="dv">10</span> <span class="op">*</span> mp.u.s</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>volume <span class="op">=</span> <span class="dv">1</span> <span class="op">*</span> mp.u.ul</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>A, B <span class="op">=</span> mp.BaseSpecies()</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>A(<span class="dv">51</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>B(<span class="dv">49</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># competition</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>A <span class="op">+</span> B <span class="op">&gt;&gt;</span> mp.Zero [delta]</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>Sim <span class="op">=</span> mp.Simulation(A <span class="op">|</span> B)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>Sim.run(</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    duration<span class="op">=</span>duration,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    volume<span class="op">=</span>volume,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    simulation_method<span class="op">=</span><span class="st">"stochastic"</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    repetitions<span class="op">=</span>repetitions,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    unit_y<span class="op">=</span><span class="dv">1</span> <span class="op">/</span> volume,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    plot_data<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> Sim.results[<span class="st">'Time'</span>]</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> Sim.results[<span class="st">'A'</span>]</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> Sim.results[<span class="st">'B'</span>]</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>figsize)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>plt.plot(T[<span class="dv">0</span>], A[<span class="dv">0</span>], label<span class="op">=</span><span class="st">'A'</span>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>plt.plot(T[<span class="dv">0</span>], B[<span class="dv">0</span>], label<span class="op">=</span><span class="st">'B'</span>)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'time (s)'</span>)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="vs">r'count </span><span class="dv">$\m</span><span class="vs">u</span><span class="dv">$</span><span class="vs">L</span><span class="dv">$</span><span class="vs">{}</span><span class="dv">^</span><span class="vs">{-1}</span><span class="dv">$</span><span class="vs">'</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="consensus_files/figure-html/cell-3-output-1.png" class="img-fluid">
+</div>
+</div>
+<p>As expected, the outcome is qualitatively the same as before. To make it behave the same quantitativley, we have to adjust the parameter <span class="math inline">\(\delta\)</span>.</p>
+<blockquote class="blockquote">
+<p><strong><em>Question:</em></strong> The parameter <span class="math inline">\(\delta\)</span> is influenced by the initial particle speeds, their radius, and the volume of the box. How would you measure it in the particle collider?</p>
+</blockquote>
+<p>While running stochastic simulations in the CRN simulator is much faster than physical simulation, we can do even better to ensure correctness and get bounds on the performance.</p>
+</section>
+<section id="approach-3-mathematical-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="approach-3-mathematical-analysis">Approach 3: Mathematical Analysis</h3>
+<p>Indeed, the correctness of the algorithm follows from two observations:</p>
+<ul>
+<li><p>Use the CRN lecture’s approximation of the billiard system as Markov chain, showing that eventually any pair of species will collide with probability 1. In particular, if there is an A and a B they will collide and decrease the total population count by 2. (Precisely, there are configurations where such an A and B will never meet, but as discussed in the lecture we can neglect them as they occur only for precisely chosen initial positions and velocities.)</p></li>
+<li><p>If there are, say, A &gt; B &gt; 0 species in the system, than after a collision between an A and a B there are A - 1 &gt; B - 1 species in the system. This means that the difference A - B remains constant throughout the execution.</p></li>
+</ul>
+<p>We can also use math to show that it is fast.</p>
+<blockquote class="blockquote">
+<p><strong><em>Problem session:</em></strong> In the problem session we will mathematically show that it converges quickly. In fact it converges as quickly as in expected time <span class="math inline">\(O(1)\)</span>. Thus this stunning as it is a constant time algorithm!</p>
+</blockquote>
+</section>
+</section>
+<section id="robust-circuits" class="level2">
+<h2 class="anchored" data-anchor-id="robust-circuits">Robust Circuits</h2>
+<p>A standard way of signaling between digital gates, like a <code>NAND</code> (<span class="math inline">\(z = \neg (x \wedge y)\)</span>), is to encode the logical value in terms of low and high voltage. For example, anything in <span class="math inline">\([0V, 0.3V]\)</span> is a clean <code>0</code> and anything in <span class="math inline">\([0.7V, 1V]\)</span> a clean <code>1</code>.</p>
+<p>Some circuits make use of different encodings. One such encoding is <em>dual-rail encoding</em> is circuits that diverge from the classical <a href="https://en.wikipedia.org/wiki/Synchronous_circuit">synchronous design paradigm</a>, so called <a href="https://en.wikipedia.org/wiki/Asynchronous_circuit">asynchronous circuits</a>.</p>
+<blockquote class="blockquote">
+<p><strong><em>Side note:</em></strong> The term “asynchronous” is a bit misleading as it can be understood as time-less, though many asynchronous circuits make explicit use of timing constraints. In fact, nowadays the distinction between synchronous and asynchronous is vanishing, as the classical synchronous abstraction can only be maintained in conservative designs.</p>
+</blockquote>
+<p>In dual-rail encoding, <code>0</code> and <code>1</code> are signaled on dedicated wires. Raising the voltage on the <code>0</code>-wire signals a <code>0</code>, and vice versa.</p>
+<blockquote class="blockquote">
+<p><strong><em>Side note:</em></strong> Encodings differ in how to communicate several logical values. An option there is to let any transition on a wire signal a logical value. Care has to be taken that a transition occurs only after it is read by all downstream gates. This is typically either ensured by explicit handshaking, or delay constraints.</p>
+</blockquote>
+<p>Ths concept is closely related to <a href="https://en.wikipedia.org/wiki/One-hot">1-hot-encoding</a> in CS and <a href="https://en.wikipedia.org/wiki/Differential_signalling">differential signalling</a> in EE.</p>
+<p>We will borrow this concept of dual-rail encoding in the context of a biological circuit, to amplify a signal value. In particular it has two interesting properties that we will make use of:</p>
+<ul>
+<li><p>Producing a signal can be costly in the biological context (e.g., transcribing, translating, secreting). We may thus want the circuit to produce no output initially and only produce an output once there is something to compute. Compare a chain of inverters in single rail signaling vs.&nbsp;one in dual rail signaling. In the former there is no notion of waiting until the first input arrives. Every second inverter is generating a costly <code>1</code>. In the second case, no inverter is generating an output initially. However, after an input, every inverter is generating exactly one <code>1</code>.</p></li>
+<li><p>Amplifying a single-rail signal is difficult. It requires an amplification against its a midpoint signal value towards <code>0</code> and <code>1</code>. In dual-rail encoding amplification is easier: it requires that only one of the two rails prevails - a property that sounds like a job for Majority Consensus.</p></li>
+</ul>
+</section>
+<section id="use-in-bio-majority-consensus-and-dual-rail-as-amplification" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="use-in-bio-majority-consensus-and-dual-rail-as-amplification">Use in Bio: Majority Consensus and Dual-Rail as Amplification</h2>
+<p>In electrical circuits, the digital abstraction is enabled by operational amplifiers. In fact, every logical gate in an electrical circuit has an amplifier at its output:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/Amplification.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption class="margin-caption">Amplification</figcaption>
+</figure>
+</div>
+<p>Without these output amplifiers, inter-gate signals would not be clean 0-or-1 signals, but rather analog signals, invalidating the digital abstraction. We have seen in previous lectures that standard microbiological amplification is rather weak, with maximal Hill exponents in the order of <span class="math inline">\(n\approx 3\)</span>. When distributing a circuit to different bacteria types, the question of a better amplification becomes important.</p>
+<p>Mimicking the behavior an operational amplifier, we will build a <em>differential</em> amplifier. This circuit component amplifies the difference between the two rails of a dual-rail encoded binary signal:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/DiffAmp.png" class="img-fluid figure-img" style="width:85.0%"></p>
+<figcaption class="margin-caption">Differential amplification</figcaption>
+</figure>
+</div>
+<p>Choosing the specific threshold ratio for initial concentrations of 50%, a perfect output signal is achieved when <em>majority consensus</em> is solved:</p>
+<ul>
+<li>One of the two species is extinct (consensus).</li>
+<li>Moreover, the initial majority species is not exinct (majority).</li>
+</ul>
+<p>The building block of a differential amplifier enables effective distribution of circuits:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/Distribution.png" class="img-fluid figure-img" style="width:85.0%"></p>
+<figcaption class="margin-caption">Circuit distribution</figcaption>
+</figure>
+</div>
+<section id="revising-the-algorithm-the-pairwise-annihilation-algorithm" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="revising-the-algorithm-the-pairwise-annihilation-algorithm">Revising the Algorithm: The Pairwise Annihilation Algorithm</h3>
+<p>We can almost use our algorithm from before to solve Majority Consensus in teh context of bacteria A and B. There remains only two problems: (1) how to implement the algorithm and (2) bacteria duplicate. We will address (1) right now and for (2) let us add duplication rules to the CRN:</p>
+<p><span class="math display">\[\begin{align}
+A &amp;\rightarrow A + A\\
+B &amp;\rightarrow B + B\\
+A + B &amp;\rightarrow \emptyset
+\end{align}\]</span></p>
+<blockquote class="blockquote">
+<p><strong><em>Side note:</em></strong> For duplication we chose a very simple model, here: exponential growth independent of a resource.</p>
+</blockquote>
+<p>We analyzed this algorithm in <a href="https://doi.org/10.1007/s00446-021-00404-8">Da-Jung Cho, Függer, Hopper, Kushwaha, Nowak, and Soubeyran. Distributed Computing</a>. One can show that it does not always solve Majority Consensus, but with high probability solves it (in a sense made precise in the paper).</p>
+<p>This simple algorithm is the <em>Pairwise Annihilation</em> algorithm, and it does exactly what it sounds like:</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="figs/PA.png" class="img-fluid figure-img" style="width:25.0%"></p>
+<figcaption class="margin-caption">Pairwise annihilation</figcaption>
+</figure>
+</div>
+<p>That is, we have two types of bacteria, and whenever they meet, they annihilate each other. In addition to that, each bacterium duplicates at a uniform rate <span class="math inline">\(\mu\)</span>. For the time being, we chose to ignore certain aspects of real bacterial systems, for example:</p>
+<ul>
+<li>resource limitation</li>
+<li>individual cell death</li>
+<li>in-flow of new nutrients</li>
+</ul>
+</section>
+<section id="communication-via-conjugation" class="level3">
+<h3 class="anchored" data-anchor-id="communication-via-conjugation">Communication via Conjugation</h3>
+<p>While the rule</p>
+<p><span class="math display">\[
+A + B \rightarrow \emptyset
+\]</span></p>
+<p>is a simplification of direct competition between A and B, one can think of implementing direct competition via <a href="https://en.wikipedia.org/wiki/Bacterial_conjugation">bacterial conjugation</a>, where cells can copy DNA over to physically close cells.</p>
+<p>Let us start by simulating the protocol’s behavior using <code>MobsPy</code>. For a first try we resort to deterministic (ODE) semantics.</p>
+<div id="cell-14" class="cell" data-execution_count="36">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_pa(A0, B0, mu: <span class="bu">float</span><span class="op">=</span><span class="dv">1</span><span class="op">/</span><span class="dv">30</span>, delta: <span class="bu">float</span><span class="op">=</span><span class="fl">5e-10</span>, duration <span class="op">=</span> <span class="fl">60.0</span> <span class="op">*</span> mp.u.<span class="bu">min</span>, stochastic: <span class="bu">bool</span><span class="op">=</span><span class="va">True</span>, repetitions: <span class="bu">int</span><span class="op">=</span><span class="dv">1</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    Bacterium <span class="op">=</span> mp.BaseSpecies()</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># growth</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    Bacterium <span class="op">&gt;&gt;</span> Bacterium <span class="op">+</span> Bacterium [mu <span class="op">/</span> mp.u.<span class="bu">min</span>]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    A, B <span class="op">=</span> mp.New(Bacterium)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    A(A0)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    B(B0)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># competition</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    A <span class="op">+</span> B <span class="op">&gt;&gt;</span> mp.Zero [delta <span class="op">*</span> mp.u.ul <span class="op">/</span> mp.u.<span class="bu">min</span>]</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    Sim <span class="op">=</span> mp.Simulation(A <span class="op">|</span> B)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    Sim.run(</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        duration<span class="op">=</span>duration,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        volume<span class="op">=</span><span class="dv">1</span><span class="op">*</span>mp.u.ul,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        simulation_method<span class="op">=</span><span class="st">"stochastic"</span> <span class="cf">if</span> stochastic <span class="cf">else</span> <span class="st">"deterministic"</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        repetitions<span class="op">=</span>repetitions,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        unit_y<span class="op">=</span><span class="dv">1</span> <span class="op">/</span> mp.u.uL,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        plot_data<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        level<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    T <span class="op">=</span> Sim.results[<span class="st">'Time'</span>]</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> Sim.results[<span class="st">'A'</span>]</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> Sim.results[<span class="st">'B'</span>]</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">'T'</span>: T, <span class="st">'A'</span>: A, <span class="st">'B'</span>: B}</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_pa_over_time(T, A, B) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    plt.figure(figsize<span class="op">=</span>figsize)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    plt.plot(T[<span class="dv">0</span>], A[<span class="dv">0</span>], label<span class="op">=</span><span class="st">'A'</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    plt.plot(T[<span class="dv">0</span>], B[<span class="dv">0</span>], label<span class="op">=</span><span class="st">'B'</span>)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">'time (min)'</span>)</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="vs">r'count </span><span class="dv">$\m</span><span class="vs">u</span><span class="dv">$</span><span class="vs">L</span><span class="dv">$</span><span class="vs">{}</span><span class="dv">^</span><span class="vs">{-1}</span><span class="dv">$</span><span class="vs">'</span>)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    plt.legend()</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> simulate_pa(</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="dv">51</span> <span class="op">/</span> mp.u.uL,</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>    <span class="dv">49</span> <span class="op">/</span> mp.u.uL,</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    mu<span class="op">=</span><span class="fl">1.0</span>,</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    delta<span class="op">=</span><span class="fl">1.0</span>,</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    duration <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> mp.u.<span class="bu">min</span>,</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>    stochastic<span class="op">=</span><span class="va">False</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>plot_pa_over_time(<span class="op">**</span>result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="consensus_files/figure-html/cell-4-output-1.png" class="img-fluid">
+</div>
+</div>
+<p>It turns out that the protocol is very sensitive to changes around the 50-50 initial configuration:</p>
+<div id="cell-16" class="cell" data-execution_count="37">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plot_pa_over_time(<span class="op">**</span>simulate_pa(<span class="fl">3.00000000e5</span> <span class="op">/</span> mp.u.uL, <span class="fl">3e5</span> <span class="op">/</span> mp.u.uL, duration<span class="op">=</span><span class="dv">1000</span> <span class="op">*</span> mp.u.<span class="bu">min</span>, stochastic<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>plot_pa_over_time(<span class="op">**</span>simulate_pa(<span class="fl">3.00000001e5</span> <span class="op">/</span> mp.u.uL, <span class="fl">3e5</span> <span class="op">/</span> mp.u.uL, duration<span class="op">=</span><span class="dv">1000</span> <span class="op">*</span> mp.u.<span class="bu">min</span>, stochastic<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="consensus_files/figure-html/cell-5-output-1.png" class="img-fluid">
+</div>
+<div class="cell-output cell-output-display">
+<img src="consensus_files/figure-html/cell-5-output-2.png" class="img-fluid">
+</div>
+</div>
+<p>Moreover, the stochastic dynamics can be very different from the ODE dynamics:</p>
+<div id="cell-18" class="cell" data-execution_count="38">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plot_pa_over_time(<span class="op">**</span>simulate_pa(<span class="dv">51</span> <span class="op">/</span> mp.u.uL, <span class="dv">49</span> <span class="op">/</span> mp.u.uL, mu<span class="op">=</span><span class="fl">1.0</span>, delta<span class="op">=</span><span class="fl">1.0</span>, duration<span class="op">=</span><span class="dv">2</span> <span class="op">*</span> mp.u.<span class="bu">min</span>, stochastic<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>plot_pa_over_time(<span class="op">**</span>simulate_pa(<span class="dv">51</span> <span class="op">/</span> mp.u.uL, <span class="dv">49</span> <span class="op">/</span> mp.u.uL, mu<span class="op">=</span><span class="fl">1.0</span>, delta<span class="op">=</span><span class="fl">1.0</span>, duration<span class="op">=</span><span class="dv">2</span> <span class="op">*</span> mp.u.<span class="bu">min</span>, stochastic<span class="op">=</span><span class="va">True</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="consensus_files/figure-html/cell-6-output-1.png" class="img-fluid">
+</div>
+<div class="cell-output cell-output-stderr">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+</pre>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<img src="consensus_files/figure-html/cell-6-output-3.png" class="img-fluid">
+</div>
+</div>
+<p>It turns out that the initial majority doesn’t always prevail:</p>
+<div id="cell-20" class="cell" data-execution_count="39">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fraction_won(A0, B0, repetitions: <span class="bu">int</span><span class="op">=</span><span class="dv">1000</span>, <span class="op">**</span>kwargs) <span class="op">-&gt;</span> <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">float</span>]:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    cnt_A_won: <span class="bu">int</span> <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    cnt_B_won: <span class="bu">int</span> <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> simulate_pa(A0<span class="op">=</span>A0 <span class="op">/</span> mp.u.uL , B0<span class="op">=</span>B0 <span class="op">/</span> mp.u.uL, stochastic<span class="op">=</span><span class="va">True</span>, repetitions<span class="op">=</span>repetitions, <span class="op">**</span>kwargs)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(repetitions):</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> result[<span class="st">'A'</span>][i][<span class="op">-</span><span class="dv">1</span>] <span class="op">==</span> <span class="dv">0</span> <span class="kw">and</span> result[<span class="st">'B'</span>][i][<span class="op">-</span><span class="dv">1</span>] <span class="op">!=</span> <span class="dv">0</span>:</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>            cnt_B_won <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> result[<span class="st">'B'</span>][i][<span class="op">-</span><span class="dv">1</span>] <span class="op">==</span> <span class="dv">0</span> <span class="kw">and</span> result[<span class="st">'A'</span>][i][<span class="op">-</span><span class="dv">1</span>] <span class="op">!=</span> <span class="dv">0</span>:</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>            cnt_A_won <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                        </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">'A'</span>: cnt_A_won<span class="op">/</span>repetitions,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>            <span class="st">'B'</span>: cnt_B_won<span class="op">/</span>repetitions,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>            <span class="st">'neither'</span>: <span class="dv">1</span> <span class="op">-</span> (cnt_A_won<span class="op">+</span>cnt_B_won)<span class="op">/</span>repetitions}</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fraction_won(<span class="dv">501</span>, <span class="dv">499</span>, mu<span class="op">=</span><span class="fl">1.0</span>, delta<span class="op">=</span><span class="fl">1.0</span>, duration<span class="op">=</span><span class="dv">5</span> <span class="op">*</span> mp.u.<span class="bu">min</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+</pre>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'A': 0.679, 'B': 0.289, 'neither': 0.03200000000000003}</code></pre>
+</div>
+</div>
+<p>Let’s make a sweep over different initial ratios:</p>
+<div id="cell-22" class="cell" data-execution_count="40">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fraction_A_won_ratio_sweep(total_pop: <span class="bu">int</span>, <span class="op">**</span>kwargs) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">list</span>[<span class="bu">float</span>], <span class="bu">list</span>[<span class="bu">float</span>]]:</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    ratios: <span class="bu">list</span>[<span class="bu">float</span>] <span class="op">=</span> []</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    wins: <span class="bu">list</span>[<span class="bu">float</span>] <span class="op">=</span> []</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    increment: <span class="bu">int</span> <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> A0 <span class="kw">in</span> tqdm.tqdm(<span class="bu">range</span>(<span class="dv">0</span>, total_pop<span class="op">+</span><span class="dv">1</span>, increment)):</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        B0 <span class="op">=</span> total_pop <span class="op">-</span> A0    </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        ratios.append(A0<span class="op">/</span>total_pop)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        wins.append(fraction_won(A0, B0, <span class="op">**</span>kwargs)[<span class="st">'A'</span>])</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ratios, wins</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>ratios, wins <span class="op">=</span> fraction_A_won_ratio_sweep(<span class="dv">100</span>, repetitions<span class="op">=</span><span class="dv">10</span>, mu<span class="op">=</span><span class="fl">1.0</span>, delta<span class="op">=</span><span class="fl">1.0</span>, duration<span class="op">=</span><span class="dv">5</span> <span class="op">*</span> mp.u.<span class="bu">min</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<div class="ansi-escaped-output">
+<pre>  0%|          | 0/51 [00:00&lt;?, ?it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+  2%|▏         | 1/51 [00:00&lt;00:26,  1.91it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+  4%|▍         | 2/51 [00:01&lt;00:24,  1.97it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+  6%|▌         | 3/51 [00:01&lt;00:23,  2.06it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+  8%|▊         | 4/51 [00:01&lt;00:22,  2.10it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 10%|▉         | 5/51 [00:02&lt;00:21,  2.12it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 12%|█▏        | 6/51 [00:02&lt;00:20,  2.15it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 14%|█▎        | 7/51 [00:03&lt;00:20,  2.18it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 16%|█▌        | 8/51 [00:03&lt;00:19,  2.22it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 18%|█▊        | 9/51 [00:04&lt;00:18,  2.24it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 20%|█▉        | 10/51 [00:04&lt;00:18,  2.20it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 22%|██▏       | 11/51 [00:05&lt;00:17,  2.24it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 24%|██▎       | 12/51 [00:05&lt;00:17,  2.25it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 25%|██▌       | 13/51 [00:05&lt;00:16,  2.28it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 27%|██▋       | 14/51 [00:06&lt;00:16,  2.28it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 29%|██▉       | 15/51 [00:06&lt;00:16,  2.24it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 31%|███▏      | 16/51 [00:07&lt;00:15,  2.27it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 33%|███▎      | 17/51 [00:07&lt;00:14,  2.28it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 35%|███▌      | 18/51 [00:08&lt;00:14,  2.28it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 37%|███▋      | 19/51 [00:08&lt;00:13,  2.29it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 39%|███▉      | 20/51 [00:08&lt;00:13,  2.31it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 41%|████      | 21/51 [00:09&lt;00:12,  2.33it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 43%|████▎     | 22/51 [00:09&lt;00:12,  2.27it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 45%|████▌     | 23/51 [00:10&lt;00:12,  2.30it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 47%|████▋     | 24/51 [00:10&lt;00:11,  2.32it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 49%|████▉     | 25/51 [00:11&lt;00:11,  2.36it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 51%|█████     | 26/51 [00:11&lt;00:10,  2.35it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 53%|█████▎    | 27/51 [00:11&lt;00:10,  2.37it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 55%|█████▍    | 28/51 [00:12&lt;00:10,  2.29it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 57%|█████▋    | 29/51 [00:12&lt;00:09,  2.32it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 59%|█████▉    | 30/51 [00:13&lt;00:08,  2.34it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 61%|██████    | 31/51 [00:13&lt;00:08,  2.34it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 63%|██████▎   | 32/51 [00:14&lt;00:08,  2.34it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 65%|██████▍   | 33/51 [00:14&lt;00:07,  2.31it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 67%|██████▋   | 34/51 [00:15&lt;00:07,  2.31it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 69%|██████▊   | 35/51 [00:15&lt;00:07,  2.25it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 71%|███████   | 36/51 [00:15&lt;00:06,  2.27it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 73%|███████▎  | 37/51 [00:16&lt;00:06,  2.28it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 75%|███████▍  | 38/51 [00:16&lt;00:05,  2.18it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 76%|███████▋  | 39/51 [00:17&lt;00:05,  2.17it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 78%|███████▊  | 40/51 [00:17&lt;00:04,  2.21it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 80%|████████  | 41/51 [00:18&lt;00:04,  2.25it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 82%|████████▏ | 42/51 [00:18&lt;00:04,  2.19it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 84%|████████▍ | 43/51 [00:19&lt;00:03,  2.21it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 86%|████████▋ | 44/51 [00:19&lt;00:03,  2.22it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 88%|████████▊ | 45/51 [00:19&lt;00:02,  2.24it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 90%|█████████ | 46/51 [00:20&lt;00:02,  2.20it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 92%|█████████▏| 47/51 [00:20&lt;00:01,  2.15it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 94%|█████████▍| 48/51 [00:21&lt;00:01,  2.18it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 96%|█████████▌| 49/51 [00:21&lt;00:00,  2.20it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 98%|█████████▊| 50/51 [00:22&lt;00:00,  2.22it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+100%|██████████| 51/51 [00:22&lt;00:00,  2.24it/s]
+</pre>
+</div>
+</div>
+</div>
+<div id="cell-23" class="cell" data-execution_count="41">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>figsize)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'$A(0)/(A(0)+B(0))$'</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'fraction of $A$ wins'</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>plt.plot(ratios, wins)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="consensus_files/figure-html/cell-9-output-1.png" class="img-fluid">
+</div>
+</div>
+<p>That’s a very steep amplification! Let’s zoom in:</p>
+<div id="cell-25" class="cell" data-execution_count="42">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fraction_A_won_diff_sweep(total_pop: <span class="bu">int</span>, max_diff: <span class="bu">int</span>, <span class="op">**</span>kwargs) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">list</span>[<span class="bu">int</span>], <span class="bu">list</span>[<span class="bu">float</span>]]:</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    differences: <span class="bu">list</span>[<span class="bu">int</span>] <span class="op">=</span> []</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    wins: <span class="bu">list</span>[<span class="bu">float</span>] <span class="op">=</span> []</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> A0 <span class="kw">in</span> tqdm.tqdm(<span class="bu">range</span>(total_pop<span class="op">//</span><span class="dv">2</span><span class="op">-</span>max_diff, total_pop<span class="op">//</span><span class="dv">2</span><span class="op">+</span>max_diff<span class="op">+</span><span class="dv">1</span>)):</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        B0 <span class="op">=</span> total_pop <span class="op">-</span> A0</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        differences.append(A0<span class="op">-</span>B0)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        wins.append(fraction_won(A0, B0, <span class="op">**</span>kwargs)[<span class="st">'A'</span>])</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> differences, wins</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>differences, wins_zoom <span class="op">=</span> fraction_A_won_diff_sweep(<span class="dv">1000</span>, <span class="dv">5</span>, repetitions<span class="op">=</span><span class="dv">100</span>, mu<span class="op">=</span><span class="fl">1.0</span>, delta<span class="op">=</span><span class="fl">1.0</span>, duration<span class="op">=</span><span class="dv">5</span> <span class="op">*</span> mp.u.<span class="bu">min</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<div class="ansi-escaped-output">
+<pre>  0%|          | 0/11 [00:00&lt;?, ?it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+  9%|▉         | 1/11 [00:01&lt;00:14,  1.44s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 18%|█▊        | 2/11 [00:02&lt;00:12,  1.43s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 27%|██▋       | 3/11 [00:04&lt;00:11,  1.44s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 36%|███▋      | 4/11 [00:05&lt;00:09,  1.42s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 45%|████▌     | 5/11 [00:07&lt;00:08,  1.40s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 55%|█████▍    | 6/11 [00:08&lt;00:07,  1.41s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 64%|██████▎   | 7/11 [00:09&lt;00:05,  1.42s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 73%|███████▎  | 8/11 [00:11&lt;00:04,  1.41s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 82%|████████▏ | 9/11 [00:12&lt;00:02,  1.42s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+ 91%|█████████ | 10/11 [00:14&lt;00:01,  1.41s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+
+100%|██████████| 11/11 [00:15&lt;00:00,  1.42s/it]
+</pre>
+</div>
+</div>
+</div>
+<div id="cell-26" class="cell" data-execution_count="43">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>figsize)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'$A(0) - B(0)$  [$n=1000$]'</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'fraction of $A$ wins'</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>plt.plot(differences, wins_zoom)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="consensus_files/figure-html/cell-11-output-1.png" class="img-fluid">
+</div>
+</div>
+</section>
+</section>
+<section id="amplification-without-interaction" class="level2">
+<h2 class="anchored" data-anchor-id="amplification-without-interaction">Amplification without Interaction?</h2>
+<p>Given the two populations A and B, can we achieve the same amplification around 50:50 by simpler means? In particular do we really need an interaction among A and B that is involved to engineer?</p>
+<p>Let’s start with an (oversimplified) system that contains only death reactions for A and B independently. In terms of an CRN this is</p>
+<p><span class="math display">\[\begin{align}
+A &amp;\rightarrow \emptyset\\
+B &amp;\rightarrow \emptyset
+\end{align}\]</span></p>
+<p>Since in this system both A and B will die, we have to redefine the output of the distributed algorithm as the species that dies that dies last.</p>
+<p>As we have seen in the problem session of the CRN lecture (1g), we could show that the probability of A winning is <span class="math inline">\(A_0 / (A_0 + B_0)\)</span>. In fact there is a simple argument by symmetry for this: any among the <span class="math inline">\(A_0 + B_0\)</span> species dies independently from all others. By symmetry (all species are equal) they are equally likely to be the last one. For A to win it is now just the probability of one of the A species to be the last one. The statement follows.</p>
+<p>However, <span class="math inline">\(A_0 / (A_0 + B_0)\)</span> corresponds to no amplification.</p>
+<p>Let us try arbitrary additions to the CRN to make it more realistic. However, without adding interactions among the species. For example, we can add duplication reactions for the species <span class="math inline">\(X \in \{A, B\}\)</span> like</p>
+<p><span class="math display">\[\begin{align}
+X &amp;\rightarrow X + X
+\end{align}\]</span></p>
+<p>as in the CRN problem session (2) or even duplication dependent on a common resource <span class="math inline">\(R\)</span></p>
+<p><span class="math display">\[\begin{align}
+X + R &amp;\rightarrow X + X
+\end{align}\]</span></p>
+<p>or a continuous cultures model with in- and outflow</p>
+<p><span class="math display">\[\begin{align}
+\emptyset &amp;\rightarrow R\\
+R &amp;\rightarrow \emptyset
+\end{align}\]</span></p>
+<p>All these additions do not change the fact that the initial individual (and its children) can be seen as independent systems that start in parallel and that win if they are the last one to die (if there are children, they win if any of them dies last). Again, arguing by symmetry they all die with the same probability, resulting in the same - not amplified - formula <span class="math inline">\(A_0 / (A_0 + B_0)\)</span> to win.</p>
+<p>The argument of symmetric systems breaks down once we introduce interaction among the system. With the reaction <span class="math inline">\(A + B \rightarrow \emptyset\)</span> an individual A particle has a harder time finding a colliding B particle if A is in majority (there may be only a few B) than a B particle in the same system. Their probabilities to win are thus, a priori, not the same. Indeed, the simulations show that the amplification is much stronger than <span class="math inline">\(A_0 / (A_0 + B_0)\)</span>.</p>
+</section>
+<section id="theoretical-analysis-of-the-amplification" class="level2">
+<h2 class="anchored" data-anchor-id="theoretical-analysis-of-the-amplification">Theoretical Analysis of the Amplification</h2>
+<p>One can show that the amplification around 50:50, as measured by the gap <span class="math inline">\(\Delta = \lvert A(0)-B(0)\rvert\)</span>, is stronger than linear. The following result holds:</p>
+<p><strong>Theorem.</strong> For initial population <span class="math inline">\(n = A(0) + B(0)\)</span> and initial gap <span class="math inline">\(\Delta = \lvert A(0)-B(0)\rvert\)</span>, the Pairwise Annihilation protocol reaches consensus in expected time <span class="math inline">\(O(1)\)</span> and in time <span class="math inline">\(O(\log n)\)</span> <a href="https://en.wikipedia.org/wiki/With_high_probability">with high probability</a>. It reaches majority consensus with probability <span class="math inline">\(1 - e^{-\Omega(\Delta^2/n)}\)</span>.</p>
+<p>If <span class="math inline">\(\Delta = \Omega\left(\sqrt{n \log n}\right)\)</span>, then the Pairwise Annihilation protocol reaches majority consensus with high probability.</p>
+<p>Before we proof the theorem, we discuss some mathematical tools.</p>
+<section id="stochastic-kinetics" class="level3">
+<h3 class="anchored" data-anchor-id="stochastic-kinetics">Stochastic Kinetics</h3>
+<p>The evolution of the Pairwise Annihilation protocol is described by a continuous-time Markov chain with state space <span class="math inline">\(S = \mathbb{N}^2\)</span>.</p>
+<p>The corresponding discrete-time jump chain, the sequence of states the system traverses, has the same state space <span class="math inline">\(S=\mathbb{N}^2\)</span> and the state-transition probabilities <span class="math display">\[\begin{equation}
+\begin{split}
+P\big( (A,B) \,,\, (A+1,B) \big) &amp; = \frac{\mu A}{\mu(A+B) + \delta AB}\\
+P\big( (A,B) \,,\, (A,B+1) \big) &amp; = \frac{\mu B}{\mu(A+B) + \delta AB}\\
+P\big( (A,B) \,,\, (A-1,B-1) \big) &amp; = \frac{\delta AB}{\mu(A+B) + \delta AB}
+\end{split}
+\end{equation}\]</span> if <span class="math inline">\(A&gt;0\)</span> or <span class="math inline">\(B&gt;0\)</span>. The axes as well as state <span class="math inline">\((A,B)=(0,0)\)</span> is absorbing, as in the continuous-time chain.</p>
+</section>
+<section id="probability-of-reaching-majority-consensus" class="level3">
+<h3 class="anchored" data-anchor-id="probability-of-reaching-majority-consensus">Probability of Reaching Majority Consensus</h3>
+<p>We now show a bound on the probability of achieving majority consensus.</p>
+<p>Assume for the following that <span class="math inline">\(A_0 \geq B_0\)</span>. Let’s consider two case:</p>
+<ul>
+<li>Case 1: Eventually <span class="math inline">\(A_k = B_k\)</span>. In this case both win with probability <span class="math inline">\(1/2\)</span>.</li>
+<li>Case 2: Always <span class="math inline">\(A_k &gt; B_k\)</span>. In this case A wins.</li>
+</ul>
+<p>We would like to determine the probabilities of both (complementary) events.</p>
+<p><strong>A simpler process.</strong> Let us also consider a simpler stochastic process. The same two events exist for two independent Yule processes X and Y. A Yule process, also known as a pure birth process, has this single state-transition rule <span class="math inline">\(X \mapsto X+1\)</span> with linear transition rate <span class="math inline">\(\mu X\)</span>. That corresponds to a CRN with the rule</p>
+<p><span class="math display">\[
+X \rightarrow X + X \quad [\mu]
+\]</span></p>
+<p>We observe that the pairwise annihilations in the original A,B-process favor the majority: it makes it harder for the minority to achieve “Case 1”. Put otherwise, if we remove annihilations, Case 1 occurs with a higher probability. Formally, this is what we obtain:</p>
+<p><span class="math display">\[
+\mathbb{P}(\exists k: A_k = B_k) \leq \mathbb{P}(\exists k: X_k = Y_k)
+\]</span></p>
+<p>Equipped with this observation, we can thus study the same two cases in the simpler Yule processes.</p>
+<blockquote class="blockquote">
+<p><strong><em>Side note:</em></strong> Two parallel independent Yule processes are known to be related to the <a href="https://en.wikipedia.org/wiki/Beta_distribution">beta distribution</a>.</p>
+<p>For two Yule processes it is known that the sequence of ratios <span class="math inline">\(\frac{X_k}{X_k+Y_k}\)</span> converges with probability <span class="math inline">\(1\)</span> and the limit is distributed according to a beta distribution with parameters <span class="math inline">\(\alpha = X_0\)</span> and <span class="math inline">\(\beta = Y_0\)</span>.</p>
+<p>The regularized incomplete beta function <span class="math inline">\(I_z(\alpha,\beta)\)</span> is the cumulative distribution function (CDF) of the beta distribution and defined as</p>
+<p><span class="math display">\[I_z(\alpha,\beta) = \int_0^z t^{\alpha-1} (1-t)^{\beta-1}\,dt \Big/ \int_0^1 t^{\alpha-1} (1-t)^{\beta-1}\,dt \enspace.\]</span></p>
+</blockquote>
+<p><strong>Lemma.</strong> If <span class="math inline">\(X_0 &gt; Y_0\)</span>, then</p>
+<p><span class="math display">\[
+\mathbb{P}(\exists k \colon X_k = Y_k) = 2\cdot I_{1/2}(X_0,Y_0)
+\]</span></p>
+<p><em>Proof.</em> By th property of the Yule processes and the definition of the beta distribution CDF, the probability that the limit is less than <span class="math inline">\(1/2\)</span> is equal to the beta distribution’s CDF evaluated at <span class="math inline">\(1/2\)</span>, i.e., equal to <span class="math inline">\(I_{1/2}(X_0,Y_0)\)</span>. Because initially we have <span class="math inline">\(X_0&gt;Y_0\)</span>, the law of total probability gives:</p>
+<p><span class="math display">\[\begin{equation}
+\begin{aligned}
+I_{1/2}(X_0,Y_0)
+&amp;=
+\mathbb{P}\left( \lim_{k\to\infty} \frac{X_k}{X_k+Y_k} &lt; \frac{1}{2} \right)
+\\ &amp; =
+\mathbb{P}\left( \lim_{k\to\infty} \frac{X_k}{X_k+Y_k} &lt; \frac{1}{2}  \Big| \exists k\colon X_k=Y_k \right) \cdot \mathbb{P}\left( \exists k\colon X_k=Y_k \right) +
+\mathbb{P}\left( \lim_{k\to\infty} \frac{X_k}{X_k+Y_k} &lt; \frac{1}{2}  \wedge  \forall k\colon X_k &gt; Y_k \right)
+\end{aligned}
+\end{equation}\]</span></p>
+<p>Now, if <span class="math inline">\(\forall k\colon X_k &gt; Y_k\)</span>, then <span class="math inline">\(\lim_k \frac{X_k}{X_k+Y_k} \geq {1}/{2}\)</span>, which shows that the second term in the sum is zero. Further, under the condition <span class="math inline">\(\exists k\colon X_k=Y_k\)</span>, it is equiprobable for the limit of <span class="math inline">\(\frac{X_k}{X_k+Y_k}\)</span> to be larger or smaller than <span class="math inline">\(1/2\)</span> by symmetry and the strong Markov property. This shows that the right-hand side is equal to <span class="math inline">\(\frac{1}{2}\cdot\mathbb{P}\left(\exists k\colon X_k = Y_k\right)\)</span>, which concludes the proof.</p>
+<p>We define the event “<span class="math inline">\(B\)</span> wins” as <span class="math inline">\(A\)</span> eventually becoming extinct. Then, we have:</p>
+<p><strong>Lemma.</strong> If <span class="math inline">\(A_0 &gt; B_0\)</span>, then</p>
+<p><span class="math display">\[
+\mathbb{P}\left(\exists k\colon A_k = B_k\right) = 2\cdot \mathbb{P}(\text{$B$ wins})
+\]</span></p>
+<p><em>Proof.</em> By the law of total probability, we have: <span class="math display">\[\begin{equation}
+\mathbb{P}\left( \text{$B$ wins} \right) = \mathbb{P}\left( \text{$B$ wins} \mid \exists k\colon A_k=B_k \right) \cdot \mathbb{P}\left( \exists k\colon A_k=B_k \right) + \mathbb{P}\left( \text{$B$ wins} \wedge \forall k\colon A_k &gt; B_k \right)
+\end{equation}\]</span> If <span class="math inline">\(\forall k\colon A_k &gt; B_k\)</span>, then <span class="math inline">\(B\)</span> cannot win, i.e., the second term in the right-hand side of the equation is zero. Also, by symmetry and the strong Markov property, it is <span class="math display">\[\begin{align*}
+\mathbb{P}\left( \text{$B$ wins} \mid \exists k\colon A_k=B_k \right)=1/2 \enspace.
+\end{align*}\]</span> A simple algebraic manipulation now concludes the proof.</p>
+<p>Combining the previous two lemmas with the coupling, we get an upper bound on the probability that the Pairwise Annihilation protocol fails to reach majority consensus. This upper bound is in terms of the regularized incomplete beta function.</p>
+<p><strong>Lemma.</strong> If <span class="math inline">\(A_0 \geq B_0\)</span>, then the Pairwise Annihilation protocol fails to reach majority consensus with probability at most <span class="math inline">\(I_{1/2}(A_0,B_0)\)</span>.</p>
+<p><em>Proof.</em> Setting <span class="math inline">\(X_0=A_0\)</span> and <span class="math inline">\(Y_0=B_0\)</span>, we get <span class="math display">\[
+\mathbb{P}(\text{$B$ wins}) = \frac{1}{2}\cdot \mathbb{P}(\exists k\colon A_k = B_k) \leq \frac{1}{2}\cdot \mathbb{P}(\exists k\colon  X_k = Y_k) = I_{1/2}(A_0,B_0)
+\]</span></p>
+<p>It only remains to upper-bound the term <span class="math inline">\(I_{1/2}(\alpha,\beta)\)</span>:</p>
+<p><strong>Lemma.</strong> For <span class="math inline">\(m,\Delta \in \mathbb{N}\)</span>, it holds that</p>
+<p><span class="math display">\[\begin{align*}
+\displaystyle I_{1/2}(m+\Delta,m) = \exp\left(-\Omega\left (\frac{\Delta^2}{m} \right) \right)\enspace.
+\end{align*}\]</span></p>
+<p>After this analytical bound on the amplification, let us visualize the amplification for some population sizes <span class="math inline">\(n\)</span>:</p>
+<div id="cell-32" class="cell" data-execution_count="44">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.special <span class="im">import</span> betainc</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_half_beta(A):</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    k_values <span class="op">=</span> np.arange(<span class="dv">0</span>, A<span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    cdf_vals <span class="op">=</span> []</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> k_values:</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        a <span class="op">=</span> A <span class="op">-</span> k</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        b <span class="op">=</span> k</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> a <span class="op">&gt;</span> <span class="dv">0</span> <span class="kw">and</span> b <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>            val <span class="op">=</span> betainc(a, b, <span class="fl">0.5</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>            val <span class="op">=</span> np.nan  <span class="co"># undefined at boundary</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        cdf_vals.append(val)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    plt.plot([k <span class="op">/</span> A <span class="cf">for</span> k <span class="kw">in</span> k_values], cdf_vals, marker<span class="op">=</span><span class="st">"."</span>, label<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span>A<span class="op">=</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>plot_half_beta(<span class="dv">10</span>)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>plot_half_beta(<span class="dv">100</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>plot_half_beta(<span class="dv">1000</span>)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"fraction"</span>)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="vs">r"</span><span class="dv">$</span><span class="vs">I_{1/2}</span><span class="kw">(</span><span class="vs">n-k, k</span><span class="kw">)</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="vs">r"</span><span class="dv">$\b</span><span class="vs">eta</span><span class="dv">$</span><span class="vs"> CDF at </span><span class="dv">$</span><span class="vs">x=1/2</span><span class="dv">$</span><span class="vs"> for different population sizes </span><span class="dv">$</span><span class="vs">n</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<img src="consensus_files/figure-html/cell-12-output-1.png" class="img-fluid">
+</div>
+</div>
+<hr>
+<p><strong>License</strong>: © 2025 Matthias Függer and Thomas Nowak. Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../03-modeling/mobspy.html" class="pagination-link" aria-label="CRN Modeling with MobsPy">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">CRN Modeling with MobsPy</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../06-plasmid/notes.html" class="pagination-link" aria-label="Plasmid Design">
+        <span class="nav-page-text"><span class="chapter-title">Plasmid Design</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
