@@ -426,7 +426,7 @@ window.Quarto = {
 <li>Markov-chain analysis of algorithms</li>
 </ul>
 <p>Let’s start by importing libraries we will need:</p>
-<div id="cell-2" class="cell" data-execution_count="34">
+<div id="cell-2" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install mobspy</span></span>
@@ -535,7 +535,7 @@ A + B \rightarrow \emptyset
 <section id="approach-2-abstract-and-simulate" class="level3">
 <h3 class="anchored" data-anchor-id="approach-2-abstract-and-simulate">Approach 2: Abstract and Simulate</h3>
 <p>But, using the insights from the CRN lecture, we do not need to simulate colliding balls. We can approximate this system via a well-mixed CRN system. Let’s code this in <code>MobsPy</code> and run it.</p>
-<div id="cell-7" class="cell" data-execution_count="35">
+<div id="cell-7" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>delta <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> mp.u.ul <span class="op">/</span> mp.u.s</span>
@@ -586,12 +586,31 @@ A + B \rightarrow \emptyset
 <h3 class="anchored" data-anchor-id="approach-3-mathematical-analysis">Approach 3: Mathematical Analysis</h3>
 <p>Indeed, the correctness of the algorithm follows from two observations:</p>
 <ul>
-<li><p>Use the CRN lecture’s approximation of the billiard system as Markov chain, showing that eventually any pair of species will collide with probability 1. In particular, if there is an A and a B they will collide and decrease the total population count by 2. (Precisely, there are configurations where such an A and B will never meet, but as discussed in the lecture we can neglect them as they occur only for precisely chosen initial positions and velocities.)</p></li>
+<li><p>Use the CRN lecture’s approximation of the billiard system as a Markov chain. Within this one, if there is an A and a B they will eventually collide and decrease the total population count by 2.</p></li>
 <li><p>If there are, say, A &gt; B &gt; 0 species in the system, than after a collision between an A and a B there are A - 1 &gt; B - 1 species in the system. This means that the difference A - B remains constant throughout the execution.</p></li>
 </ul>
+<p>Let us write this down in a rigorous mathematical way with a statement and a proof.</p>
+<p><strong>Lemma 1.</strong> For the CRN <span class="math inline">\(A + B \xrightarrow{\gamma} \emptyset\)</span> with rate constant <span class="math inline">\(\gamma &gt; 0\)</span>, <span class="math inline">\(A &gt; 0\)</span> and <span class="math inline">\(B &gt; 0\)</span>, the time <span class="math inline">\(T\)</span> to the first collision satisfies <span class="math inline">\(\mathbb{P}(T = \infty) = 0\)</span> and <span class="math inline">\(\mathbb{E}[T] = \frac{1}{\gamma A B}\)</span>.</p>
+<p><em>Proof.</em> By definition of reaction’s kinetics, <span class="math inline">\(T \sim \mathrm{Exp}(\gamma AB)\)</span>, so <span class="math inline">\(\mathbb{P}(T&gt;t) = e^{-\gamma AB\,t}\)</span>. Then <span class="math display">\[
+\mathbb{P}(T=\infty) = \lim_{t\to\infty} e^{-\gamma AB\,t} = 0\]</span> from which the first claim follows. Further, <span class="math display">\[\mathbb{E}[T] = \int_0^\infty e^{-\gamma AB\,t}\,dt = \frac{1}{\gamma AB}\]</span> from which the second claim follows. <span class="math inline">\(\square\)</span></p>
+</section>
+<section id="correctness-proof" class="level3">
+<h3 class="anchored" data-anchor-id="correctness-proof">Correctness proof</h3>
+<p><strong>Lemma 2.</strong> Consider the CRN with the single reaction <span class="math inline">\(A + B \to \emptyset\)</span>. For any execution, the quantity <span class="math inline">\(A - B\)</span> is invariant: for all times <span class="math inline">\(t \geq 0\)</span>, <span class="math display">\[A(t) - B(t) = A(0) - B(0).\]</span></p>
+<p><em>Proof.</em> The proof is by induction on the number of collision events <span class="math inline">\(k \geq 0\)</span>.</p>
+<p><em>Base case</em> (<span class="math inline">\(k = 0\)</span>): Before any collision, <span class="math inline">\(A - B = A(0) - B(0)\)</span>.</p>
+<p><em>Inductive step</em>: Suppose <span class="math inline">\(A - B = A(0) - B(0)\)</span> holds after <span class="math inline">\(k\)</span> collisions and assume that there is <span class="math inline">\((k+1)\)</span>-th transition happening (otherwise, the statement follows immediately). Then <span class="math inline">\(A &gt; 0\)</span> and <span class="math inline">\(B &gt; 0\)</span> must hold before the reaction happens. Applying the reaction, decrements both <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> by <span class="math inline">\(1\)</span> simultaneously, so for the new counts <span class="math inline">\(A', B'\)</span>, one has <span class="math display">\[
+A' - B' = (A - 1) - (B - 1) = A - B = A(0) - B(0).
+\]</span> The claim therefore holds after <span class="math inline">\(k + 1\)</span> collisions. <span class="math inline">\(\square\)</span></p>
+<p>We are now in the position to assemble all into a correctness proof of the algorithm.</p>
+<p><strong>Theorem (Correctness).</strong> For the CRN <span class="math inline">\(A + B \xrightarrow{\gamma} \emptyset\)</span> with <span class="math inline">\(\gamma &gt; 0\)</span>, if <span class="math inline">\(A(0) \neq B(0)\)</span>, then with probability <span class="math inline">\(1\)</span> the algorithm terminates: the minority species is fully annihilated and <span class="math inline">\(|A(0)-B(0)|\)</span> molecules of the majority species survive.</p>
+<p><em>Proof.</em> Assume without loss of generality <span class="math inline">\(A(0) &gt; B(0)\)</span>. By Lemma 2, <span class="math inline">\(A(t) - B(t) = A(0) - B(0) &gt; 0\)</span> at all times <span class="math inline">\(t \geq 0\)</span>, so <span class="math inline">\(A(t) &gt; B(t) \geq 0\)</span>. In particular <span class="math inline">\(A(t) &gt; 0\)</span> throughout. As long as <span class="math inline">\(B(t) &gt; 0\)</span>, Lemma 1 guarantees the next collision occurs almost surely (i.e., with probability 1). Each collision decrements <span class="math inline">\(B\)</span> by <span class="math inline">\(1\)</span>. Since <span class="math inline">\(B(0)\)</span> is finite and <span class="math inline">\(B\)</span> is non-negative integer-valued, after exactly <span class="math inline">\(B(0)\)</span> such collisions, each occurring with probability <span class="math inline">\(1\)</span>, we reach <span class="math inline">\(B = 0\)</span> and <span class="math inline">\(A = A(0) - B(0) &gt; 0\)</span>. Put otherwise, <span class="math inline">\(A\)</span> survives and <span class="math inline">\(B\)</span> does not survive. The statement follows. <span class="math inline">\(\square\)</span></p>
+</section>
+<section id="performance-proof" class="level3">
+<h3 class="anchored" data-anchor-id="performance-proof">Performance proof</h3>
 <p>We can also use math to show that it is fast.</p>
 <blockquote class="blockquote">
-<p><strong><em>Problem session:</em></strong> In the problem session we will mathematically show that it converges quickly. In fact it converges as quickly as in expected time <span class="math inline">\(O(1)\)</span>. Thus this stunning as it is a constant time algorithm!</p>
+<p><strong><em>Question:</em></strong> Before you continue reading, try to show that the algorithm converges quickly. In fact it converges as quickly as in expected time <span class="math inline">\(O(1)\)</span>. Thus this stunning as it is a constant time algorithm!</p>
 </blockquote>
 </section>
 </section>
@@ -676,7 +695,7 @@ A + B \rightarrow \emptyset
 \]</span></p>
 <p>is a simplification of direct competition between A and B, one can think of implementing direct competition via <a href="https://en.wikipedia.org/wiki/Bacterial_conjugation">bacterial conjugation</a>, where cells can copy DNA over to physically close cells.</p>
 <p>Let us start by simulating the protocol’s behavior using <code>MobsPy</code>. For a first try we resort to deterministic (ODE) semantics.</p>
-<div id="cell-14" class="cell" data-execution_count="36">
+<div id="cell-18" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_pa(A0, B0, mu: <span class="bu">float</span><span class="op">=</span><span class="dv">1</span><span class="op">/</span><span class="dv">30</span>, delta: <span class="bu">float</span><span class="op">=</span><span class="fl">5e-10</span>, duration <span class="op">=</span> <span class="fl">60.0</span> <span class="op">*</span> mp.u.<span class="bu">min</span>, stochastic: <span class="bu">bool</span><span class="op">=</span><span class="va">True</span>, repetitions: <span class="bu">int</span><span class="op">=</span><span class="dv">1</span>) <span class="op">-&gt;</span> <span class="bu">dict</span>:</span>
@@ -735,7 +754,7 @@ A + B \rightarrow \emptyset
 </div>
 </div>
 <p>It turns out that the protocol is very sensitive to changes around the 50-50 initial configuration:</p>
-<div id="cell-16" class="cell" data-execution_count="37">
+<div id="cell-20" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plot_pa_over_time(<span class="op">**</span>simulate_pa(<span class="fl">3.00000000e5</span> <span class="op">/</span> mp.u.uL, <span class="fl">3e5</span> <span class="op">/</span> mp.u.uL, duration<span class="op">=</span><span class="dv">1000</span> <span class="op">*</span> mp.u.<span class="bu">min</span>, stochastic<span class="op">=</span><span class="va">False</span>))</span>
@@ -750,7 +769,7 @@ A + B \rightarrow \emptyset
 </div>
 </div>
 <p>Moreover, the stochastic dynamics can be very different from the ODE dynamics:</p>
-<div id="cell-18" class="cell" data-execution_count="38">
+<div id="cell-22" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plot_pa_over_time(<span class="op">**</span>simulate_pa(<span class="dv">51</span> <span class="op">/</span> mp.u.uL, <span class="dv">49</span> <span class="op">/</span> mp.u.uL, mu<span class="op">=</span><span class="fl">1.0</span>, delta<span class="op">=</span><span class="fl">1.0</span>, duration<span class="op">=</span><span class="dv">2</span> <span class="op">*</span> mp.u.<span class="bu">min</span>, stochastic<span class="op">=</span><span class="va">False</span>))</span>
@@ -772,7 +791,7 @@ A + B \rightarrow \emptyset
 </div>
 </div>
 <p>It turns out that the initial majority doesn’t always prevail:</p>
-<div id="cell-20" class="cell" data-execution_count="39">
+<div id="cell-24" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fraction_won(A0, B0, repetitions: <span class="bu">int</span><span class="op">=</span><span class="dv">1000</span>, <span class="op">**</span>kwargs) <span class="op">-&gt;</span> <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">float</span>]:</span>
@@ -802,11 +821,11 @@ A + B \rightarrow \emptyset
 </div>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'A': 0.679, 'B': 0.289, 'neither': 0.03200000000000003}</code></pre>
+<pre><code>{'A': 0.746, 'B': 0.232, 'neither': 0.02200000000000002}</code></pre>
 </div>
 </div>
 <p>Let’s make a sweep over different initial ratios:</p>
-<div id="cell-22" class="cell" data-execution_count="40">
+<div id="cell-26" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fraction_A_won_ratio_sweep(total_pop: <span class="bu">int</span>, <span class="op">**</span>kwargs) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">list</span>[<span class="bu">float</span>], <span class="bu">list</span>[<span class="bu">float</span>]]:</span>
@@ -827,212 +846,212 @@ A + B \rightarrow \emptyset
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
-  2%|▏         | 1/51 [00:00&lt;00:26,  1.91it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+  2%|▏         | 1/51 [00:00&lt;00:21,  2.31it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
-  4%|▍         | 2/51 [00:01&lt;00:24,  1.97it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+  4%|▍         | 2/51 [00:00&lt;00:21,  2.33it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
-  6%|▌         | 3/51 [00:01&lt;00:23,  2.06it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+  6%|▌         | 3/51 [00:01&lt;00:20,  2.36it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
-  8%|▊         | 4/51 [00:01&lt;00:22,  2.10it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+  8%|▊         | 4/51 [00:01&lt;00:19,  2.35it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 10%|▉         | 5/51 [00:02&lt;00:21,  2.12it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 10%|▉         | 5/51 [00:02&lt;00:19,  2.36it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 12%|█▏        | 6/51 [00:02&lt;00:20,  2.15it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 12%|█▏        | 6/51 [00:02&lt;00:19,  2.36it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 14%|█▎        | 7/51 [00:03&lt;00:20,  2.18it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 14%|█▎        | 7/51 [00:02&lt;00:18,  2.36it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 16%|█▌        | 8/51 [00:03&lt;00:19,  2.22it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 16%|█▌        | 8/51 [00:03&lt;00:18,  2.33it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 18%|█▊        | 9/51 [00:04&lt;00:18,  2.24it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 18%|█▊        | 9/51 [00:03&lt;00:18,  2.32it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 20%|█▉        | 10/51 [00:04&lt;00:18,  2.20it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 20%|█▉        | 10/51 [00:04&lt;00:17,  2.35it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 22%|██▏       | 11/51 [00:05&lt;00:17,  2.24it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 22%|██▏       | 11/51 [00:04&lt;00:16,  2.37it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 24%|██▎       | 12/51 [00:05&lt;00:17,  2.25it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 24%|██▎       | 12/51 [00:05&lt;00:16,  2.37it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 25%|██▌       | 13/51 [00:05&lt;00:16,  2.28it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 25%|██▌       | 13/51 [00:05&lt;00:16,  2.36it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 27%|██▋       | 14/51 [00:06&lt;00:16,  2.28it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 27%|██▋       | 14/51 [00:05&lt;00:15,  2.35it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 29%|██▉       | 15/51 [00:06&lt;00:16,  2.24it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 29%|██▉       | 15/51 [00:06&lt;00:15,  2.37it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 31%|███▏      | 16/51 [00:07&lt;00:15,  2.27it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 31%|███▏      | 16/51 [00:06&lt;00:14,  2.38it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 33%|███▎      | 17/51 [00:07&lt;00:14,  2.28it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 33%|███▎      | 17/51 [00:07&lt;00:14,  2.40it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 35%|███▌      | 18/51 [00:08&lt;00:14,  2.28it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 35%|███▌      | 18/51 [00:07&lt;00:13,  2.39it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 37%|███▋      | 19/51 [00:08&lt;00:13,  2.29it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 37%|███▋      | 19/51 [00:08&lt;00:13,  2.40it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 39%|███▉      | 20/51 [00:08&lt;00:13,  2.31it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 39%|███▉      | 20/51 [00:08&lt;00:12,  2.40it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 41%|████      | 21/51 [00:09&lt;00:12,  2.33it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 41%|████      | 21/51 [00:08&lt;00:12,  2.39it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 43%|████▎     | 22/51 [00:09&lt;00:12,  2.27it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 43%|████▎     | 22/51 [00:09&lt;00:11,  2.42it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 45%|████▌     | 23/51 [00:10&lt;00:12,  2.30it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 45%|████▌     | 23/51 [00:09&lt;00:11,  2.41it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 47%|████▋     | 24/51 [00:10&lt;00:11,  2.32it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 47%|████▋     | 24/51 [00:10&lt;00:11,  2.41it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 49%|████▉     | 25/51 [00:11&lt;00:11,  2.36it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 49%|████▉     | 25/51 [00:10&lt;00:10,  2.40it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 51%|█████     | 26/51 [00:11&lt;00:10,  2.35it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 51%|█████     | 26/51 [00:10&lt;00:10,  2.43it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 53%|█████▎    | 27/51 [00:11&lt;00:10,  2.37it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 53%|█████▎    | 27/51 [00:11&lt;00:09,  2.45it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 55%|█████▍    | 28/51 [00:12&lt;00:10,  2.29it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 55%|█████▍    | 28/51 [00:11&lt;00:09,  2.45it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 57%|█████▋    | 29/51 [00:12&lt;00:09,  2.32it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 57%|█████▋    | 29/51 [00:12&lt;00:08,  2.47it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 59%|█████▉    | 30/51 [00:13&lt;00:08,  2.34it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 59%|█████▉    | 30/51 [00:12&lt;00:08,  2.47it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 61%|██████    | 31/51 [00:13&lt;00:08,  2.34it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 61%|██████    | 31/51 [00:12&lt;00:08,  2.47it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 63%|██████▎   | 32/51 [00:14&lt;00:08,  2.34it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 63%|██████▎   | 32/51 [00:13&lt;00:07,  2.45it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 65%|██████▍   | 33/51 [00:14&lt;00:07,  2.31it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 65%|██████▍   | 33/51 [00:13&lt;00:07,  2.46it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 67%|██████▋   | 34/51 [00:15&lt;00:07,  2.31it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 67%|██████▋   | 34/51 [00:14&lt;00:06,  2.45it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 69%|██████▊   | 35/51 [00:15&lt;00:07,  2.25it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 69%|██████▊   | 35/51 [00:14&lt;00:06,  2.43it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 71%|███████   | 36/51 [00:15&lt;00:06,  2.27it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 71%|███████   | 36/51 [00:15&lt;00:06,  2.37it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 73%|███████▎  | 37/51 [00:16&lt;00:06,  2.28it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 73%|███████▎  | 37/51 [00:15&lt;00:05,  2.37it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 75%|███████▍  | 38/51 [00:16&lt;00:05,  2.18it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 75%|███████▍  | 38/51 [00:15&lt;00:05,  2.34it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 76%|███████▋  | 39/51 [00:17&lt;00:05,  2.17it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 76%|███████▋  | 39/51 [00:16&lt;00:05,  2.33it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 78%|███████▊  | 40/51 [00:17&lt;00:04,  2.21it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 78%|███████▊  | 40/51 [00:16&lt;00:04,  2.32it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 80%|████████  | 41/51 [00:18&lt;00:04,  2.25it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 80%|████████  | 41/51 [00:17&lt;00:04,  2.34it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 82%|████████▏ | 42/51 [00:18&lt;00:04,  2.19it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 82%|████████▏ | 42/51 [00:17&lt;00:03,  2.36it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 84%|████████▍ | 43/51 [00:19&lt;00:03,  2.21it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 84%|████████▍ | 43/51 [00:18&lt;00:03,  2.36it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 86%|████████▋ | 44/51 [00:19&lt;00:03,  2.22it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 86%|████████▋ | 44/51 [00:18&lt;00:02,  2.34it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 88%|████████▊ | 45/51 [00:19&lt;00:02,  2.24it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 88%|████████▊ | 45/51 [00:18&lt;00:02,  2.36it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 90%|█████████ | 46/51 [00:20&lt;00:02,  2.20it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 90%|█████████ | 46/51 [00:19&lt;00:02,  2.35it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 92%|█████████▏| 47/51 [00:20&lt;00:01,  2.15it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 92%|█████████▏| 47/51 [00:19&lt;00:01,  2.37it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 94%|█████████▍| 48/51 [00:21&lt;00:01,  2.18it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 94%|█████████▍| 48/51 [00:20&lt;00:01,  2.36it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 96%|█████████▌| 49/51 [00:21&lt;00:00,  2.20it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 96%|█████████▌| 49/51 [00:20&lt;00:00,  2.36it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 98%|█████████▊| 50/51 [00:22&lt;00:00,  2.22it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 98%|█████████▊| 50/51 [00:21&lt;00:00,  2.34it/s]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
-100%|██████████| 51/51 [00:22&lt;00:00,  2.24it/s]
+100%|██████████| 51/51 [00:21&lt;00:00,  2.38it/s]
 </pre>
 </div>
 </div>
 </div>
-<div id="cell-23" class="cell" data-execution_count="41">
+<div id="cell-27" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>figsize)</span>
@@ -1046,7 +1065,7 @@ A + B \rightarrow \emptyset
 </div>
 </div>
 <p>That’s a very steep amplification! Let’s zoom in:</p>
-<div id="cell-25" class="cell" data-execution_count="42">
+<div id="cell-29" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fraction_A_won_diff_sweep(total_pop: <span class="bu">int</span>, max_diff: <span class="bu">int</span>, <span class="op">**</span>kwargs) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">list</span>[<span class="bu">int</span>], <span class="bu">list</span>[<span class="bu">float</span>]]:</span>
@@ -1066,15 +1085,15 @@ A + B \rightarrow \emptyset
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
-  9%|▉         | 1/11 [00:01&lt;00:14,  1.44s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+  9%|▉         | 1/11 [00:01&lt;00:14,  1.40s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 18%|█▊        | 2/11 [00:02&lt;00:12,  1.43s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 18%|█▊        | 2/11 [00:02&lt;00:12,  1.37s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 27%|██▋       | 3/11 [00:04&lt;00:11,  1.44s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 27%|██▋       | 3/11 [00:04&lt;00:11,  1.38s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
@@ -1082,36 +1101,36 @@ A + B \rightarrow \emptyset
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 45%|████▌     | 5/11 [00:07&lt;00:08,  1.40s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 45%|████▌     | 5/11 [00:06&lt;00:08,  1.39s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 55%|█████▍    | 6/11 [00:08&lt;00:07,  1.41s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 55%|█████▍    | 6/11 [00:08&lt;00:06,  1.38s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 64%|██████▎   | 7/11 [00:09&lt;00:05,  1.42s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 64%|██████▎   | 7/11 [00:09&lt;00:05,  1.37s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 73%|███████▎  | 8/11 [00:11&lt;00:04,  1.41s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 73%|███████▎  | 8/11 [00:11&lt;00:04,  1.37s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 82%|████████▏ | 9/11 [00:12&lt;00:02,  1.42s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 82%|████████▏ | 9/11 [00:12&lt;00:02,  1.37s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
- 91%|█████████ | 10/11 [00:14&lt;00:01,  1.41s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
+ 91%|█████████ | 10/11 [00:13&lt;00:01,  1.36s/it]<span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
 <span class="ansi-bright-yellow-fg">WARNING: The stochastic simulation rounds floats to integers</span>
 
-100%|██████████| 11/11 [00:15&lt;00:00,  1.42s/it]
+100%|██████████| 11/11 [00:15&lt;00:00,  1.38s/it]
 </pre>
 </div>
 </div>
 </div>
-<div id="cell-26" class="cell" data-execution_count="43">
+<div id="cell-30" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>figsize)</span>
@@ -1134,8 +1153,8 @@ A + B \rightarrow \emptyset
 A &amp;\rightarrow \emptyset\\
 B &amp;\rightarrow \emptyset
 \end{align}\]</span></p>
-<p>Since in this system both A and B will die, we have to redefine the output of the distributed algorithm as the species that dies that dies last.</p>
-<p>As we have seen in the problem session of the CRN lecture (1g), we could show that the probability of A winning is <span class="math inline">\(A_0 / (A_0 + B_0)\)</span>. In fact there is a simple argument by symmetry for this: any among the <span class="math inline">\(A_0 + B_0\)</span> species dies independently from all others. By symmetry (all species are equal) they are equally likely to be the last one. For A to win it is now just the probability of one of the A species to be the last one. The statement follows.</p>
+<p>Since in this system both A and B will die, we have to redefine the output of the distributed algorithm as the species that dies last.</p>
+<p>Indeed we can show that the probability of A winning is <span class="math inline">\(A_0 / (A_0 + B_0)\)</span>. In fact there is a simple argument by symmetry for this: any among the <span class="math inline">\(A_0 + B_0\)</span> species dies independently from all others. By symmetry (all species are equal) they are equally likely to be the last one. For A to win it is now just the probability of one of the A species to be the last one. The statement follows.</p>
 <p>However, <span class="math inline">\(A_0 / (A_0 + B_0)\)</span> corresponds to no amplification.</p>
 <p>Let us try arbitrary additions to the CRN to make it more realistic. However, without adding interactions among the species. For example, we can add duplication reactions for the species <span class="math inline">\(X \in \{A, B\}\)</span> like</p>
 <p><span class="math display">\[\begin{align}
@@ -1231,7 +1250,7 @@ I_{1/2}(X_0,Y_0)
 \displaystyle I_{1/2}(m+\Delta,m) = \exp\left(-\Omega\left (\frac{\Delta^2}{m} \right) \right)\enspace.
 \end{align*}\]</span></p>
 <p>After this analytical bound on the amplification, let us visualize the amplification for some population sizes <span class="math inline">\(n\)</span>:</p>
-<div id="cell-32" class="cell" data-execution_count="44">
+<div id="cell-36" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
