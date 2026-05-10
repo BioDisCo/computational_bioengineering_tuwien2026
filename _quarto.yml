@@ -26,7 +26,10 @@ book:
       - 03-modeling/quantum.ipynb
       - 03-modeling/molecular.ipynb
       - 03-modeling/crn.ipynb
+    - part: "Simulation"
+      chapters:
       - 03-modeling/stochastic_simulation.ipynb
+      - 03-modeling/increasing_performance.ipynb
       - 03-modeling/mobspy.ipynb
     - part: "Distributed Algorithms"
       chapters:
