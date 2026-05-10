@@ -1,6 +1,6 @@
+"""Implementation of the Gillespie Stochastic Simulation Algorithm (SSA), non-optimized code."""
+
 import numpy as np
-import scipy.stats as st
-import numba
 from typing import TypedDict
 
 
