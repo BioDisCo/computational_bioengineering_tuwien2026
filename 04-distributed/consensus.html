@@ -1154,7 +1154,9 @@ A &amp;\rightarrow \emptyset\\
 B &amp;\rightarrow \emptyset
 \end{align}\]</span></p>
 <p>Since in this system both A and B will die, we have to redefine the output of the distributed algorithm as the species that dies last.</p>
-<p>Indeed we can show that the probability of A winning is <span class="math inline">\(A_0 / (A_0 + B_0)\)</span>. In fact there is a simple argument by symmetry for this: any among the <span class="math inline">\(A_0 + B_0\)</span> species dies independently from all others. By symmetry (all species are equal) they are equally likely to be the last one. For A to win it is now just the probability of one of the A species to be the last one. The statement follows.</p>
+<p>Indeed we can show that the probability of A winning is:</p>
+<p><span class="math display">\[A_0 / (A_0 + B_0).\]</span></p>
+<p>In fact there is a simple argument by symmetry for this: any among the <span class="math inline">\(A_0 + B_0\)</span> species dies independently from all others. By symmetry (all species are equal) they are equally likely to be the last one. For A to win it is now just the probability of one of the A species to be the last one. The statement follows.</p>
 <p>However, <span class="math inline">\(A_0 / (A_0 + B_0)\)</span> corresponds to no amplification.</p>
 <p>Let us try arbitrary additions to the CRN to make it more realistic. However, without adding interactions among the species. For example, we can add duplication reactions for the species <span class="math inline">\(X \in \{A, B\}\)</span> like</p>
 <p><span class="math display">\[\begin{align}
@@ -1169,7 +1171,7 @@ X + R &amp;\rightarrow X + X
 \emptyset &amp;\rightarrow R\\
 R &amp;\rightarrow \emptyset
 \end{align}\]</span></p>
-<p>All these additions do not change the fact that the initial individual (and its children) can be seen as independent systems that start in parallel and that win if they are the last one to die (if there are children, they win if any of them dies last). Again, arguing by symmetry they all die with the same probability, resulting in the same - not amplified - formula <span class="math inline">\(A_0 / (A_0 + B_0)\)</span> to win.</p>
+<p>All these additions do not change the fact that the initial individual (and its children) can be seen as independent systems that start in parallel and that win if they are the last one to die (if there are children, they win if any of them dies last). Again, arguing by symmetry they all die with the same probability, resulting in the same, not amplified, formula <span class="math inline">\(A_0 / (A_0 + B_0)\)</span> to win.</p>
 <p>The argument of symmetric systems breaks down once we introduce interaction among the system. With the reaction <span class="math inline">\(A + B \rightarrow \emptyset\)</span> an individual A particle has a harder time finding a colliding B particle if A is in majority (there may be only a few B) than a B particle in the same system. Their probabilities to win are thus, a priori, not the same. Indeed, the simulations show that the amplification is much stronger than <span class="math inline">\(A_0 / (A_0 + B_0)\)</span>.</p>
 </section>
 <section id="theoretical-analysis-of-the-amplification" class="level2">
