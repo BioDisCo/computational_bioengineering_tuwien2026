@@ -227,3 +227,4 @@ _book/
 # measurement data
 *.tif
 microbeSEG_dataset/
+*.txt
