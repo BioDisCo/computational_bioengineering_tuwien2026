@@ -502,7 +502,7 @@ window.Quarto = {
 <section id="the-nearest-neighbor-model-local-interactions-global-behavior" class="level3">
 <h3 class="anchored" data-anchor-id="the-nearest-neighbor-model-local-interactions-global-behavior">The Nearest-Neighbor Model: Local Interactions, Global Behavior</h3>
 <p>Here’s where physics becomes powerfully practical. Experiments have shown that the stability of a base pair depends primarily on its immediate neighbors. An <code>AT</code> pair surrounded by <code>GC</code> pairs has a different stability than an <code>AT</code> pair surrounded by other <code>AT</code> pairs. This seems like it would make predictions complicated, but it actually simplifies things enormously.</p>
-<p>Instead of needing to measure every possible DNA sequence, we only need to measure the energies of the ten unique nearest-neighbor pairs: AA/TT, AT/TA, TA/AT, CA/GT, GT/CA, CT/GA, GA/CT, CG/GC, GC/CG, and GG/CC. Once we have these ten numbers (and a few corrections for special cases like terminal base pairs), we can predict the stability of any DNA sequence by simply summing the contributions from each nearest-neighbor step along the sequence.</p>
+<p>Instead of needing to measure every possible DNA sequence, we only need to measure the energies of the ten unique nearest-neighbor pairs: <code>AA</code>/<code>TT</code>, <code>AT</code>/<code>TA</code>, <code>TA</code>/<code>AT</code>, <code>CA</code>/<code>GT</code>, <code>GT</code>/<code>CA</code>, <code>CT</code>/<code>GA</code>, <code>GA</code>/<code>CT</code>, <code>CG</code>/<code>GC</code>, <code>GC</code>/<code>CG</code>, and <code>GG</code>/<code>CC</code>. Once we have these ten numbers (and a few corrections for special cases like terminal base pairs), we can predict the stability of any DNA sequence by simply summing the contributions from each nearest-neighbor step along the sequence.</p>
 </section>
 <section id="why-this-matters-for-primer-design" class="level3">
 <h3 class="anchored" data-anchor-id="why-this-matters-for-primer-design">Why This Matters for Primer Design</h3>
@@ -613,7 +613,7 @@ MFE structure: (((((((....)))))))
 MFE ΔG:        -5.60 kcal/mol</code></pre>
 </div>
 </div>
-<p>The structure is represented in dot-parenthesis notation. Dots represent unpaired bases, while matching parentheses represent base pairs. For example, <code>....((((....))))....</code> represents a hairpin with four base pairs in the stem.</p>
+<p>The structure is represented in dot-parenthesis notation.</p>
 <p>The critical value here is the MFE energy. If this oligonucleotide has a very negative ΔG, it means it strongly favors forming secondary structure. For a primer, that’s bad news. The primer will be too busy folding on itself to bind efficiently to your template.</p>
 </section>
 <section id="checking-for-primer-dimers" class="level3">

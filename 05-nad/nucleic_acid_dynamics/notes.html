@@ -443,11 +443,13 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="secondary-structure">Secondary structure</h3>
 <p>A DNA or RNA molecule can form bonds with itself or other molecules in the form of base-pairing. Base-pairing is a reversible and stochastic process dictated by the rules of thermodynamics. In particular, different copies of the molecule will probably be in different states and a single molecule will probably change states over time. The probability of a given secondary structure <span class="math inline">\(s\)</span> to occur in equilibrium is given by</p>
 <p><span class="math display">\[\begin{equation}
-p(s) = \frac{1}{Q} e^{- \Delta G(s) / kT}
+P(s) = \frac{1}{Q} e^{- \Delta G(s) / kT}
 \end{equation}\]</span></p>
-<p>where <span class="math inline">\(\Delta G(s)\)</span> is the difference in Gibbs free energy of structure <span class="math inline">\(s\)</span> (usually with respect to the structure without base-pairings), <span class="math inline">\(k\)</span> is the Boltzmann constant, <span class="math inline">\(T\)</span> is the temperature, and <span class="math inline">\(Q\)</span> is the partition function (that is, a normalization term to have all probabilities sum up to <span class="math inline">\(1\)</span>). The secondary structure with the highest probability is usually called the MFE (minimum free energy) structure.</p>
-<p>The secondary structure can be analyzed with the <code>ViennaRNA</code> library:</p>
-<div id="cell-2" class="cell" data-execution_count="35">
+<p>where <span class="math inline">\(\Delta G(s)\)</span> is the difference in Gibbs free energy of structure <span class="math inline">\(s\)</span> (usually with respect to the structure without base-pairings), <span class="math inline">\(k\)</span> is the Boltzmann constant, <span class="math inline">\(T\)</span> is the temperature, and <span class="math inline">\(Q\)</span> is the partition function (that is, a normalization term to have all probabilities sum up to <span class="math inline">\(1\)</span>). The secondary structure with the highest probability is usually called the <strong>minimum free energy (MFE) structure</strong>.</p>
+<p>The secondary structure can be analyzed with libraries such as the <code>ViennaRNA</code> library. We will use it to return the MFE, <span class="math inline">\(\Delta G(\text{MFE})\)</span>, the <strong>ensemble free energy</strong> defined as</p>
+<p><span class="math display">\[\Delta G_\text{ens} = -kT \ln Q\]</span></p>
+<p>and <span class="math inline">\(P(\text{MFE})\)</span> by running hte following code:</p>
+<div id="cell-2" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> RNA</span>
@@ -457,8 +459,8 @@ p(s) = \frac{1}{Q} e^{- \Delta G(s) / kT}
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>temperature <span class="op">=</span> pint.Quantity(<span class="dv">23</span>, u.celsius)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p>We will analyze the structure of an RNA sequence next.</p>
-<div id="cell-4" class="cell" data-execution_count="36">
+<p>As an example, we will analyze the structure of an RNA sequence next.</p>
+<div id="cell-4" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># example RNA sequence</span></span>
@@ -486,8 +488,10 @@ Ensemble ΔG   : -12.3429 kcal/mol
 P(MFE)        : 0.2347</code></pre>
 </div>
 </div>
-<p>We can also look at the structure graphically:</p>
-<div id="cell-6" class="cell" data-execution_count="37">
+<p>The structure is represented in dot-parenthesis notation. Dots represent unpaired bases, while matching parentheses represent base pairs. For example, <code>....((((....))))....</code> represents a hairpin with four base pairs in a stem.</p>
+<p>We can see that the MFE structure has a probability of about 23% to occur.</p>
+<p>We can also look at the MFE structure graphically:</p>
+<div id="cell-7" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> SVG, display</span>
@@ -500,7 +504,7 @@ P(MFE)        : 0.2347</code></pre>
 </div>
 </div>
 <p>The library also supports DNA. We just have to load the DNA energies:</p>
-<div id="cell-8" class="cell" data-execution_count="38">
+<div id="cell-9" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># example DNA sequence</span></span>
@@ -530,7 +534,8 @@ Ensemble ΔG   : -5.3938 kcal/mol
 P(MFE)        : 0.0275</code></pre>
 </div>
 </div>
-<div id="cell-9" class="cell" data-execution_count="39">
+<p>Here, for DNA, the MFE structure occurs in about 28% among all possible structures. The MFE structure is shown below:</p>
+<div id="cell-11" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>RNA.svg_rna_plot(sequence, mfe_structure, <span class="st">'structure_dna.svg'</span>)</span>
@@ -540,8 +545,8 @@ P(MFE)        : 0.0275</code></pre>
 <img src="notes_files/figure-html/cell-6-output-1.svg" class="img-fluid">
 </div>
 </div>
-<p>And not to forget to reset parameters to RNA for subsequent cells:</p>
-<div id="cell-11" class="cell" data-execution_count="40">
+<p>We finally reset parameters to RNA for subsequent cells:</p>
+<div id="cell-13" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>RNA.params_load_RNA_Turner2004()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -550,12 +555,14 @@ P(MFE)        : 0.0275</code></pre>
 </section>
 <section id="partition-function-mfe-structure" class="level3">
 <h3 class="anchored" data-anchor-id="partition-function-mfe-structure">Partition function, MFE structure</h3>
-<p>The number <span class="math inline">\(T(N)\)</span> of possible pseudoknot-free secondary structures with <span class="math inline">\(N\)</span> nucleotides satisfies the recursion <span class="math display">\[\begin{equation}
+<p>The number <span class="math inline">\(T(N)\)</span> of possible <a href="https://en.wikipedia.org/wiki/Pseudoknot">pseudoknot</a>-free (no crossing base-pairs) secondary structures with <span class="math inline">\(N\)</span> nucleotides satisfies the recursion <span class="math display">\[\begin{equation}
 T(N+1) = T(N) + \sum_{k=1}^{N-2} T(k) T(N-k-1)
 \end{equation}\]</span> and has the asymptotic formula (<a href="https://doi.org/10.1016/0012-365X(79)90033-5">Stein and Waterman 1979</a>): <span class="math display">\[\begin{equation}
 T(N) \sim \sqrt{\frac{15 + 7\sqrt{5}}{8\pi}} N^{-3/2} \left( \frac{3+\sqrt{5}}{2} \right)^N
 \end{equation}\]</span> That is, the number of possible secondary structures is exponential in the length of the sequence. It is nonetheless possible to calculate the MFE structure and the partition function without pseudoknots (no crossing base pairings in the plane) in polynomial time using dynamic programming (<a href="https://doi.org/10.1007/BF02459506">Zuker and Sankoff 1984</a>). If pseudoknots are to be taken into account, the computation becomes NP hard.</p>
-<p>To show the principle, we now describe a dynamic program to caclulate the partition function (<a href="https://doi.org/10.1002/bip.360290621">McCaskill 1990</a>). The basic recurrence for the partition function of the subsequence delimited by indices <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> is: <span class="math display">\[\begin{equation}
+<p>To show the principle, we now describe a dynamic program to caclulate the partition function (<a href="https://doi.org/10.1002/bip.360290621">McCaskill 1990</a>). Denoting by <span class="math inline">\(Q_{i,j}\)</span> the partition function of the subsequence delimited by indices <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> defined as:</p>
+<p><span class="math display">\[Q_{i,j} = \sum_{\text{structures } s \text{ on } [i,j]} e^{-\Delta G(s)/kT}\]</span></p>
+<p>the following recursion can be shown to hold: <span class="math display">\[\begin{equation}
 Q_{i,j} = 1 + \sum_{i\leq d &lt; e\leq j} Q_{i,d-1} Q^b_{d,e}
 \end{equation}\]</span> In this sum, the pair <span class="math inline">\((d,e)\)</span> denotes the rightmost base pairing (that is, <span class="math inline">\(e\)</span> is maximal). The term <span class="math inline">\(Q^b(i,j)\)</span> denotes the partition function of the subsequence between <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> with the additional constraint that <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> are base-paired.</p>
 <p><span class="math display">\[\begin{equation}
@@ -574,7 +581,7 @@ Q^m_{i,j} = \sum_{i\leq d &lt; e\leq j} Q^b_{d,e} P^\mathrm{multi,end}_{i,d,e,j}
 \sum_{\substack{i\leq c&lt;j\\\text{nick between $c$ and $c+1$}}} Q_{i+1,c} Q_{c+1,j-1}
 \end{equation}\]</span></p>
 <p>The <code>ViennaRNA</code> library can carry out these calculations:</p>
-<div id="cell-14" class="cell" data-execution_count="41">
+<div id="cell-16" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>seq_a <span class="op">=</span> <span class="st">'GGCUGGUUUCUGCUCUCUAGUUCGCGAGGUGCAAUCUCCUAUC'</span></span>
