@@ -228,3 +228,4 @@ _book/
 *.tif
 microbeSEG_dataset/
 *.txt
+tmp_data/
