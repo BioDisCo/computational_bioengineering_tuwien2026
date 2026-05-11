@@ -35,6 +35,9 @@ book:
       chapters:
       - 04-distributed/consensus.ipynb
     - part: "Nucleic Acid Design"
+      chapters:
+      - 05-nad/nucleic_acid_dynamics/notes.ipynb
+      - 05-nad/nucleic_acid_design/notes.ipynb
     - part: "Plasmid Design"
       chapters:
       - 06-plasmid/notes.ipynb
