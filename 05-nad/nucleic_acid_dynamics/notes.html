@@ -446,9 +446,9 @@ window.Quarto = {
 P(s) = \frac{1}{Q} e^{- \Delta G(s) / kT}
 \end{equation}\]</span></p>
 <p>where <span class="math inline">\(\Delta G(s)\)</span> is the difference in Gibbs free energy of structure <span class="math inline">\(s\)</span> (usually with respect to the structure without base-pairings), <span class="math inline">\(k\)</span> is the Boltzmann constant, <span class="math inline">\(T\)</span> is the temperature, and <span class="math inline">\(Q\)</span> is the partition function (that is, a normalization term to have all probabilities sum up to <span class="math inline">\(1\)</span>). The secondary structure with the highest probability is usually called the <strong>minimum free energy (MFE) structure</strong>.</p>
-<p>The secondary structure can be analyzed with libraries such as the <code>ViennaRNA</code> library. We will use it to return the MFE, <span class="math inline">\(\Delta G(\text{MFE})\)</span>, the <strong>ensemble free energy</strong> defined as</p>
+<p>The secondary structure can be analyzed with libraries such as the <code>ViennaRNA</code> library. We will use it to return the MFE, the value for <span class="math inline">\(\Delta G(\text{MFE})\)</span>, the <strong>ensemble free energy</strong> that is defined as</p>
 <p><span class="math display">\[\Delta G_\text{ens} = -kT \ln Q\]</span></p>
-<p>and <span class="math inline">\(P(\text{MFE})\)</span> by running hte following code:</p>
+<p>as well as the probability <span class="math inline">\(P(\text{MFE})\)</span> by running the following code:</p>
 <div id="cell-2" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
