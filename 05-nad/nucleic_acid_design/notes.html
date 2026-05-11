@@ -444,7 +444,7 @@ window.Quarto = {
 <section id="nucleic-acid-design" class="level1 page-columns page-full">
 <h1>Nucleic Acid Design</h1>
 <p>Nucleic acid design (NAD) is the process of creating DNA or RNA sequences with specific desired properties. Just as a software engineer designs code to perform a task, a molecular engineer designs sequences to achieve biological or biochemical functions. These functions might include binding to a specific target, forming a particular structure, catalyzing a reaction, sensing an environmental signal, or assembling into a larger complex.</p>
-<p>The power of nucleic acid design comes from a remarkable fact: DNA and RNA follow predictable physical rules. The Watson-Crick <a href="https://en.wikipedia.org/wiki/Base_pair">base pairing rules</a> discovered in 1953 aren’t just a curiosity. They’re a programming language. A pairs with T (or U in RNA), G pairs with C, and these interactions have measurable energies that we can calculate. This predictability means we can, in principle, design any sequence behavior we want.</p>
+<p>The power of nucleic acid design comes from a remarkable fact: DNA and RNA follow predictable physical rules. The Watson-Crick <a href="https://en.wikipedia.org/wiki/Base_pair">base pairing rules</a> discovered in 1953 aren’t just a curiosity. They’re a programming language. <code>A</code> pairs with <code>T</code> (or <code>U</code> in RNA), <code>G</code> pairs with <code>C</code>, and these interactions have measurable energies that we can calculate. This predictability means we can, in principle, design any sequence behavior we want.</p>
 <p>The applications of nucleic acid design span nearly every domain of biotechnology. In diagnostics, designed DNA probes detect pathogens or genetic mutations with single-nucleotide precision. In therapeutics, engineered antisense oligonucleotides and siRNAs silence disease-causing genes. In synthetic biology, designed genetic circuits program cells to perform new functions, from producing biofuels to detecting cancer. In nanotechnology, DNA self-assembles into complex two and three-dimensional structures that serve as scaffolds, sensors, and drug delivery vehicles.</p>
 <p>Perhaps most importantly for day-to-day research, nucleic acid design enables the basic tools of molecular biology. Every PCR experiment requires primers designed to amplify only the intended target. Every CRISPR experiment requires guide RNAs designed to cut at the right location and nowhere else. Every cloning project requires oligonucleotides designed to work reliably under specific conditions. Poor design leads to failed experiments, wasted time, and unreliable results. Good design makes everything else possible.</p>
 <section id="introduction-to-pcr-the-foundation-of-modern-molecular-biology" class="level2 page-columns page-full">
@@ -501,7 +501,7 @@ window.Quarto = {
 </section>
 <section id="the-nearest-neighbor-model-local-interactions-global-behavior" class="level3">
 <h3 class="anchored" data-anchor-id="the-nearest-neighbor-model-local-interactions-global-behavior">The Nearest-Neighbor Model: Local Interactions, Global Behavior</h3>
-<p>Here’s where physics becomes powerfully practical. Experiments have shown that the stability of a base pair depends primarily on its immediate neighbors. An AT pair surrounded by GC pairs has a different stability than an AT pair surrounded by other AT pairs. This seems like it would make predictions complicated, but it actually simplifies things enormously.</p>
+<p>Here’s where physics becomes powerfully practical. Experiments have shown that the stability of a base pair depends primarily on its immediate neighbors. An <code>AT</code> pair surrounded by <code>GC</code> pairs has a different stability than an <code>AT</code> pair surrounded by other <code>AT</code> pairs. This seems like it would make predictions complicated, but it actually simplifies things enormously.</p>
 <p>Instead of needing to measure every possible DNA sequence, we only need to measure the energies of the ten unique nearest-neighbor pairs: AA/TT, AT/TA, TA/AT, CA/GT, GT/CA, CT/GA, GA/CT, CG/GC, GC/CG, and GG/CC. Once we have these ten numbers (and a few corrections for special cases like terminal base pairs), we can predict the stability of any DNA sequence by simply summing the contributions from each nearest-neighbor step along the sequence.</p>
 </section>
 <section id="why-this-matters-for-primer-design" class="level3">
@@ -514,7 +514,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="biopython-the-foundation-of-sequence-manipulation">Biopython: The Foundation of Sequence Manipulation</h2>
 <p>Biopython is the Swiss Army knife of biological sequence analysis. While it doesn’t predict structures or design sequences, it handles all the essential manipulations that make those tasks possible. Think of it as the plumbing that connects all your other tools together. Understanding Biopython well makes everything else easier.</p>
 <p>Let’s see this in action:</p>
-<div id="dcb85929-71bb-4e79-93f5-227d5d600eba" class="cell" data-scrolled="true" data-execution_count="9">
+<div id="dcb85929-71bb-4e79-93f5-227d5d600eba" class="cell" data-scrolled="true" data-execution_count="31">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install biopython</span></span>
@@ -547,13 +547,13 @@ Protein: MAIVMGR*KGAR*</code></pre>
 <section id="understanding-the-reverse-complement" class="level3">
 <h3 class="anchored" data-anchor-id="understanding-the-reverse-complement">Understanding the Reverse Complement</h3>
 <p>The reverse complement is critically important for primer design. DNA has two strands that run in opposite directions. By convention, we write sequences in the 5’ to 3’ direction. When you’re designing primers for PCR, the forward primer binds to one strand and the reverse primer binds to the opposite strand. But the opposite strand doesn’t have the same sequence as the template. It has the reverse complement of the template sequence.</p>
-<p>If your target sequence is 5’-ATGGCCATTGTAAT-3’, the complementary sequence is 3’-TACCGGTAACATTA-5’. But we always write sequences 5’ to 3’, so we need to reverse it: 5’-ATTACAATGGCCAT-3’. This is the reverse complement. When you order a reverse primer, you give the synthesis company this reverse complement sequence. Biopython handles this automatically, saving you from error-prone manual manipulations.</p>
+<p>If your target sequence is <code>5'-ATGGCCATTGTAAT-3'</code>, the complementary sequence is <code>3'-TACCGGTAACATTA-5'</code>. But we always write sequences 5’ to 3’, so we need to reverse it: <code>5'-ATTACAATGGCCAT-3'</code>. This is the reverse complement. When you order a reverse primer, you give the synthesis company this reverse complement sequence. Biopython handles this automatically, saving you from error-prone manual manipulations.</p>
 <p>This becomes especially important when you’re extracting primer sequences from a template. The forward primer sequence is taken directly from the template. But the reverse primer must be the reverse complement of the template sequence at the 3’ end of your amplicon.</p>
 </section>
 <section id="connecting-to-ncbi-programmatic-access-to-biological-databases" class="level3">
 <h3 class="anchored" data-anchor-id="connecting-to-ncbi-programmatic-access-to-biological-databases">Connecting to NCBI: Programmatic Access to Biological Databases</h3>
 <p>One of Biopython’s most powerful features is its ability to fetch sequences directly from NCBI databases. Instead of manually downloading sequences through a web browser, you can write scripts that fetch exactly what you need:</p>
-<div id="7ccb46c6-d565-4133-b029-457cd8763d0d" class="cell" data-execution_count="10">
+<div id="7ccb46c6-d565-4133-b029-457cd8763d0d" class="cell" data-execution_count="32">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio <span class="im">import</span> Entrez, SeqIO</span>
@@ -577,48 +577,40 @@ Sequence: CTCAAAAGTCTAGAGCCACCGTCCAGGGAGCAGGTAGCTGCTGGGCTCCG...</code></pre>
 <p>This becomes particularly valuable when you’re designing primers for multiple genes. You can write a script that fetches all the sequences, designs candidates for each one, and generates a complete order list automatically. What would take hours of manual work happens in seconds.</p>
 </section>
 </section>
-<section id="nupack-thermodynamic-prediction-and-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="nupack-thermodynamic-prediction-and-analysis">NUPACK: Thermodynamic Prediction and Analysis</h2>
-<p>If Biopython is the foundation, NUPACK is the analytical workhorse of nucleic acid design. NUPACK stands for Nucleic Acid Package, and it’s the gold standard for predicting how DNA and RNA sequences will fold and interact. NUPACK implements the nearest-neighbor thermodynamic model we discussed earlier, using experimentally measured parameters to predict free energies and structures.</p>
-<section id="the-physics-nupack-computes" class="level3">
-<h3 class="anchored" data-anchor-id="the-physics-nupack-computes">The Physics NUPACK Computes</h3>
-<p>When you give NUPACK a DNA sequence, it considers all the different ways that sequence could fold. Could it form a hairpin? Could parts of it base pair with other parts? For each possible structure, NUPACK calculates the free energy by summing up all the nearest-neighbor contributions and subtracting penalties for loops and bulges. The structure with the lowest free energy is called the minimum free energy (MFE) structure, and it’s the most likely structure to form at equilibrium.</p>
-<p>For multi-strand systems like primers and templates, NUPACK considers all the ways the strands could interact with each other and with themselves. This is crucial for primer design because primers can form three problematic structures: hairpins within a single primer, homodimers where two copies of the same primer bind to each other, and heterodimers where the forward and reverse primers bind to each other instead of the template.</p>
-<p>The Gibbs free energy that NUPACK calculates has profound practical implications. A ΔG of -3 kcal/mol means the structure is mildly favorable. A ΔG of -30 kcal/mol means it’s extremely stable and will almost certainly form. For primer design, we generally want primer-template binding to have very negative ΔG (very stable) while primer-dimer interactions should have ΔG greater than -9 kcal/mol (relatively unstable).</p>
-</section>
-<section id="installing-and-using-nupack" class="level3">
-<h3 class="anchored" data-anchor-id="installing-and-using-nupack">Installing and Using NUPACK</h3>
-<p>NUPACK can be downloaded from <a href="https://nupack.org/">nupack.org</a> for academic applications after signing up; see the <a href="https://docs.nupack.org/start/#macoslinux-installation">documentation</a> for detailed installation instructions. The basic usage follows a consistent pattern: define your experimental conditions in a Model object, create Strand objects representing your sequences, and then analyze them:</p>
-<div id="11751254-4d01-4557-bc15-31e58eedb8dd" class="cell" data-execution_count="11">
+<section id="viennarna-thermodynamic-prediction-and-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="viennarna-thermodynamic-prediction-and-analysis">ViennaRNA: Thermodynamic Prediction and Analysis</h2>
+<p>If Biopython is the foundation, ViennaRNA is the analytical workhorse of nucleic acid design. Developed at the University of Vienna, ViennaRNA is the gold standard for predicting how DNA and RNA sequences fold and interact. It implements the nearest-neighbor thermodynamic model using experimentally measured parameters, and is trivially installable:</p>
+<pre><code>pip install ViennaRNA</code></pre>
+<section id="the-physics-viennarna-computes" class="level3">
+<h3 class="anchored" data-anchor-id="the-physics-viennarna-computes">The Physics ViennaRNA Computes</h3>
+<p>When given a sequence, ViennaRNA considers all possible folding configurations. For each, it sums nearest-neighbor contributions along the sequence and subtracts loop penalties to obtain the free energy. The configuration with the lowest free energy is the minimum free energy (MFE) structure, i.e., the most probable structure at thermodynamic equilibrium.</p>
+<p>For multi-strand systems such as primers and templates, ViennaRNA uses the <code>&amp;</code> separator to delimit strands in a cofold query. This lets us screen all problematic configurations: hairpins within a single primer, homodimers (two copies of the same primer binding each other), and heterodimers (forward and reverse primers binding each other instead of the template).</p>
+<p>The Gibbs free energy that ViennaRNA computes has direct practical consequences. A ΔG of −3 kcal/mol indicates mild stability; a ΔG of −30 kcal/mol near-certain structure formation. For primers, we want primer-template binding to be strongly negative while primer-dimer interactions remain above −9 kcal/mol.</p>
+<p>DNA parameters are loaded explicitly via <code>RNA.params_load_DNA_Mathews2004()</code>, activating the Mathews (2004) nearest-neighbor parameter set for DNA. Without this call, ViennaRNA defaults to RNA parameters. We set the temperature through an <code>RNA.md()</code> model-details object before constructing a fold compound.</p>
+<div id="11751254-4d01-4557-bc15-31e58eedb8dd" class="cell" data-execution_count="33">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nupack</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define experimental conditions</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>my_model <span class="op">=</span> nupack.Model(material<span class="op">=</span><span class="st">"dna"</span>, celsius<span class="op">=</span><span class="dv">37</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyze a sequence</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>sequence <span class="op">=</span> <span class="st">"GCATGCGCCCATGCATGC"</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyze MFE structure</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> nupack.mfe(strands<span class="op">=</span>[sequence], model<span class="op">=</span>my_model)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Sequence: </span><span class="sc">{</span>sequence<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"MFE structure: </span><span class="sc">{</span>result[<span class="dv">0</span>]<span class="sc">.</span>structure<span class="sc">}</span><span class="ss">"</span>)  <span class="co"># Minimum free energy structure</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"MFE ΔG: </span><span class="sc">{</span>result[<span class="dv">0</span>]<span class="sc">.</span>energy<span class="sc">:.2f}</span><span class="ss"> kcal/mol"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install ViennaRNA</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> RNA</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load DNA nearest-neighbor parameters (Mathews 2004)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>RNA.params_load_DNA_Mathews2004()</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>md <span class="op">=</span> RNA.md()</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>md.temperature <span class="op">=</span> <span class="fl">37.0</span>  <span class="co"># in Celsius</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>sequence <span class="op">=</span> <span class="st">"GCATGCGCCCATGCATGC"</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>fc <span class="op">=</span> RNA.fold_compound(sequence, md)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>structure, mfe <span class="op">=</span> fc.mfe()</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Sequence:      </span><span class="sc">{</span>sequence<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"MFE structure: </span><span class="sc">{</span>structure<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"MFE ΔG:        </span><span class="sc">{</span>mfe<span class="sc">:.2f}</span><span class="ss"> kcal/mol"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ModuleNotFoundError</span>                       Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[11]</span><span class="ansi-green-fg">, line 1</span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">1</span> <span style="font-weight:bold;color:rgb(0,135,0)">import</span> nupack
-<span class="ansi-green-fg">      2</span> 
-<span class="ansi-green-fg">      3</span> <span style="font-style:italic;color:rgb(95,135,135)"># Define experimental conditions</span>
-<span class="ansi-green-fg">      4</span> my_model = nupack.Model(material=<span class="ansi-yellow-fg">"dna"</span>, celsius=<span class="ansi-green-fg">37</span>)
-
-<span class="ansi-red-fg">ModuleNotFoundError</span>: No module named 'nupack'</pre>
-</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sequence:      GCATGCGCCCATGCATGC
+MFE structure: (((((((....)))))))
+MFE ΔG:        -5.60 kcal/mol</code></pre>
 </div>
 </div>
 <p>The structure is represented in dot-parenthesis notation. Dots represent unpaired bases, while matching parentheses represent base pairs. For example, <code>....((((....))))....</code> represents a hairpin with four base pairs in the stem.</p>
@@ -626,69 +618,66 @@ Sequence: CTCAAAAGTCTAGAGCCACCGTCCAGGGAGCAGGTAGCTGCTGGGCTCCG...</code></pre>
 </section>
 <section id="checking-for-primer-dimers" class="level3">
 <h3 class="anchored" data-anchor-id="checking-for-primer-dimers">Checking for Primer Dimers</h3>
-<p>One of the most common causes of PCR failure is primer dimer formation. This occurs when primers bind to each other instead of to the template. NUPACK lets us check for this computationally before spending money on synthesis:</p>
-<div id="73c6586a-5a83-47b8-a1ae-92e259d86bd7" class="cell">
+<p>One of the most common causes of PCR failure is primer dimer formation. This occurs when primers bind to each other instead of to the template. ViennaRNA lets us check for this computationally before spending money on synthesis:</p>
+<div id="73c6586a-5a83-47b8-a1ae-92e259d86bd7" class="cell" data-execution_count="34">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check_primer_dimer(primer_fwd, primer_rev, temp<span class="op">=</span><span class="dv">60</span>):</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Check if two primers will form dimers instead of binding to template.</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> nupack.Model(material<span class="op">=</span><span class="st">'dna'</span>, celsius<span class="op">=</span>temp)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check homodimers (primer with itself)</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    fwd_dimer <span class="op">=</span> nupack.mfe(strands<span class="op">=</span>[primer_fwd, primer_fwd], model<span class="op">=</span>model)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    rev_dimer <span class="op">=</span> nupack.mfe(strands<span class="op">=</span>[primer_rev, primer_rev], model<span class="op">=</span>model)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check heterodimer (forward + reverse)</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    het_dimer <span class="op">=</span> nupack.mfe(strands<span class="op">=</span>[primer_fwd, primer_rev], model<span class="op">=</span>model)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Primer Dimer Analysis"</span>)</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">50</span>)</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Forward primer homodimer:"</span>)</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  ΔG = </span><span class="sc">{</span>fwd_dimer[<span class="dv">0</span>]<span class="sc">.</span>energy<span class="sc">:.2f}</span><span class="ss"> kcal/mol"</span>)</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Structure: </span><span class="sc">{</span>fwd_dimer[<span class="dv">0</span>]<span class="sc">.</span>structure<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Reverse primer homodimer:"</span>)</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  ΔG = </span><span class="sc">{</span>rev_dimer[<span class="dv">0</span>]<span class="sc">.</span>energy<span class="sc">:.2f}</span><span class="ss"> kcal/mol"</span>)</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Structure: </span><span class="sc">{</span>rev_dimer[<span class="dv">0</span>]<span class="sc">.</span>structure<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Heterodimer (fwd + rev):"</span>)</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  ΔG = </span><span class="sc">{</span>het_dimer[<span class="dv">0</span>]<span class="sc">.</span>energy<span class="sc">:.2f}</span><span class="ss"> kcal/mol"</span>)</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Structure: </span><span class="sc">{</span>het_dimer[<span class="dv">0</span>]<span class="sc">.</span>structure<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Rule of thumb: ΔG &gt; -9 kcal/mol is usually acceptable</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(x[<span class="dv">0</span>].energy <span class="op">&lt;</span> <span class="op">-</span><span class="dv">9</span> <span class="cf">for</span> x <span class="kw">in</span> [fwd_dimer, rev_dimer, het_dimer]):</span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">WARNING: Strong dimer formation detected!"</span>)</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">False</span></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Primers look good - minimal dimer formation"</span>)</span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">True</span></span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Example</span></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>primer_fwd <span class="op">=</span> <span class="st">"CATTATGCTGAGGATTTGGAAAGG"</span></span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>primer_rev <span class="op">=</span> <span class="st">"CTTGAGCACACAGAGGGCTACA"</span></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>check_primer_dimer(primer_fwd, primer_rev)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check_primer_dimer(primer_fwd: <span class="bu">str</span>, primer_rev: <span class="bu">str</span>, temp: <span class="bu">float</span> <span class="op">=</span> <span class="fl">60.0</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Check whether two primers form dimers instead of binding the template."""</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    RNA.params_load_DNA_Mathews2004()</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    md <span class="op">=</span> RNA.md()</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    md.temperature <span class="op">=</span> temp</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> mfe_cofold(s1: <span class="bu">str</span>, s2: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>]:</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        fc <span class="op">=</span> RNA.fold_compound(s1 <span class="op">+</span> <span class="st">"&amp;"</span> <span class="op">+</span> s2, md)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> fc.mfe()</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    fwd_struct, fwd_dg <span class="op">=</span> mfe_cofold(primer_fwd, primer_fwd)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    rev_struct, rev_dg <span class="op">=</span> mfe_cofold(primer_rev, primer_rev)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    het_struct, het_dg <span class="op">=</span> mfe_cofold(primer_fwd, primer_rev)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Primer Dimer Analysis"</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">50</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Forward primer homodimer:"</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  ΔG = </span><span class="sc">{</span>fwd_dg<span class="sc">:.2f}</span><span class="ss"> kcal/mol"</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Structure: </span><span class="sc">{</span>fwd_struct<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Reverse primer homodimer:"</span>)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  ΔG = </span><span class="sc">{</span>rev_dg<span class="sc">:.2f}</span><span class="ss"> kcal/mol"</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Structure: </span><span class="sc">{</span>rev_struct<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Heterodimer (fwd + rev):"</span>)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  ΔG = </span><span class="sc">{</span>het_dg<span class="sc">:.2f}</span><span class="ss"> kcal/mol"</span>)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  Structure: </span><span class="sc">{</span>het_struct<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(dg <span class="op">&lt;</span> <span class="op">-</span><span class="dv">9</span> <span class="cf">for</span> dg <span class="kw">in</span> [fwd_dg, rev_dg, het_dg]):</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">WARNING: Strong dimer formation detected!"</span>)</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Primers look good - minimal dimer formation"</span>)</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="co"># example check</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>primer_fwd <span class="op">=</span> <span class="st">"CATTATGCTGAGGATTTGGAAAGG"</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>primer_rev <span class="op">=</span> <span class="st">"CTTGAGCACACAGAGGGCTACA"</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>check_primer_dimer(primer_fwd, primer_rev)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Primer Dimer Analysis
 ==================================================
 
 Forward primer homodimer:
-  ΔG = -5.53 kcal/mol
-  Structure: ....((.((.((.((.........+....)).)).)).)).........
+  ΔG = -3.58 kcal/mol
+  Structure: ....((.((.((.((.............)).)).)).)).........
 
 Reverse primer homodimer:
-  ΔG = -6.57 kcal/mol
-  Structure: ....(((.(.(.(.(.(((...+....))).).).).).)))...
+  ΔG = -4.29 kcal/mol
+  Structure: ....(((.(.(.(..((((.......))).).).)..))))...
 
 Heterodimer (fwd + rev):
-  ΔG = -6.87 kcal/mol
-  Structure: .....((((...............+....))))..............
+  ΔG = -3.47 kcal/mol
+  Structure: .....((((.((............))..))))..............
 
 Primers look good - minimal dimer formation</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="34">
 <pre><code>True</code></pre>
 </div>
 </div>
@@ -697,52 +686,66 @@ Primers look good - minimal dimer formation</code></pre>
 <section id="suboptimal-structures" class="level3">
 <h3 class="anchored" data-anchor-id="suboptimal-structures">Suboptimal Structures</h3>
 <p>MFE structures are not the only ones that exist. We can also look at suboptimal ones:</p>
-<div id="5aa43fed-3cfc-455a-99da-1263878e8e42" class="cell">
+<div id="5aa43fed-3cfc-455a-99da-1263878e8e42" class="cell" data-execution_count="35">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> nupack.Model(material<span class="op">=</span><span class="st">"dna"</span>, celsius<span class="op">=</span><span class="dv">60</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># include some suboptimal structures</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>subopt <span class="op">=</span> nupack.subopt(strands<span class="op">=</span>[primer_fwd, primer_fwd], model<span class="op">=</span>model, energy_gap<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># same structure can appear multiple times, let's remove duplicates</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>unique_structures <span class="op">=</span> {}</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> s <span class="kw">in</span> subopt:</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    key <span class="op">=</span> (s.structure, <span class="bu">round</span>(s.energy, <span class="dv">3</span>))</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> key <span class="kw">not</span> <span class="kw">in</span> unique_structures:</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        unique_structures[key] <span class="op">=</span> s</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>subopt_compact <span class="op">=</span> <span class="bu">list</span>(unique_structures.values())</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> s <span class="kw">in</span> subopt_compact:</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">ΔG = </span><span class="sc">{</span>s<span class="sc">.</span>energy<span class="sc">:.2f}</span><span class="ss"> kcal/mol"</span>)</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Structure: </span><span class="sc">{</span>s<span class="sc">.</span>structure<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>RNA.params_load_DNA_Mathews2004()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>md <span class="op">=</span> RNA.md()</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>md.temperature <span class="op">=</span> <span class="fl">60.0</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>fc <span class="op">=</span> RNA.fold_compound(primer_fwd <span class="op">+</span> <span class="st">"&amp;"</span> <span class="op">+</span> primer_fwd, md)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># subopt delta in units of 10 cal/mol; 100 = 1.0 kcal/mol</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>solutions <span class="op">=</span> fc.subopt(<span class="dv">100</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>seen: <span class="bu">set</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>]] <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>subopt_compact <span class="op">=</span> []</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> s <span class="kw">in</span> solutions:</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    key <span class="op">=</span> (s.structure, <span class="bu">round</span>(s.energy, <span class="dv">3</span>))</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> key <span class="kw">not</span> <span class="kw">in</span> seen:</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        seen.add(key)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>        subopt_compact.append(s)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> s <span class="kw">in</span> subopt_compact:</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">ΔG = </span><span class="sc">{</span>s<span class="sc">.</span>energy<span class="sc">:.2f}</span><span class="ss"> kcal/mol"</span>)</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Structure: </span><span class="sc">{</span>s<span class="sc">.</span>structure<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-ΔG = -5.53 kcal/mol
-Structure: ....((.((.((.((.........+....)).)).)).)).........
+ΔG = -3.58 kcal/mol
+Structure: ....((.((.((.((.........&amp;....)).)).)).)).........
 
-ΔG = -4.83 kcal/mol
-Structure: ....((.((...............+..........)).)).........
+ΔG = -3.36 kcal/mol
+Structure: ((..((.((.((.((.........&amp;....)).)).)).)).))......
 
-ΔG = -4.83 kcal/mol
-Structure: ..........((.((.........+....)).))...............
+ΔG = -3.36 kcal/mol
+Structure: ....((.((.((.((.((......&amp;))..)).)).)).)).........
 
-ΔG = -4.78 kcal/mol
-Structure: ....((.((.((............+.......)).)).)).........
+ΔG = -3.14 kcal/mol
+Structure: ((..((.((.((.((.((......&amp;))..)).)).)).)).))......
 
-ΔG = -4.78 kcal/mol
-Structure: .......((.((.((.........+....)).)).))............
+ΔG = -3.06 kcal/mol
+Structure: ....((.((.((.(..........&amp;.....).)).)).)).........
 
-ΔG = -4.75 kcal/mol
-Structure: ....((.((.((.(..........+.....).)).)).)).........
+ΔG = -3.06 kcal/mol
+Structure: .....(.((.((.((.........&amp;....)).)).)).)..........
 
-ΔG = -4.75 kcal/mol
-Structure: .....(.((.((.((.........+....)).)).)).)..........
+ΔG = -2.84 kcal/mol
+Structure: ((..((.((.((.(..........&amp;.....).)).)).)).))......
 
-ΔG = -4.68 kcal/mol
-Structure: ......((................+......))................</code></pre>
+ΔG = -2.84 kcal/mol
+Structure: .....(.((.((.((.((......&amp;))..)).)).)).)..........
+
+ΔG = -2.64 kcal/mol
+Structure: ..(.((.((.((.((.........&amp;....)).)).)).))..)......
+
+ΔG = -2.64 kcal/mol
+Structure: ....((.((.((.((..(......&amp;..).)).)).)).)).........
+
+ΔG = -2.59 kcal/mol
+Structure: .(..((.((.((.((.........&amp;....)).)).)).)).).......
+
+ΔG = -2.59 kcal/mol
+Structure: ....((.((.((.((.(.......&amp;.)..)).)).)).)).........</code></pre>
 </div>
 </div>
 <p>The Boltzmann distribution describes the probability that a system occupies a particular energy state at thermal equilibrium. One intuitive way to derive this distribution is through the maximum-entropy principle, which states that, given limited information, the most unbiased probability distribution is the one that maximizes entropy subject to known constraints.</p>
@@ -786,84 +789,100 @@ P_i = \frac{e^{-\beta E_i}}{Z}.
 \]</span></p>
 <p>In this form, the partition function <span class="math inline">\(Z\)</span> plays a central role: it ensures normalization, encodes the statistical weights of all states, and provides a direct link between microscopic energies and macroscopic thermodynamic quantities such as free energy. The Boltzmann distribution states that low-energy states are exponentially favored, but the relative probabilities of different states are determined by the partition function. From the maximum-entropy perspective, this distribution is the least biased assignment of probabilities consistent with our knowledge of the average energy.</p>
 <p>Let’s look into the equilibrium probabilities for one of the suboptimal structures identifies above:</p>
-<div id="72ed26bb-2958-4773-b68c-a6d41c85baaa" class="cell">
+<div id="72ed26bb-2958-4773-b68c-a6d41c85baaa" class="cell" data-execution_count="36">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> s <span class="kw">in</span> subopt_compact:</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    structure <span class="op">=</span> s.structure</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    probability <span class="op">=</span> nupack.structure_probability(strands<span class="op">=</span>[primer_fwd, primer_fwd], structure<span class="op">=</span>structure, model<span class="op">=</span>model)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Probability for </span><span class="sc">{</span>structure<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>probability<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install pint</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pint</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>ureg <span class="op">=</span> pint.UnitRegistry()</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> ureg.Quantity(<span class="dv">60</span>, ureg.degC).to(<span class="st">"K"</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>RNA.params_load_DNA_Mathews2004()</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>md60 <span class="op">=</span> RNA.md()</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>md60.temperature <span class="op">=</span> T.to(<span class="st">"degC"</span>).magnitude</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> (<span class="dv">1</span> <span class="op">*</span> ureg.molar_gas_constant).to(<span class="st">"kcal / (mol * K)"</span>)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>RT <span class="op">=</span> (R <span class="op">*</span> T).to(<span class="st">"kcal / mol"</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>fc_prob <span class="op">=</span> RNA.fold_compound(primer_fwd <span class="op">+</span> <span class="st">"&amp;"</span> <span class="op">+</span> primer_fwd, md60)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>_, pf_energy <span class="op">=</span> fc_prob.pf()</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>pf_q <span class="op">=</span> ureg.Quantity(pf_energy, <span class="st">"kcal / mol"</span>)</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> s <span class="kw">in</span> subopt_compact:</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    g_i <span class="op">=</span> ureg.Quantity(s.energy, <span class="st">"kcal / mol"</span>)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    prob <span class="op">=</span> math.exp(((pf_q <span class="op">-</span> g_i) <span class="op">/</span> RT).magnitude)</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Probability for </span><span class="sc">{</span>s<span class="sc">.</span>structure<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>prob<span class="sc">:.6f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Probability for ....((.((.((.((.........+....)).)).)).)).........: 0.01574715207205065
-Probability for ....((.((...............+..........)).)).........: 0.0054476787280400285
-Probability for ..........((.((.........+....)).))...............: 0.005447678728040024
-Probability for ....((.((.((............+.......)).)).)).........: 0.005012099928260824
-Probability for .......((.((.((.........+....)).)).))............: 0.005012099928260824
-Probability for ....((.((.((.(..........+.....).)).)).)).........: 0.004831113262953302
-Probability for .....(.((.((.((.........+....)).)).)).)..........: 0.004831113262953293
-Probability for ......((................+......))................: 0.004310536520689461</code></pre>
+<pre><code>Probability for ....((.((.((.((.........&amp;....)).)).)).)).........: 0.055791
+Probability for ((..((.((.((.((.........&amp;....)).)).)).)).))......: 0.040017
+Probability for ....((.((.((.((.((......&amp;))..)).)).)).)).........: 0.040017
+Probability for ((..((.((.((.((.((......&amp;))..)).)).)).)).))......: 0.028703
+Probability for ....((.((.((.(..........&amp;.....).)).)).)).........: 0.025436
+Probability for .....(.((.((.((.........&amp;....)).)).)).)..........: 0.025436
+Probability for ((..((.((.((.(..........&amp;.....).)).)).)).))......: 0.018244
+Probability for .....(.((.((.((.((......&amp;))..)).)).)).)..........: 0.018244
+Probability for ..(.((.((.((.((.........&amp;....)).)).)).))..)......: 0.013487
+Probability for ....((.((.((.((..(......&amp;..).)).)).)).)).........: 0.013487
+Probability for .(..((.((.((.((.........&amp;....)).)).)).)).).......: 0.012506
+Probability for ....((.((.((.((.(.......&amp;.)..)).)).)).)).........: 0.012506</code></pre>
 </div>
 </div>
-<p>We see that there is a clear separation between the MFE structure and the suboptimal ones. This gives some validity to the often used approach to only look at the MFE structure.</p>
-<hr>
+<p>Within the enumerated window the MFE structure is only modestly more probable than its neighbours.</p>
+<p>This is expected: at 60 °C, <span class="math inline">\(RT \approx 0.66\,\text{kcal/mol}\)</span>, and successive structures differ by only <span class="math inline">\(\sim 0.2\,\text{kcal/mol} \approx 0.3\,RT\)</span>, giving Boltzmann weight ratios of <span class="math inline">\(e^{0.2/0.66}\approx 1.35\)</span>. A “clear winner” would require the gap to exceed several <span class="math inline">\(RT\)</span>.</p>
+<p>The practical implication for PCR is that the primer can adopt multiple dimer configurations with similar likelihood (none dominates) and the total probability of being in <em>any</em> dimer state is the sum over all such structures. This is why primer dimer <span class="math inline">\(\Delta G\)</span> thresholds (e.g., <span class="math inline">\(&gt; -9\,\text{kcal/mol}\)</span>) matter more than the identity of the single most-stable structure.</p>
 </section>
 </section>
 <section id="blast-ensuring-specificity" class="level2">
 <h2 class="anchored" data-anchor-id="blast-ensuring-specificity">BLAST: Ensuring Specificity</h2>
-<p>Having designed a sequence with good thermodynamic properties, we must ensure it binds only where we want it to. This is where BLAST comes in. BLAST, which stands for Basic Local Alignment Search Tool, searches databases for sequences similar to a query sequence. For primer design, BLAST answers a critical question: where else in the genome might my primer bind?</p>
-<section id="why-specificity-matters" class="level3">
-<h3 class="anchored" data-anchor-id="why-specificity-matters">Why Specificity Matters</h3>
-<p>Consider designing a primer to amplify a specific gene in the human genome. The human genome contains about 3 billion base pairs. A 20-nucleotide primer could theoretically bind to <span class="math inline">\(4^{20}\)</span> different sequences, which is about a trillion possibilities. Most of these don’t exist in the human genome, but some do. If your primer matches multiple locations, you’ll amplify multiple products, making your PCR results difficult to interpret.</p>
-<p>BLAST finds these potential off-target sites by searching the entire genome for sequences similar to your query. It doesn’t require perfect matches; it finds sequences with high similarity even if they differ by a few bases. This is important because DNA binding can tolerate a few mismatches, especially if they’re not in critical positions like the 3’ end.</p>
-</section>
-<section id="using-blast-through-biopython" class="level3">
-<h3 class="anchored" data-anchor-id="using-blast-through-biopython">Using BLAST Through Biopython</h3>
-<p>Biopython provides an interface to NCBI’s BLAST web service, letting you perform searches programmatically:</p>
-<div id="5f0105b3-9119-4aaf-93f0-a7005244ce43" class="cell">
+<p>We will next perform a second check: a so-called, BLAST:</p>
+<div id="5f0105b3-9119-4aaf-93f0-a7005244ce43" class="cell" data-execution_count="37">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio.Blast <span class="im">import</span> NCBIWWW, NCBIXML</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check_primer_specificity(primer, organism<span class="op">=</span><span class="st">"Homo sapiens"</span>):</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">    BLAST a primer sequence to check for off-targets.</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"BLASTing primer: </span><span class="sc">{</span>primer<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Against: </span><span class="sc">{</span>organism<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"This may take a minute...</span><span class="ch">\n</span><span class="st">"</span>)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run BLAST search</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    result_handle <span class="op">=</span> NCBIWWW.qblast(</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        program<span class="op">=</span><span class="st">"blastn"</span>,</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        database<span class="op">=</span><span class="st">"nt"</span>,  <span class="co"># nucleotide database</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        sequence<span class="op">=</span>primer,</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        entrez_query<span class="op">=</span><span class="ss">f'"</span><span class="sc">{</span>organism<span class="sc">}</span><span class="ss">"[Organism]'</span>,</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>        hitlist_size<span class="op">=</span><span class="dv">20</span>  <span class="co"># Return top 20 hits</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Parse results</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    blast_records <span class="op">=</span> NCBIXML.parse(result_handle)</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> blast_record <span class="kw">in</span> blast_records:</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Found </span><span class="sc">{</span><span class="bu">len</span>(blast_record.alignments)<span class="sc">}</span><span class="ss"> alignments</span><span class="ch">\n</span><span class="ss">"</span>)</span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, alignment <span class="kw">in</span> <span class="bu">enumerate</span>(blast_record.alignments[:<span class="dv">10</span>]):  <span class="co"># Top 10</span></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> hsp <span class="kw">in</span> alignment.hsps:</span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="ss">f"Hit </span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>alignment<span class="sc">.</span>title[:<span class="dv">60</span>]<span class="sc">}</span><span class="ss">..."</span>)</span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="ss">f"  Length: </span><span class="sc">{</span>alignment<span class="sc">.</span>length<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="ss">f"  E-value: </span><span class="sc">{</span>hsp<span class="sc">.</span>expect<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="ss">f"  Identity: </span><span class="sc">{</span>hsp<span class="sc">.</span>identities<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>hsp<span class="sc">.</span>align_length<span class="sc">}</span><span class="ss"> "</span> <span class="op">+</span> </span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>                      <span class="ss">f"(</span><span class="sc">{</span><span class="dv">100</span><span class="op">*</span>hsp<span class="sc">.</span>identities<span class="op">/</span>hsp<span class="sc">.</span>align_length<span class="sc">:.1f}</span><span class="ss">%)"</span>)</span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> hsp.identities <span class="op">==</span> hsp.align_length <span class="kw">and</span> i <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>                    <span class="bu">print</span>(<span class="st">"WARNING: Perfect match to off-target!"</span>)</span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>()</span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Example</span></span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>primer <span class="op">=</span> primer_fwd</span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>check_primer_specificity(primer)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio.Blast <span class="im">import</span> NCBIWWW, NCBIXML</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check_primer_specificity(primer, organism<span class="op">=</span><span class="st">"Homo sapiens"</span>):</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">    BLAST a primer sequence to check for off-targets.</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"BLASTing primer: </span><span class="sc">{</span>primer<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Against: </span><span class="sc">{</span>organism<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"This may take a minute...</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run BLAST search</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    result_handle <span class="op">=</span> NCBIWWW.qblast(</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        program<span class="op">=</span><span class="st">"blastn"</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>        database<span class="op">=</span><span class="st">"nt"</span>,  <span class="co"># nucleotide database</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        sequence<span class="op">=</span>primer,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>        entrez_query<span class="op">=</span><span class="ss">f'"</span><span class="sc">{</span>organism<span class="sc">}</span><span class="ss">"[Organism]'</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>        hitlist_size<span class="op">=</span><span class="dv">20</span>  <span class="co"># Return top 20 hits</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Parse results</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    blast_records <span class="op">=</span> NCBIXML.parse(result_handle)</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> blast_record <span class="kw">in</span> blast_records:</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Found </span><span class="sc">{</span><span class="bu">len</span>(blast_record.alignments)<span class="sc">}</span><span class="ss"> alignments</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, alignment <span class="kw">in</span> <span class="bu">enumerate</span>(blast_record.alignments[:<span class="dv">10</span>]):  <span class="co"># Top 10</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> hsp <span class="kw">in</span> alignment.hsps:</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="ss">f"Hit </span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>alignment<span class="sc">.</span>title[:<span class="dv">60</span>]<span class="sc">}</span><span class="ss">..."</span>)</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="ss">f"  Length: </span><span class="sc">{</span>alignment<span class="sc">.</span>length<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="ss">f"  E-value: </span><span class="sc">{</span>hsp<span class="sc">.</span>expect<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="ss">f"  Identity: </span><span class="sc">{</span>hsp<span class="sc">.</span>identities<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>hsp<span class="sc">.</span>align_length<span class="sc">}</span><span class="ss"> "</span> <span class="op">+</span> </span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>                      <span class="ss">f"(</span><span class="sc">{</span><span class="dv">100</span><span class="op">*</span>hsp<span class="sc">.</span>identities<span class="op">/</span>hsp<span class="sc">.</span>align_length<span class="sc">:.1f}</span><span class="ss">%)"</span>)</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> hsp.identities <span class="op">==</span> hsp.align_length <span class="kw">and</span> i <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>                    <span class="bu">print</span>(<span class="st">"WARNING: Perfect match to off-target!"</span>)</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>()</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Example</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>primer <span class="op">=</span> primer_fwd</span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>check_primer_specificity(primer)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>BLASTing primer: CATTATGCTGAGGATTTGGAAAGG
@@ -872,68 +891,62 @@ This may take a minute...
 
 Found 20 alignments
 
-Hit 1: gi|184369|gb|M26434.1|HUMHPRTB Human hypoxanthine phosphorib...
-  Length: 56737
-  E-value: 0.000993761
-  Identity: 24/24 (100.0%)
-
-Hit 2: gi|164693830|dbj|AK313435.1| Homo sapiens cDNA, FLJ93974, Ho...
-  Length: 804
-  E-value: 0.000993761
-  Identity: 24/24 (100.0%)
-WARNING: Perfect match to off-target!
-
-Hit 3: gi|34784789|gb|BC000578.2| Homo sapiens hypoxanthine phospho...
+Hit 1: gi|34784789|gb|BC000578.2| Homo sapiens hypoxanthine phospho...
   Length: 1307
-  E-value: 0.000993761
+  E-value: 0.00100249
+  Identity: 24/24 (100.0%)
+
+Hit 2: gi|459814|gb|L29383.1|HUMHPRTC Human hypoxanthine phosphorib...
+  Length: 654
+  E-value: 0.00100249
   Identity: 24/24 (100.0%)
 WARNING: Perfect match to off-target!
 
-Hit 4: gi|459814|gb|L29383.1|HUMHPRTC Human hypoxanthine phosphorib...
+Hit 3: gi|332367617|gb|HM005402.1| Homo sapiens clone HTL-T-89 test...
+  Length: 780
+  E-value: 0.00100249
+  Identity: 24/24 (100.0%)
+WARNING: Perfect match to off-target!
+
+Hit 4: gi|459816|gb|L29382.1|HUMHPRTD Human hypoxanthine phosphorib...
   Length: 654
-  E-value: 0.000993761
+  E-value: 0.00100249
   Identity: 24/24 (100.0%)
 WARNING: Perfect match to off-target!
 
 Hit 5: gi|47115226|emb|CR407645.1| Homo sapiens full open reading f...
   Length: 654
-  E-value: 0.000993761
+  E-value: 0.00100249
   Identity: 24/24 (100.0%)
 WARNING: Perfect match to off-target!
 
-Hit 6: gi|642092|gb|M24772.1|HUMHPRTMUT Homo sapiens hypxanthine ph...
-  Length: 620
-  E-value: 0.000993761
+Hit 6: gi|184369|gb|M26434.1|HUMHPRTB Human hypoxanthine phosphorib...
+  Length: 56737
+  E-value: 0.00100249
   Identity: 24/24 (100.0%)
 WARNING: Perfect match to off-target!
 
-Hit 6: gi|642092|gb|M24772.1|HUMHPRTMUT Homo sapiens hypxanthine ph...
-  Length: 620
-  E-value: 0.000993761
+Hit 7: gi|54288828|gb|AY780550.1| Homo sapiens hypoxanthine phospho...
+  Length: 44436
+  E-value: 0.00100249
   Identity: 24/24 (100.0%)
 WARNING: Perfect match to off-target!
 
-Hit 7: gi|2944111|gb|AC004383.1|AC004383 Human Chromosome X clone b...
+Hit 8: gi|2944111|gb|AC004383.1|AC004383 Human Chromosome X clone b...
   Length: 156461
-  E-value: 0.000993761
+  E-value: 0.00100249
   Identity: 24/24 (100.0%)
 WARNING: Perfect match to off-target!
 
-Hit 8: gi|184349|gb|M31642.1|HUMHPRT Homo sapiens hypoxanthine phos...
-  Length: 1331
-  E-value: 0.000993761
+Hit 9: gi|1543384753|ref|NG_012329.2| Homo sapiens hypoxanthine pho...
+  Length: 47524
+  E-value: 0.00100249
   Identity: 24/24 (100.0%)
 WARNING: Perfect match to off-target!
 
-Hit 9: gi|2017770043|gb|MW727705.1| Homo sapiens hypoxanthine phosp...
-  Length: 100613
-  E-value: 0.000993761
-  Identity: 24/24 (100.0%)
-WARNING: Perfect match to off-target!
-
-Hit 10: gi|459816|gb|L29382.1|HUMHPRTD Human hypoxanthine phosphorib...
-  Length: 654
-  E-value: 0.000993761
+Hit 10: gi|164693830|dbj|AK313435.1| Homo sapiens cDNA, FLJ93974, Ho...
+  Length: 804
+  E-value: 0.00100249
   Identity: 24/24 (100.0%)
 WARNING: Perfect match to off-target!
 </code></pre>
@@ -941,7 +954,6 @@ WARNING: Perfect match to off-target!
 </div>
 <p>This function sends your primer sequence to NCBI, which searches it against the entire nucleotide database for your organism of interest. The results show where your primer matches in the genome. The E-value indicates the statistical significance; smaller E-values mean more significant matches. The identity percentage shows how many bases match exactly.</p>
 <p>When interpreting BLAST results, the first hit is usually your intended target. That’s good! You want a perfect match there. What you’re looking for is whether there are other hits with high identity. A second hit with 100% identity means your primer will bind equally well to two different locations, which is a problem. A second hit with 85% identity over the full length might cause some non-specific amplification but probably won’t ruin your experiment entirely.</p>
-</section>
 </section>
 <section id="primer3-automated-primer-design" class="level2">
 <h2 class="anchored" data-anchor-id="primer3-automated-primer-design">Primer3: Automated Primer Design</h2>
@@ -953,79 +965,79 @@ WARNING: Perfect match to off-target!
 <section id="basic-primer3-usage" class="level3">
 <h3 class="anchored" data-anchor-id="basic-primer3-usage">Basic Primer3 Usage</h3>
 <p>Let’s design primers for a simple PCR amplification:</p>
-<div id="3fdafd91-d720-4d1e-bb3f-7e0d3396d48a" class="cell" data-execution_count="13">
+<div id="3fdafd91-d720-4d1e-bb3f-7e0d3396d48a" class="cell" data-execution_count="38">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install primer3-py</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> primer3</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> design_primers_primer3(sequence, target_start, target_end):</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">    Use Primer3 to design primers for a target region.</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define the design parameters</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    seq_args <span class="op">=</span> {</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">'SEQUENCE_ID'</span>: <span class="st">'my_gene'</span>,</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">'SEQUENCE_TEMPLATE'</span>: sequence,</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">'SEQUENCE_TARGET'</span>: [target_start, target_end <span class="op">-</span> target_start]</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define global parameters</span></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    global_args <span class="op">=</span> {</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_OPT_SIZE'</span>: <span class="dv">20</span>,</span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_MIN_SIZE'</span>: <span class="dv">18</span>,</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_MAX_SIZE'</span>: <span class="dv">25</span>,</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_OPT_TM'</span>: <span class="fl">60.0</span>,</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_MIN_TM'</span>: <span class="fl">57.0</span>,</span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_MAX_TM'</span>: <span class="fl">63.0</span>,</span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_MIN_GC'</span>: <span class="fl">40.0</span>,</span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_MAX_GC'</span>: <span class="fl">60.0</span>,</span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_PRODUCT_SIZE_RANGE'</span>: [[<span class="dv">300</span>, <span class="dv">500</span>]],</span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run Primer3</span></span>
-<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> primer3.bindings.design_primers(seq_args, global_args)</span>
-<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract the best primer pair</span></span>
-<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> results[<span class="st">'PRIMER_PAIR_NUM_RETURNED'</span>] <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Primer3 Design Results"</span>)</span>
-<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">60</span>)</span>
-<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get the first (best) primer pair</span></span>
-<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>        fwd_seq <span class="op">=</span> results[<span class="st">'PRIMER_LEFT_0_SEQUENCE'</span>]</span>
-<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>        rev_seq <span class="op">=</span> results[<span class="st">'PRIMER_RIGHT_0_SEQUENCE'</span>]</span>
-<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>        fwd_tm <span class="op">=</span> results[<span class="st">'PRIMER_LEFT_0_TM'</span>]</span>
-<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>        rev_tm <span class="op">=</span> results[<span class="st">'PRIMER_RIGHT_0_TM'</span>]</span>
-<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>        fwd_gc <span class="op">=</span> results[<span class="st">'PRIMER_LEFT_0_GC_PERCENT'</span>]</span>
-<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>        rev_gc <span class="op">=</span> results[<span class="st">'PRIMER_RIGHT_0_GC_PERCENT'</span>]</span>
-<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>        product_size <span class="op">=</span> results[<span class="st">'PRIMER_PAIR_0_PRODUCT_SIZE'</span>]</span>
-<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Forward Primer: 5'-</span><span class="sc">{</span>fwd_seq<span class="sc">}</span><span class="ss">-3'"</span>)</span>
-<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  Tm: </span><span class="sc">{</span>fwd_tm<span class="sc">:.1f}</span><span class="ss">°C"</span>)</span>
-<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  GC%: </span><span class="sc">{</span>fwd_gc<span class="sc">:.1f}</span><span class="ss">%"</span>)</span>
-<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  Length: </span><span class="sc">{</span><span class="bu">len</span>(fwd_seq)<span class="sc">}</span><span class="ss"> bp"</span>)</span>
-<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Reverse Primer: 5'-</span><span class="sc">{</span>rev_seq<span class="sc">}</span><span class="ss">-3'"</span>)</span>
-<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  Tm: </span><span class="sc">{</span>rev_tm<span class="sc">:.1f}</span><span class="ss">°C"</span>)</span>
-<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  GC%: </span><span class="sc">{</span>rev_gc<span class="sc">:.1f}</span><span class="ss">%"</span>)</span>
-<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  Length: </span><span class="sc">{</span><span class="bu">len</span>(rev_seq)<span class="sc">}</span><span class="ss"> bp"</span>)</span>
-<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Product Size: </span><span class="sc">{</span>product_size<span class="sc">}</span><span class="ss"> bp"</span>)</span>
-<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> fwd_seq, rev_seq, results</span>
-<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Primer3 could not find suitable primers!"</span>)</span>
-<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Reason: </span><span class="sc">{</span>results<span class="sc">.</span>get(<span class="st">'PRIMER_ERROR'</span>, <span class="st">'Unknown error'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span>, <span class="va">None</span>, results</span>
-<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Example usage</span></span>
-<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a>sequence <span class="op">=</span> <span class="st">"ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAGGTGAGTCAGGCACCGGCTCGGAGCTGGGCGCGCGGCTGGGTGCCGCGGGCAAGCTGCAGTCTGCCAGGTGAGCAAGGGCGAGGAGCTGTTCACCGGGGTGGTGCCCATCCTGGTCGAGCTGGACGGCGACGTAAACGGCCACAAGTTCAGCGTGTCCGGCGAGGGCGAGGGCGATGCCACCTACGGCAAGCTGACCCTGAAGTTCATCTGCACCACCGGCAAGCTGCCCGTGCCCTGGCCCACCCTCGTGACCACCCTGACCTACGGCGTGCAGTGCTTCAGCCGCTACCCCGACCACATGAAGCAGCACGACTTCTTCAAGTCCGCCATGCCCGAAGGCTACGTCCAGGAGCGCACCATCTTCTTCAAGGACGACGGCAACTACAAGACCCGCGCCGAGGTGAAGTTCGAGGGCGACACCCTGGTGAACCGCATCGAGCTGAAGGGCATCGACTTCAAGGAGGACGGCAACATCCTGGGGCACAAGCTGGAGTACAACTACAACAGCCACAACGTCTATATCATGGCCGACAAGCAGAAGAACGGCATCAAGGTGAACTTCAAGATCCGCCACAACATCGAGGACGGCAGCGTGCAGCTCGCCGACCACTACCAGCAGAACACCCCCATCGGCGACGGCCCCGTGCTGCTGCCCGACAACCACTACCTGAGCACCCAGTCCGCCCTGAGCAAAGACCCCAACGAGAAGCGCGATCACATGGTCCTGCTGGAGTTCGTGACCGCCGCCGGGATCACTCTCGGCATGGACGAGCTGTACAAGTAA"</span></span>
-<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a>fwd, rev, results <span class="op">=</span> design_primers_primer3(sequence, <span class="dv">200</span>, <span class="dv">400</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install primer3-py</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> primer3</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> design_primers_primer3(sequence, target_start, target_end):</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">    Use Primer3 to design primers for a target region.</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define the design parameters</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    seq_args <span class="op">=</span> {</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">'SEQUENCE_ID'</span>: <span class="st">'my_gene'</span>,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">'SEQUENCE_TEMPLATE'</span>: sequence,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">'SEQUENCE_TARGET'</span>: [target_start, target_end <span class="op">-</span> target_start]</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define global parameters</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    global_args <span class="op">=</span> {</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_OPT_SIZE'</span>: <span class="dv">20</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_MIN_SIZE'</span>: <span class="dv">18</span>,</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_MAX_SIZE'</span>: <span class="dv">25</span>,</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_OPT_TM'</span>: <span class="fl">60.0</span>,</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_MIN_TM'</span>: <span class="fl">57.0</span>,</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_MAX_TM'</span>: <span class="fl">63.0</span>,</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_MIN_GC'</span>: <span class="fl">40.0</span>,</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_MAX_GC'</span>: <span class="fl">60.0</span>,</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">'PRIMER_PRODUCT_SIZE_RANGE'</span>: [[<span class="dv">300</span>, <span class="dv">500</span>]],</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run Primer3</span></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> primer3.bindings.design_primers(seq_args, global_args)</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract the best primer pair</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> results[<span class="st">'PRIMER_PAIR_NUM_RETURNED'</span>] <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Primer3 Design Results"</span>)</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">60</span>)</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get the first (best) primer pair</span></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>        fwd_seq <span class="op">=</span> results[<span class="st">'PRIMER_LEFT_0_SEQUENCE'</span>]</span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>        rev_seq <span class="op">=</span> results[<span class="st">'PRIMER_RIGHT_0_SEQUENCE'</span>]</span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>        fwd_tm <span class="op">=</span> results[<span class="st">'PRIMER_LEFT_0_TM'</span>]</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>        rev_tm <span class="op">=</span> results[<span class="st">'PRIMER_RIGHT_0_TM'</span>]</span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>        fwd_gc <span class="op">=</span> results[<span class="st">'PRIMER_LEFT_0_GC_PERCENT'</span>]</span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>        rev_gc <span class="op">=</span> results[<span class="st">'PRIMER_RIGHT_0_GC_PERCENT'</span>]</span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>        product_size <span class="op">=</span> results[<span class="st">'PRIMER_PAIR_0_PRODUCT_SIZE'</span>]</span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Forward Primer: 5'-</span><span class="sc">{</span>fwd_seq<span class="sc">}</span><span class="ss">-3'"</span>)</span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  Tm: </span><span class="sc">{</span>fwd_tm<span class="sc">:.1f}</span><span class="ss">°C"</span>)</span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  GC%: </span><span class="sc">{</span>fwd_gc<span class="sc">:.1f}</span><span class="ss">%"</span>)</span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  Length: </span><span class="sc">{</span><span class="bu">len</span>(fwd_seq)<span class="sc">}</span><span class="ss"> bp"</span>)</span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Reverse Primer: 5'-</span><span class="sc">{</span>rev_seq<span class="sc">}</span><span class="ss">-3'"</span>)</span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  Tm: </span><span class="sc">{</span>rev_tm<span class="sc">:.1f}</span><span class="ss">°C"</span>)</span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  GC%: </span><span class="sc">{</span>rev_gc<span class="sc">:.1f}</span><span class="ss">%"</span>)</span>
+<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  Length: </span><span class="sc">{</span><span class="bu">len</span>(rev_seq)<span class="sc">}</span><span class="ss"> bp"</span>)</span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Product Size: </span><span class="sc">{</span>product_size<span class="sc">}</span><span class="ss"> bp"</span>)</span>
+<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> fwd_seq, rev_seq, results</span>
+<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Primer3 could not find suitable primers!"</span>)</span>
+<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Reason: </span><span class="sc">{</span>results<span class="sc">.</span>get(<span class="st">'PRIMER_ERROR'</span>, <span class="st">'Unknown error'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span>, <span class="va">None</span>, results</span>
+<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Example usage</span></span>
+<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a>sequence <span class="op">=</span> <span class="st">"ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAGGTGAGTCAGGCACCGGCTCGGAGCTGGGCGCGCGGCTGGGTGCCGCGGGCAAGCTGCAGTCTGCCAGGTGAGCAAGGGCGAGGAGCTGTTCACCGGGGTGGTGCCCATCCTGGTCGAGCTGGACGGCGACGTAAACGGCCACAAGTTCAGCGTGTCCGGCGAGGGCGAGGGCGATGCCACCTACGGCAAGCTGACCCTGAAGTTCATCTGCACCACCGGCAAGCTGCCCGTGCCCTGGCCCACCCTCGTGACCACCCTGACCTACGGCGTGCAGTGCTTCAGCCGCTACCCCGACCACATGAAGCAGCACGACTTCTTCAAGTCCGCCATGCCCGAAGGCTACGTCCAGGAGCGCACCATCTTCTTCAAGGACGACGGCAACTACAAGACCCGCGCCGAGGTGAAGTTCGAGGGCGACACCCTGGTGAACCGCATCGAGCTGAAGGGCATCGACTTCAAGGAGGACGGCAACATCCTGGGGCACAAGCTGGAGTACAACTACAACAGCCACAACGTCTATATCATGGCCGACAAGCAGAAGAACGGCATCAAGGTGAACTTCAAGATCCGCCACAACATCGAGGACGGCAGCGTGCAGCTCGCCGACCACTACCAGCAGAACACCCCCATCGGCGACGGCCCCGTGCTGCTGCCCGACAACCACTACCTGAGCACCCAGTCCGCCCTGAGCAAAGACCCCAACGAGAAGCGCGATCACATGGTCCTGCTGGAGTTCGTGACCGCCGCCGGGATCACTCTCGGCATGGACGAGCTGTACAAGTAA"</span></span>
+<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a>fwd, rev, results <span class="op">=</span> design_primers_primer3(sequence, <span class="dv">200</span>, <span class="dv">400</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Primer3 Design Results
@@ -1053,47 +1065,47 @@ Product Size: 419 bp</code></pre>
 <section id="calculating-thermodynamic-properties-with-primer3" class="level3">
 <h3 class="anchored" data-anchor-id="calculating-thermodynamic-properties-with-primer3">Calculating Thermodynamic Properties with Primer3</h3>
 <p>Primer3 also provides functions to calculate individual thermodynamic properties without doing full design:</p>
-<div id="aa40577e-ffbf-4a7f-a627-79e5849e606b" class="cell">
+<div id="aa40577e-ffbf-4a7f-a627-79e5849e606b" class="cell" data-execution_count="39">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check_primer_properties(primer_seq):</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Calculate detailed properties of a primer sequence.</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate Tm using Primer3's method</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    tm <span class="op">=</span> primer3.calc_tm(primer_seq)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate hairpin formation</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    hairpin <span class="op">=</span> primer3.calc_hairpin(primer_seq)</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate homodimer formation</span></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    homodimer <span class="op">=</span> primer3.calc_homodimer(primer_seq)</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Primer: </span><span class="sc">{</span>primer_seq<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Tm: </span><span class="sc">{</span>tm<span class="sc">:.1f}</span><span class="ss">°C"</span>)</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Hairpin ΔG: </span><span class="sc">{</span>hairpin<span class="sc">.</span>dg<span class="op">/</span><span class="dv">1000</span><span class="sc">:.2f}</span><span class="ss"> kcal/mol"</span>)</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Hairpin Tm: </span><span class="sc">{</span>hairpin<span class="sc">.</span>tm<span class="sc">:.1f}</span><span class="ss">°C"</span>)</span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Homodimer ΔG: </span><span class="sc">{</span>homodimer<span class="sc">.</span>dg<span class="op">/</span><span class="dv">1000</span><span class="sc">:.2f}</span><span class="ss"> kcal/mol"</span>)</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Homodimer Tm: </span><span class="sc">{</span>homodimer<span class="sc">.</span>tm<span class="sc">:.1f}</span><span class="ss">°C"</span>)</span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Interpret results</span></span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Analysis:"</span>)</span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">abs</span>(hairpin.dg<span class="op">/</span><span class="dv">1000</span>) <span class="op">&lt;</span> <span class="dv">3</span>:</span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Low hairpin formation"</span>)</span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Significant hairpin structure"</span>)</span>
-<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">abs</span>(homodimer.dg<span class="op">/</span><span class="dv">1000</span>) <span class="op">&lt;</span> <span class="dv">9</span>:</span>
-<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Low homodimer formation"</span>)</span>
-<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Strong homodimer potential"</span>)</span>
-<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">'tm'</span>: tm, <span class="st">'hairpin'</span>: hairpin, <span class="st">'homodimer'</span>: homodimer}</span>
-<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>check_primer_properties(<span class="st">"GCTAGCTAGCTAGCTAGCTA"</span>)</span>
-<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n\n</span><span class="st">"</span>)</span>
-<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>check_primer_properties(primer_fwd)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check_primer_properties(primer_seq):</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Calculate detailed properties of a primer sequence.</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate Tm using Primer3's method</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    tm <span class="op">=</span> primer3.calc_tm(primer_seq)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate hairpin formation</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    hairpin <span class="op">=</span> primer3.calc_hairpin(primer_seq)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate homodimer formation</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    homodimer <span class="op">=</span> primer3.calc_homodimer(primer_seq)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Primer: </span><span class="sc">{</span>primer_seq<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Tm: </span><span class="sc">{</span>tm<span class="sc">:.1f}</span><span class="ss">°C"</span>)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Hairpin ΔG: </span><span class="sc">{</span>hairpin<span class="sc">.</span>dg<span class="op">/</span><span class="dv">1000</span><span class="sc">:.2f}</span><span class="ss"> kcal/mol"</span>)</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Hairpin Tm: </span><span class="sc">{</span>hairpin<span class="sc">.</span>tm<span class="sc">:.1f}</span><span class="ss">°C"</span>)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Homodimer ΔG: </span><span class="sc">{</span>homodimer<span class="sc">.</span>dg<span class="op">/</span><span class="dv">1000</span><span class="sc">:.2f}</span><span class="ss"> kcal/mol"</span>)</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Homodimer Tm: </span><span class="sc">{</span>homodimer<span class="sc">.</span>tm<span class="sc">:.1f}</span><span class="ss">°C"</span>)</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Interpret results</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Analysis:"</span>)</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">abs</span>(hairpin.dg<span class="op">/</span><span class="dv">1000</span>) <span class="op">&lt;</span> <span class="dv">3</span>:</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Low hairpin formation"</span>)</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Significant hairpin structure"</span>)</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">abs</span>(homodimer.dg<span class="op">/</span><span class="dv">1000</span>) <span class="op">&lt;</span> <span class="dv">9</span>:</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Low homodimer formation"</span>)</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Strong homodimer potential"</span>)</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">'tm'</span>: tm, <span class="st">'hairpin'</span>: hairpin, <span class="st">'homodimer'</span>: homodimer}</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>check_primer_properties(<span class="st">"GCTAGCTAGCTAGCTAGCTA"</span>)</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n\n</span><span class="st">"</span>)</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>check_primer_properties(primer_fwd)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Primer: GCTAGCTAGCTAGCTAGCTA
@@ -1120,7 +1132,7 @@ Analysis:
 Low hairpin formation
 Low homodimer formation</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="39">
 <pre><code>{'tm': 58.16037862741649,
  'hairpin': ThermoResult(structure_found=False, tm=0.00, dg=0.00, dh=0.00, ds=0.00),
  'homodimer': ThermoResult(structure_found=True, tm=-16.44, dg=-3097.16, dh=-39000.00, ds=-115.76)}</code></pre>
