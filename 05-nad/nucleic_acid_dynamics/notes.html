@@ -141,7 +141,7 @@ window.Quarto = {
 <link rel="stylesheet" href="../../custom.css">
 </head>
 
-<body class="nav-sidebar floating fullcontent quarto-light">
+<body class="nav-sidebar floating slimcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -411,9 +411,10 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../05-nad/nucleic_acid_dynamics/notes.html">Nucleic Acid Design</a></li><li class="breadcrumb-item"><a href="../../05-nad/nucleic_acid_dynamics/notes.html"><span class="chapter-title">Nucleic Acid Thermodynamics</span></a></li></ol></nav>
 <div class="quarto-title">
@@ -439,12 +440,21 @@ window.Quarto = {
 <li>physics of RNA and DNA binding</li>
 <li>computational approaches</li>
 </ul>
-<section id="secondary-structure" class="level3">
+<section id="secondary-structure" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="secondary-structure">Secondary structure</h3>
 <p>A DNA or RNA molecule can form bonds with itself or other molecules in the form of base-pairing.</p>
-<p>One typically distinguishes between pseudoknot-free structures and those with pseudoknots. This can be visualized by arranging a DNA/RNA strand in a circle and marking base-pairs with lines between the bonding nucleotides. Pseudoknots are crossing base-pairs.</p>
-<div style="display:flex; gap:10px; justify-content:center; align-items:flex-start;">
-<p><img src="bp_nopseudoknot.svg" width="340"> <img src="bp_pseudoknot.svg" width="340"></p>
+<p>One typically distinguishes between <strong>pseudoknot-free</strong> structures and those with <strong>pseudoknots</strong>. This can be visualized by arranging a DNA/RNA strand in a circle and marking base-pairs with lines between the bonding nucleotides. Pseudoknots are crossing base-pairs. Examples are shown in the figure below.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="bp_nopseudoknot.svg" class="img-fluid figure-img" width="340"></p>
+<figcaption class="margin-caption">Structures without pseudoknot</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="bp_pseudoknot.svg" class="img-fluid figure-img" width="340"></p>
+<figcaption class="margin-caption">Structures with pseudoknot</figcaption>
+</figure>
 </div>
 <p>Base-pairing is a reversible and stochastic process dictated by the rules of thermodynamics. In particular, different copies of the molecule will probably be in different states and a single molecule will probably change states over time. The probability of a given secondary structure <span class="math inline">\(s\)</span> to occur in equilibrium is given by</p>
 <p><span class="math display">\[\begin{equation}
@@ -454,7 +464,7 @@ P(s) = \frac{1}{Q} e^{- \Delta G(s) / kT}
 <p>The secondary structure can be analyzed with libraries such as the <code>ViennaRNA</code> library. We will use it to return the MFE, the value for <span class="math inline">\(\Delta G(\text{MFE})\)</span>, the <strong>ensemble free energy</strong> that is defined as</p>
 <p><span class="math display">\[\Delta G_\text{ens} = -kT \ln Q\]</span></p>
 <p>as well as the probability <span class="math inline">\(P(\text{MFE})\)</span> by running the following code:</p>
-<div id="cell-4" class="cell" data-execution_count="1">
+<div id="cell-4" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> RNA</span>
@@ -465,7 +475,7 @@ P(s) = \frac{1}{Q} e^{- \Delta G(s) / kT}
 </details>
 </div>
 <p>As an example, we will analyze the structure of an RNA sequence next.</p>
-<div id="cell-6" class="cell" data-execution_count="2">
+<div id="cell-6" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># example RNA sequence</span></span>
@@ -496,7 +506,7 @@ P(MFE)        : 0.2347</code></pre>
 <p>The structure is represented in dot-parenthesis notation. Dots represent unpaired bases, while matching parentheses represent base pairs. For example, <code>....((((....))))....</code> represents a hairpin with four base pairs in a stem.</p>
 <p>We can see that the MFE structure has a probability of about 23% to occur.</p>
 <p>We can also look at the MFE structure graphically:</p>
-<div id="cell-9" class="cell" data-execution_count="3">
+<div id="cell-9" class="cell" data-execution_count="25">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> SVG, display</span>
@@ -509,7 +519,7 @@ P(MFE)        : 0.2347</code></pre>
 </div>
 </div>
 <p>The library also supports DNA. We just have to load the DNA energies:</p>
-<div id="cell-11" class="cell" data-execution_count="4">
+<div id="cell-11" class="cell" data-execution_count="26">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># example DNA sequence</span></span>
@@ -540,10 +550,10 @@ P(MFE)        : 0.0275</code></pre>
 </div>
 </div>
 <p>Here, for DNA, the MFE structure occurs in about 28% among all possible structures. The MFE structure is shown below:</p>
-<div id="cell-13" class="cell" data-execution_count="5">
+<div id="cell-13" class="cell" data-execution_count="27">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>RNA.svg_rna_plot(sequence, mfe_structure, <span class="st">'structure_dna.svg'</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>RNA.svg_rna_plot(dna_sequence, mfe_structure, <span class="st">'structure_dna.svg'</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>display(SVG(<span class="st">'structure_dna.svg'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
@@ -551,7 +561,7 @@ P(MFE)        : 0.0275</code></pre>
 </div>
 </div>
 <p>We finally reset parameters to RNA for subsequent cells:</p>
-<div id="cell-15" class="cell" data-execution_count="6">
+<div id="cell-15" class="cell" data-execution_count="28">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>RNA.params_load_RNA_Turner2004()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -586,7 +596,7 @@ Q^m_{i,j} = \sum_{i\leq d &lt; e\leq j} Q^b_{d,e} P^\mathrm{multi,end}_{i,d,e,j}
 \sum_{\substack{i\leq c&lt;j\\\text{nick between $c$ and $c+1$}}} Q_{i+1,c} Q_{c+1,j-1}
 \end{equation}\]</span></p>
 <p>The <code>ViennaRNA</code> library can carry out these calculations:</p>
-<div id="cell-18" class="cell" data-execution_count="7">
+<div id="cell-18" class="cell" data-execution_count="29">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>seq_a <span class="op">=</span> <span class="st">'GGCUGGUUUCUGCUCUCUAGUUCGCGAGGUGCAAUCUCCUAUC'</span></span>

@@ -46,25 +46,25 @@
       <text class="nucleotide" x="57.059" y="42.124">G</text>
       <text class="nucleotide" x="47.534" y="52.806">G</text>
       <text class="nucleotide" x="34.368" y="45.617">C</text>
-      <text class="nucleotide" x="25.964" y="32.213">U</text>
+      <text class="nucleotide" x="25.964" y="32.213">T</text>
       <text class="nucleotide" x="11.086" y="32.904">G</text>
       <text class="nucleotide" x="3.017" y="18.627">G</text>
-      <text class="nucleotide" x="-13.381" y="18.747">U</text>
-      <text class="nucleotide" x="-21.241" y="33.140">U</text>
-      <text class="nucleotide" x="-12.476" y="47.000">U</text>
+      <text class="nucleotide" x="-13.381" y="18.747">T</text>
+      <text class="nucleotide" x="-21.241" y="33.140">T</text>
+      <text class="nucleotide" x="-12.476" y="47.000">T</text>
       <text class="nucleotide" x="3.897" y="46.069">C</text>
-      <text class="nucleotide" x="11.359" y="58.960">U</text>
+      <text class="nucleotide" x="11.359" y="58.960">T</text>
       <text class="nucleotide" x="27.180" y="58.782">G</text>
       <text class="nucleotide" x="40.345" y="65.971">C</text>
-      <text class="nucleotide" x="36.299" y="81.150">U</text>
+      <text class="nucleotide" x="36.299" y="81.150">T</text>
       <text class="nucleotide" x="36.054" y="96.858">C</text>
-      <text class="nucleotide" x="39.624" y="112.156">U</text>
+      <text class="nucleotide" x="39.624" y="112.156">T</text>
       <text class="nucleotide" x="46.797" y="126.132">C</text>
-      <text class="nucleotide" x="57.144" y="137.953">U</text>
+      <text class="nucleotide" x="57.144" y="137.953">T</text>
       <text class="nucleotide" x="70.048" y="146.912">A</text>
       <text class="nucleotide" x="84.739" y="152.476">G</text>
-      <text class="nucleotide" x="100.340" y="154.312">U</text>
-      <text class="nucleotide" x="115.921" y="152.311">U</text>
+      <text class="nucleotide" x="100.340" y="154.312">T</text>
+      <text class="nucleotide" x="115.921" y="152.311">T</text>
       <text class="nucleotide" x="130.553" y="146.592">C</text>
       <text class="nucleotide" x="143.361" y="137.497">G</text>
       <text class="nucleotide" x="154.697" y="147.320">C</text>
@@ -72,25 +72,25 @@
       <text class="nucleotide" x="171.327" y="170.889">A</text>
       <text class="nucleotide" x="186.082" y="164.590">G</text>
       <text class="nucleotide" x="190.217" y="149.089">G</text>
-      <text class="nucleotide" x="180.561" y="136.278">U</text>
+      <text class="nucleotide" x="180.561" y="136.278">T</text>
       <text class="nucleotide" x="164.520" y="135.983">G</text>
       <text class="nucleotide" x="153.184" y="126.160">C</text>
       <text class="nucleotide" x="159.864" y="113.503">A</text>
       <text class="nucleotide" x="163.580" y="99.681">A</text>
-      <text class="nucleotide" x="164.147" y="85.381">U</text>
+      <text class="nucleotide" x="164.147" y="85.381">T</text>
       <text class="nucleotide" x="161.536" y="71.308">C</text>
-      <text class="nucleotide" x="155.879" y="58.162">U</text>
+      <text class="nucleotide" x="155.879" y="58.162">T</text>
       <text class="nucleotide" x="147.454" y="46.592">C</text>
       <text class="nucleotide" x="136.679" y="37.172">C</text>
-      <text class="nucleotide" x="124.087" y="30.369">U</text>
+      <text class="nucleotide" x="124.087" y="30.369">T</text>
       <text class="nucleotide" x="110.303" y="26.518">A</text>
-      <text class="nucleotide" x="96.008" y="25.811">U</text>
+      <text class="nucleotide" x="96.008" y="25.811">T</text>
       <text class="nucleotide" x="81.911" y="28.284">C</text>
     </g>
   </g>
 <script type="text/ecmascript">
 <![CDATA[
-  let sequence = "GGCUGGUUUCUGCUCUCUAGUUCGCGAGGUGCAAUCUCCUAUC";
+  let sequence = "GGCTGGTTTCTGCTCTCTAGTTCGCGAGGTGCAATCTCCTATC";
   let structure = ".((.(....).))..........((.....))...........";
   const basepairs = [
     { i: 2, j: 13, type: "cWW" },
